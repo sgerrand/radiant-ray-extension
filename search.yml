@@ -1181,10 +1181,10 @@ repositories:
   forks: 0
   homepage: http://www.saturnflyer.com
   owner: saturnflyer
-- name: radiant-rbac-base-extension
+- name: radiant-rbac_base-extension
   watchers: 5
   private: false
-  url: http://github.com/saturnflyer/radiant-rbac-base-extension
+  url: http://github.com/saturnflyer/radiant-rbac_base-extension
   fork: false
   description: Role Based Access Control
   forks: 1
