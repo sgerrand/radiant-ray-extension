@@ -192,15 +192,6 @@ repositories:
   forks: 1
   homepage: http://svn.artofmission.com/svn/plugins/radiant/extensions/comments/README
   owner: tricycle
-- name: radiant-ray-extension
-  watchers: 11
-  private: false
-  url: http://github.com/johnmuhl/radiant-ray-extension
-  fork: false
-  description: Ray makes managing Radiant extensions a breeze. Uses git or http.
-  forks: 1
-  homepage: http://johnmuhl.com/workbook/ray
-  owner: johnmuhl
 - name: radiant-translator-extension
   watchers: 2
   private: false
