@@ -20,10 +20,11 @@ namespace :ray do
       search_results
     end
     task :disable do
+      name = ENV['name']
       messages = ["The disable command requires an extension name.", "rake ray:extension:disable name=extension_name"]
       require_options = [ENV['name']]
       validate_command(messages, require_options)
-      disable_extension
+      disable_extension(name)
     end
     task :enable do
       messages = ["The enable command requires an extension name.", "rake ray:extension:enable name=extension_name"]
@@ -104,17 +105,13 @@ def install_extension(messages, require_options)
   output(messages)
   restart_server
 end
-def disable_extension
-  name = ENV['name']
-  unless File.exist?("#{@path}/#{name}")
-    messages = ["The #{name} extension does not appear to be installed.", "You can try installing it with: rake ray:extension:install name=#{name}"]
-    output(messages)
-    exit
-  end
-  File.makedirs("#{@ray}/disabled_extensions")
-  rm_r("#{@ray}/disabled_extensions/#{name}") rescue nil
-  move( "#{@path}/#{name}", "#{@ray}/disabled_extensions/#{name}")
-  messages = ["The #{name} extension has been disabled.", "To enable it run, rake ray:en name=#{name}"]
+def disable_extension(name)
+  @name = name
+  move_to_disabled
+  messages = [
+    "The #{@name} extension has been disabled. Enable it with:",
+    "rake ray:extension:enable name=#{@name}"
+  ]
   output(messages)
   restart_server
 end
@@ -390,27 +387,27 @@ def run_rake_tasks
       begin
         sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:install")
         puts('Install task ran successfully.')
-      rescue Exception => err
+      rescue Exception
         cause = 'install'
-        quarantine_extension(cause, err)
+        quarantine_extension(cause)
       end
     else
       if @tasks.include?('migrate')
         begin
           sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:migrate")
           puts('Migrate task ran successfully.')
-        rescue Exception => err
+        rescue Exception
           cause = 'migrate'
-          quarantine_extension(cause, err)
+          quarantine_extension(cause)
         end
       end
       if @tasks.include?('update')
         begin
           sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:update")
           puts('Update task ran successfully.')
-        rescue Exception => err
+        rescue Exception
           cause = 'update'
-          quarantine_extension(cause, err)
+          quarantine_extension(cause)
         end
       end
     end
@@ -645,13 +642,33 @@ def move_extension(vendor_name)
   @name = vendor_name
 end
 
-def quarantine_extension(cause, err)
-  File.makedirs("#{@ray}/disabled_extensions")
-  rm_r("#{@ray}/disabled_extensions/#{@name}") rescue nil
-  move("#{@path}/#{@name}", "#{@ray}/disabled_extensions/#{@name}")
-  messages = ["The #{@name} extension failed to install properly.", "As a result I have canceled the installation and placed the extension in:", "#{@ray}/disabled_extensions/#{@name}", "For more detailed error output try the command:", "rake radiant:extensions:#{@name}:#{cause} --trace"]
+def move_to_disabled
+  File.makedirs("#{@path}/.disabled")
+  if File.exist?("#{@path}/#{@name}")
+    begin
+      move("#{@path}/#{@name}", "#{@path}/.disabled/#{@name}")
+    rescue Exception => error
+      rm_r("#{@path}/.disabled/#{@name}")
+      move("#{@path}/#{@name}", "#{@path}/.disabled/#{@name}")
+    end
+  else
+    messages = [
+      "The #{@name} extension is not installed. Install it with:",
+      "rake ray:extension:install name=#{@name}"
+    ]
+    output(messages)
+  end
+end
+
+def quarantine_extension(cause)
+  move_to_disabled
+  messages = [
+        "The #{@name} extension failed to install properly.",
+        "Specifically, the failure was caused by the extension's #{cause} task:",
+        "Run `rake radiant:extensions:#{@name}:#{cause} --trace` for more details.",
+        "The extension has been disabled and placed in #{@path}/.disabled"
+  ]
   output(messages)
-  print "\nERROR:\n#{err}\n"
   exit
 end
 
