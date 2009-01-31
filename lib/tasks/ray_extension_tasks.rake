@@ -27,6 +27,7 @@ namespace :ray do
       disable_extension(name)
     end
     task :enable do
+      name = ENV['name']
       messages = ["The enable command requires an extension name.", "rake ray:extension:enable name=extension_name"]
       require_options = [ENV['name']]
       validate_command(messages, require_options)
@@ -115,16 +116,28 @@ def disable_extension(name)
   output(messages)
   restart_server
 end
-def enable_extension
-  name = ENV['name']
-  unless File.exist?("#{@ray}/disabled_extensions/#{name}")
-    messages = ["The #{name} extension was not disabled by Ray.", "You can try installing it with: rake ray:ext name=#{name}"]
+def enable_extension(name)
+  if File.exist?("#{@path}/.disabled/#{name}")
+    begin
+      move("#{@path}/.disabled/#{name}", "#{@path}/#{name}")
+    rescue Exception
+      messages = ["You already have a copy of the #{name} extension installed."]
+      output(messages)
+      exit
+    end
+    messages = [
+      "The #{name} extension has been enabled. Disable it with:",
+      "rake ray:extension:disable name=#{name}"
+    ]
+    output(messages)
+  else
+    messages = [
+      "The #{name} extension was not disabled by Ray. Install it with:",
+      "rake ray:extension:install name=#{name}"
+    ]
     output(messages)
     exit
   end
-  move("#{@ray}/disabled_extensions/#{name}", "#{@path}/#{name}")
-  messages = ["The #{name} extension has been enabled.", "To disable it run, rake ray:dis name=#{name}"]
-  output(messages)
   restart_server
 end
 def update_extension
