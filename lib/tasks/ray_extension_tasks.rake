@@ -330,10 +330,16 @@ def install_dependencies
     @extension_dependencies.each {|e| system "rake ray:extension:install name=#{e}"}
   end
   if @gem_dependencies.length > 0
-    messages = ["The #{@_name} extension requires one or more gems.", "YOU MAY BE PROMPTED FOR YOU SYSTEM ADMINISTRATOR PASSWORD!"]
+    gem_sources = `gem sources`.split("\n")
+    gem_sources.each {|g| @github = g if g.include?("github")}
+    sh("gem sources --add http://gems.github.com") unless @github
+    messages = ["The #{@name} extension requires one or more gems.", "YOU MAY BE PROMPTED FOR YOU SYSTEM ADMINISTRATOR PASSWORD!"]
     output(messages)
     @gem_dependencies.each do |g|
-      sh("sudo gem install #{g}")
+      has_gem = `gem list #{g}`.strip
+      if has_gem.length == 0
+        sh("sudo gem install #{g}")
+      end
     end
   end
   if @plugin_dependencies.length > 0
