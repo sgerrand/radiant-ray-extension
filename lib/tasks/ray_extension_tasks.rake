@@ -296,14 +296,13 @@ def http_extension_update(extension)
 end
 
 def check_dependencies
-  if File.exist?("#{@path}/#{@_name}/dependency.yml")
+  if File.exist?("#{@path}/#{@name}/dependency.yml")
     @extension_dependencies = []
-    @gem_dependencies = []
-    @plugin_dependencies = []
-    File.open("#{@path}/#{@_name}/dependency.yml" ) do |dependence|
-      YAML.load_documents(dependence) do |dependency|
-        total = dependency.length - 1
-        for i in 0..total do
+    @gem_dependencies       = []
+    @plugin_dependencies    = []
+    File.open("#{@path}/#{@name}/dependency.yml").map do |f|
+      YAML.load_documents(f) do |dependency|
+        for i in 0...dependency.length
           @extension_dependencies << dependency[i]['extension'] if dependency[i].include?('extension')
           @gem_dependencies << dependency[i]['gem'] if dependency[i].include?('gem')
           @plugin_dependencies << dependency[i]['plugin'] if dependency[i].include?('plugin')
