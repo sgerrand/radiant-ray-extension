@@ -604,12 +604,12 @@ def validate_command(messages, require_options)
     end
   end
 end
+
 def output(messages)
-  messages.each do |message|
-    print "#{message}\n"
-  end
+  puts "================================================================================"
+  messages.each { |m| puts "#{m}" }
+  puts "================================================================================"
   messages = []
-  puts('================================================================================')
 end
 
 def replace_github_username
