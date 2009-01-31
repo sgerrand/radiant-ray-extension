@@ -343,10 +343,18 @@ def install_dependencies
     end
   end
   if @plugin_dependencies.length > 0
-    messages = ["Plugin dependencies are not yet supported by Ray.", "Consider adding plugins as git submodules, which are supported by Ray.", "If you're not the extension author consider contacting them about this issue."]
+    messages = [
+      "Plugin dependencies are not supported by Ray.",
+      "Consider adding plugins as git submodules, which are supported by Ray.",
+      "If you're not the extension author consider contacting them about this issue."
+    ]
     output(messages)
     @plugin_dependencies.each do |p|
-      messages = ["The #{@_name} extension requires the #{p} plugin,", "but Ray does not support plugin dependencies.", "Please install the #{p} plugin manually."]
+      messages = [
+        "The #{@name} extension requires the #{p} plugin,",
+        "but Ray does not support plugin dependencies.",
+        "Please install the #{p} plugin manually."
+      ]
       output(messages)
     end
   end
