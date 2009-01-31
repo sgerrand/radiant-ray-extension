@@ -106,6 +106,7 @@ def install_extension(messages, require_options)
   output(messages)
   restart_server
 end
+
 def disable_extension(name)
   @name = name
   move_to_disabled
@@ -116,6 +117,7 @@ def disable_extension(name)
   output(messages)
   restart_server
 end
+
 def enable_extension(name)
   if File.exist?("#{@path}/.disabled/#{name}")
     begin
@@ -140,6 +142,7 @@ def enable_extension(name)
   end
   restart_server
 end
+
 def update_extension
   name = ENV['name'] if ENV['name']
   # update all extensions, except ray
@@ -185,6 +188,7 @@ def update_extension
     end
   end
 end
+
 def install_bundle
   unless File.exist?('config/extensions.yml')
     messages = ["You don't seem to have a bundle file available.", "Refer to the documentation for more information on extension bundles.", "http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-bundle"]
@@ -240,6 +244,7 @@ def git_extension_install
     end
   end
 end
+
 def http_extension_install
   require 'open-uri'
   File.makedirs("#{@ray}/tmp")
@@ -272,6 +277,7 @@ def http_extension_install
   end
   rm_r("#{@ray}/tmp")
 end
+
 def git_extension_update(extension)
   Dir.chdir("#{@path}/#{extension}") do
     sh("git checkout master")
@@ -279,6 +285,7 @@ def git_extension_update(extension)
   end
   puts("#{extension} extension updated.")
 end
+
 def http_extension_update(extension)
   Dir.chdir("#{@path}/#{extension}") do
     sh("rake ray:extension:disable name=#{extension}")
@@ -306,6 +313,7 @@ def check_dependencies
     install_dependencies
   end
 end
+
 def check_submodules
   if File.exist?("#{@path}/#{@_name}/.gitmodules")
     submodules = []
@@ -316,6 +324,7 @@ def check_submodules
     install_submodules(submodules)
   end
 end
+
 def install_dependencies
   if @extension_dependencies.length > 0
     @extension_dependencies.each {|e| system "rake ray:extension:install name=#{e}"}
@@ -336,6 +345,7 @@ def install_dependencies
     end
   end
 end
+
 def install_submodules(submodules)
   if @download == "git"
     if File.exist?('.git/HEAD')
@@ -374,56 +384,50 @@ def install_submodules(submodules)
   end
 end
 
-def check_rake_tasks
-  if File.exist?("#{@path}/#{@name}/lib/tasks/")
-    rake_file = `ls #{@path}/#{@name}/lib/tasks/*_tasks.rake`.gsub(/\n/, '')
-    @tasks = []
-    File.readlines("#{rake_file}").map do |f|
+def run_extension_tasks
+  if File.exist?("#{@path}/#{@name}/lib/tasks")
+    rake_files = Dir.entries("#{@path}/#{@name}/lib/tasks") - [".", ".."]
+    if rake_files.length == 1
+      rake_file = rake_files[0]
+    else
+      rake_files.each do |f|
+        rake_file = f if f.include?("_extension_tasks.rake")
+      end
+    end
+    tasks = []
+    File.readlines("#{@path}/#{@name}/lib/tasks/#{rake_file}").map do |f|
       line = f.rstrip
-      @tasks << 'install' if line.include? 'task :install =>'
-      @tasks << 'migrate' if line.include? 'task :migrate =>'
-      @tasks << 'update' if line.include? 'task :update =>'
-      @tasks << 'uninstall' if line.include? 'task :uninstall =>'
+      tasks << 'install' if line.include? 'task :install =>'
+      tasks << 'migrate' if line.include? 'task :migrate =>'
+      tasks << 'update' if line.include? 'task :update =>'
     end
-    unless @uninstall
-      run_rake_tasks
-    end
-  else
-    puts("The #{@name} extension has no task file.")
-  end
-end
-def run_rake_tasks
-  if @tasks.empty?
-    puts("The #{@name} extension has no tasks to run.")
-  else
-    if @tasks.include?('install')
+    if tasks.include?('install')
       begin
-        sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:install")
-        puts('Install task ran successfully.')
-      rescue Exception
-        cause = 'install'
+        sh("rake radiant:extensions:#{@name}:install --trace")
+      rescue Exception => error
+        cause = "install"
         quarantine_extension(cause)
       end
     else
-      if @tasks.include?('migrate')
+      if tasks.include?('migrate')
         begin
-          sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:migrate")
-          puts('Migrate task ran successfully.')
-        rescue Exception
-          cause = 'migrate'
+          sh("rake radiant:extensions:#{@name}:migrate --trace")
+        rescue Exception => error
+          cause = "migrate"
           quarantine_extension(cause)
         end
       end
-      if @tasks.include?('update')
+      if tasks.include?('update')
         begin
-          sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:update")
-          puts('Update task ran successfully.')
-        rescue Exception
-          cause = 'update'
+          sh("rake radiant:extensions:#{@name}:update --trace")
+        rescue Exception => error
+          cause = "update"
           quarantine_extension(cause)
         end
       end
     end
+  else
+    puts "The #{@name} extension has no task file."
   end
 end
 
@@ -440,6 +444,7 @@ def uninstall_extension
   messages = ["The #{@name} extension has been uninstalled. To install it run:", "rake ray:ext name=#{@name}"]
   output(messages)
 end
+
 def run_uninstall_tasks
   if @tasks
     if @tasks.empty?
@@ -502,6 +507,7 @@ def search_extensions
     online_search
   end
 end
+
 def cached_search
   File.open("#{@ray}/search.yml") do |repositories|
     YAML.load_documents(repositories) do |repository|
@@ -530,10 +536,12 @@ def cached_search
     end
   end
 end
+
 def online_search
   puts("Online searching is not implemented.") # TODO: implement online_search
   exit
 end
+
 def search_results
   if @extensions.length == 0
     messages = ["Your search term '#{@_term}' did not match any extensions."]
@@ -581,6 +589,7 @@ def get_download_preference
     set_download_preference
   end
 end
+
 def set_download_preference
   File.makedirs("#{@conf}")
   begin
@@ -593,6 +602,7 @@ def set_download_preference
   messages = ["Your download preference has been set to #{@download}."]
   output(messages)
 end
+
 def set_restart_preference
   File.makedirs("#{@conf}")
   preference = ENV['server']
@@ -643,6 +653,7 @@ def validate_extension_location
     move_extension(vendor_name)
   end
 end
+
 def move_extension(vendor_name)
   begin
     move("#{@path}/#{@_name}", "#{@path}/#{vendor_name}")
@@ -751,6 +762,7 @@ def add_remote(messages, require_options)
     exit
   end
 end
+
 def pull_remote
   require_git
   name = ENV['name'] if ENV[ 'name' ]
