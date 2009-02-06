@@ -101,7 +101,7 @@ def install_extension(messages, require_options)
   check_submodules
   check_dependencies
   validate_extension_location
-  check_rake_tasks
+  run_extension_tasks
   messages = ["The #{@name} extension has been installed successfully.", "Disable it with: rake ray:dis name=#{@name}"]
   output(messages)
   restart_server
@@ -451,7 +451,7 @@ def uninstall_extension
     output(messages)
     exit
   end
-  check_rake_tasks
+  run_extension_tasks
   run_uninstall_tasks
   messages = ["The #{@name} extension has been uninstalled. To install it run:", "rake ray:ext name=#{@name}"]
   output(messages)
