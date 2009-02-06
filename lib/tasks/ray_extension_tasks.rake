@@ -282,7 +282,6 @@ def git_extension_update(extension)
     sh("git checkout master")
     sh("git pull origin master")
   end
-  puts("#{extension} extension updated.")
 end
 
 def http_extension_update(extension)
@@ -290,7 +289,6 @@ def http_extension_update(extension)
     sh("rake ray:extension:disable name=#{extension}")
     sh("rake ray:extension:install name=#{extension}")
     rm_r("#{@ray}/disabled_extensions/#{extension}")
-    puts("#{extension} extension updated.")
   end
 end
 
