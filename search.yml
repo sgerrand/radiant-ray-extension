@@ -260,9 +260,9 @@ repositories:
   description: Access Radiant through WebDAV
   owner: johnmuhl
 - name: radiant-redcloth4-extension
-  url: http://github.com/johnmuhl/radiant-redcloth4-extension
+  url: http://github.com/jgarber/radiant-redcloth4-extension
   description: Overrides Radiant's packaged RedCloth version so you can use a newer RedCloth gem.
-  owner: johnmuhl
+  owner: jgarber
 - name: radiant-wordpress_link_saver-extension
   url: http://github.com/saturnflyer/radiant-wordpress_link_saver-extension
   description: Maintains the links within imported content from Wordpress to Radiant
@@ -424,9 +424,9 @@ repositories:
 ---
 repositories:
 - name: radiant-file-browser-extension
-  url: http://github.com/johnmuhl/radiant-file-browser-extension
+  url: http://github.com/tricycle/radiant-file-browser-extension
   description: "Alpha: Lists the contents of a server-side directory, and allows uploading of files to it"
-  owner: johnmuhl
+  owner: tricycle
 - name: find_fu
   url: http://github.com/inz/find_fu
   description: Radiant extension to add some advanced find functionality.
