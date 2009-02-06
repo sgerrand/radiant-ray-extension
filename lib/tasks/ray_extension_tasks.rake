@@ -538,9 +538,9 @@ def run_uninstall_tasks
       end
     end
   end
-  File.makedirs("#{@ray}/removed_extensions")
-  move("#{@path}/#{@name}", "#{@ray}/removed_extensions/#{@name}")
-  rm_r("#{@ray}/removed_extensions/#{@name}")
+  File.makedirs("#{@ray}/tmp")
+  move("#{@path}/#{@name}", "#{@ray}/tmp/#{@name}")
+  rm_r("#{@ray}/tmp/#{@name}")
 end
 
 def search_extensions
