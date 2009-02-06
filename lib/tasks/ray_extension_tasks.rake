@@ -70,7 +70,7 @@ namespace :ray do
     task :restart do
       messages = ["I need to know the type of server you'd like auto-restarted.", "rake ray:setup:restart server=mongrel", "rake ray:setup:restart server=passenger"]
       require_options = [ENV['server']]
-      validate_command(messages, required_options)
+      validate_command(messages, require_options)
       set_restart_preference
     end
     desc "Set extension download preference."
