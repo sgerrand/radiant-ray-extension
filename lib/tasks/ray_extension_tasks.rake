@@ -31,7 +31,7 @@ namespace :ray do
       messages = ["The enable command requires an extension name.", "rake ray:extension:enable name=extension_name"]
       require_options = [ENV['name']]
       validate_command(messages, require_options)
-      enable_extension
+      enable_extension(name)
     end
     desc "Uninstall an extension"
     task :uninstall do
