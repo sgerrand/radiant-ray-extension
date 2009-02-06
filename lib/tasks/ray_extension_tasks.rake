@@ -411,28 +411,67 @@ def run_extension_tasks
       tasks << 'migrate' if line.include? 'task :migrate =>'
       tasks << 'update' if line.include? 'task :update =>'
     end
-    if tasks.include?('install')
-      begin
-        sh("rake radiant:extensions:#{@name}:install --trace")
-      rescue Exception => error
-        cause = "install"
-        quarantine_extension(cause)
-      end
-    else
-      if tasks.include?('migrate')
+    if @uninstall
+      if tasks.include?('uninstall')
         begin
-          sh("rake radiant:extensions:#{@name}:migrate --trace")
+          sh("rake radiant:extensions:#{@name}:uninstall --trace")
         rescue Exception => error
-          cause = "migrate"
+          cause = "uninstall"
           quarantine_extension(cause)
         end
-      end
-      if tasks.include?('update')
+      else
+        if tasks.include?('migrate')
+          begin
+            sh("rake radiant:extensions:#{@name}:migrate VERSION=0 --trace")
+          rescue Exception => error
+            cause = "migrate"
+            quarantine_extension(cause)
+          end
+        end
+        if tasks.include?('update')
+          require 'find'
+          files = []
+          Find.find("#{@path}/#{@name}/public") {|file| files << file}
+          files.each do |f|
+            if f.include?('.')
+              unless f.include?('.DS_Store')
+                file = f.gsub(/#{@path}\/#{@name}\/public/, 'public')
+                File.delete("#{file}") rescue nil
+              end
+            end
+          end
+          messages = [
+            "I tried to delete assets associated with the #{@name} extension,",
+            "but may have missed some while trying not to delete anything accidentally.",
+            "You may want manually clean up your public directory after an uninstall."
+          ]
+          output(messages)
+        end
+      end      
+    else
+      if tasks.include?('install')
         begin
-          sh("rake radiant:extensions:#{@name}:update --trace")
+          sh("rake radiant:extensions:#{@name}:install --trace")
         rescue Exception => error
-          cause = "update"
+          cause = "install"
           quarantine_extension(cause)
+        end
+      else
+        if tasks.include?('migrate')
+          begin
+            sh("rake radiant:extensions:#{@name}:migrate --trace")
+          rescue Exception => error
+            cause = "migrate"
+            quarantine_extension(cause)
+          end
+        end
+        if tasks.include?('update')
+          begin
+            sh("rake radiant:extensions:#{@name}:update --trace")
+          rescue Exception => error
+            cause = "update"
+            quarantine_extension(cause)
+          end
         end
       end
     end
