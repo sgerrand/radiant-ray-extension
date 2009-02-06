@@ -148,13 +148,12 @@ def update_extension
   # update all extensions, except ray
   if name == 'all'
     get_download_preference
+    extensions = Dir.entries(@path) - ['.', '..', '.DS_Store', '.disabled', 'ray']
     if @download == "git"
-      extensions = Dir.entries(@path) - ['.', '.DS_Store', 'ray', '..']
       extensions.each do |extension|
         git_extension_update(extension)
       end
     elsif @download == "http"
-      extensions = Dir.entries(@path) - ['.', '.DS_Store', 'ray', '..']
       extensions.each do |extension|
         http_extension_update(extension)
       end
