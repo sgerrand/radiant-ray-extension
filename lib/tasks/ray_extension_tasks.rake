@@ -434,7 +434,7 @@ def run_extension_tasks
     if @uninstall
       if tasks.include?('uninstall')
         begin
-          sh("rake radiant:extensions:#{@name}:uninstall --trace")
+          sh("rake radiant:extensions:#{@name}:uninstall")
         rescue Exception => error
           cause = "uninstall"
           quarantine_extension(cause)
@@ -442,7 +442,7 @@ def run_extension_tasks
       else
         if tasks.include?('migrate')
           begin
-            sh("rake radiant:extensions:#{@name}:migrate VERSION=0 --trace")
+            sh("rake radiant:extensions:#{@name}:migrate VERSION=0")
           rescue Exception => error
             cause = "migrate"
             quarantine_extension(cause)
@@ -471,7 +471,7 @@ def run_extension_tasks
     else
       if tasks.include?('install')
         begin
-          sh("rake radiant:extensions:#{@name}:install --trace")
+          sh("rake radiant:extensions:#{@name}:install")
         rescue Exception => error
           cause = "install"
           quarantine_extension(cause)
@@ -479,7 +479,7 @@ def run_extension_tasks
       else
         if tasks.include?('migrate')
           begin
-            sh("rake radiant:extensions:#{@name}:migrate --trace")
+            sh("rake radiant:extensions:#{@name}:migrate")
           rescue Exception => error
             cause = "migrate"
             quarantine_extension(cause)
@@ -487,7 +487,7 @@ def run_extension_tasks
         end
         if tasks.include?('update')
           begin
-            sh("rake radiant:extensions:#{@name}:update --trace")
+            sh("rake radiant:extensions:#{@name}:update")
           rescue Exception => error
             cause = "update"
             quarantine_extension(cause)
