@@ -685,22 +685,25 @@ def replace_github_username
   @url.gsub!(/(http:\/\/github.com\/).*(\/.*)/, "\\1#{ENV['hub']}\\2")
 end
 
-def validate_extension_location
-  @name = @_name
-  unless File.exist?("#{@path}/#{@_name}/#{@_name}_extension.rb")
-    path = Regexp.escape(@path)
-    begin
-      sh("ls #{@path}/#{@_name}/*_extension.rb")
-    rescue Exception
-      rm_r("#{@ray}/disabled_extensions/#{@_name}") rescue nil
-      move("#{@path}/#{@_name}", "#{@ray}/disabled_extensions/#{@_name}")
-      messages = ["#{@path}/#{@_name} is not a Radiant extension.", "It has been moved to #{@ray}/disabled_extensions/#{@_name}."]
-      output(messages)
-      exit
-    end
-    vendor_name = `ls #{@path}/#{@_name}/*_extension.rb`.gsub(/#{path}\/#{@_name}\//, "").gsub(/_extension.rb/, "").gsub(/\n/, "") rescue nil
-    move_extension(vendor_name)
+def determine_install_path
+  File.makedirs("#{@ray}/tmp")
+  # download an html list of the repository contents
+  begin
+    html = open("#{@url}.git", "User-Agent" => "open-uri").read
+  rescue OpenURI::HTTPError
+    puts "GitHub is having trouble serving the request, just try it again."
+    exit
   end
+  open("#{@ray}/tmp/#{ENV['name']}.html", "w") { |f| f.write(html) }
+  # inspect the html list to determine the install path
+  name = []
+  File.readlines("#{@path}/ray/tmp/#{ENV['name']}.html").map do |f|
+    line = f.rstrip
+    name << line if line.include?("_extension.rb")
+  end
+  @name = name[0].to_s
+  @name.strip!.gsub!(/<li> <a href=".*">/, "").gsub!(/<\/a> <\/li>/, "").gsub!(/_extension.rb/, "")
+  rm_r("#{@ray}/tmp")
 end
 
 def move_extension(vendor_name)
