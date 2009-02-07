@@ -255,10 +255,6 @@ repositories:
   url: http://github.com/djcp/radiant-sectionalize-extension
   description: A set of radius tags designed to make splitting Radiant sites into "sections" easier for more flexible CSS layouts.
   owner: djcp
-- name: radiant-dav-extension
-  url: http://github.com/johnmuhl/radiant-dav-extension
-  description: Access Radiant through WebDAV
-  owner: johnmuhl
 - name: radiant-redcloth4-extension
   url: http://github.com/jgarber/radiant-redcloth4-extension
   description: Overrides Radiant's packaged RedCloth version so you can use a newer RedCloth gem.
@@ -597,7 +593,30 @@ repositories:
   url: http://github.com/saturnflyer/radiant-page_group_rbac_migrator-extension
   description: Migrates data from Page Group Permissions to using RBAC Page Edit and maintains the connection between pages, users and roles/groups.
   owner: saturnflyer
-
+- name: invisible_pages
+  url: http://github.com/saturnflyer/radiant-invisible_pages-extension
+  description: Invisible Pages was developed for dealing with migrated content from another system to allow older content to continue living at it’s normal URL. The design of this extension assumes that you have some content that may be directly under your Home page, but you don’t want the Radiant interface to have so many pages on the index. Invisible Pages will keep your interface clean.
+  owner: saturnflyer
+- name: change_author
+  url: http://github.com/saturnflyer/radiant-change_author-extension
+  description:It allows administrators to set the author of each page.
+  owner: saturnflyer
+- name: code_ray
+  url: http://github.com/phallstrom/code_ray
+  description: Provides syntax highlighting via the CodeRay ruby gem.
+  owner: phallstrom
+- name: dav
+  url: http://github.com/willcodeforfoo/radiant-dav-extension
+  description: Access Radiant through WebDAV, by myself and Michael Kessler
+  owner: willcodeforfoo
+- name: categories
+  url: http://github.com/eph3meral/radiant-categories-extension
+  description: Basic categorization support.
+  owner: eph3meral
+- name: fckeditor
+  url: http://github.com/djcp/radiant-fckeditor
+  description: fckeditor filter for page parts – with file uploads and spell checking.
+  owner: djcp
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
