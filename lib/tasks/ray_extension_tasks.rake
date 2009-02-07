@@ -94,15 +94,17 @@ def install_extension(messages, require_options)
   get_download_preference
   search_extensions
   choose_extension_to_install
+  determine_install_path
   replace_github_username if ENV['hub']
   git_extension_install if @download == "git"
   http_extension_install if @download == "http"
   set_download_preference if @download != "git" and @download != "http"
   check_submodules
   check_dependencies
-  validate_extension_location
   run_extension_tasks
-  messages = ["The #{@name} extension has been installed successfully.", "Disable it with: rake ray:dis name=#{@name}"]
+  messages = [
+    "The #{@name} extension has been installed successfully.",
+  ]
   output(messages)
   restart_server
 end
@@ -227,7 +229,7 @@ def git_extension_install
   end
   if File.exist?('.git/HEAD')
     begin
-      sh("git submodule add #{@url}.git #{@path}/#{@_name}")
+      sh("git submodule add #{@url}.git #{@path}/#{@name}")
     rescue Exception => err
       messages = [err]
       output(messages)
@@ -235,7 +237,7 @@ def git_extension_install
     end
   else
     begin
-      sh("git clone #{@url}.git #{@path}/#{@_name}")
+      sh("git clone #{@url}.git #{@path}/#{@name}")
     rescue Exception => err
       messages = [err]
       output(messages)
@@ -250,26 +252,36 @@ def http_extension_install
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
   rescue OpenURI::HTTPError
-    messages = ["There was a glitch in the system and the extension could not be downloaded.", "These are usually temporary issues, just try it again."]
+    messages = [
+      "GitHub failed to serve the requested extension archive.",
+      "These are usually temporary issues, just try it again."
+    ]
     output(messages)
     exit
   end
-  open("#{@ray}/tmp/#{@_name}.tar.gz", "wb") {|f| f.write(tarball)}
+  open("#{@ray}/tmp/#{@name}.tar.gz", "wb") {|f| f.write(tarball)}
   Dir.chdir("#{@ray}/tmp") do
     begin
-      sh("tar xzvf #{@_name}.tar.gz")
+      sh("tar xzvf #{@name}.tar.gz")
     rescue Exception
-      rm("#{@_name}.tar.gz")
-      messages = ["The #{@_name} extension archive is not decompressing properly.", "You can usually fix this by simply running the command again."]
+      rm("#{@name}.tar.gz")
+      messages = [
+        "The #{@name} extension archive is not decompressing properly.",
+        "You can usually fix this by simply running the command again."
+      ]
       output(messages)
       exit
     end
-    rm("#{@_name}.tar.gz")
+    rm("#{@name}.tar.gz")
   end
   begin
-    sh("mv #{@ray}/tmp/* #{@path}/#{@_name}")
+    sh("mv #{@ray}/tmp/* #{@path}/#{@name}")
   rescue
-    messages = ["You already have the #{@_name} extension installed.", "If you're trying to update it, use the update command instead.", "rake ray:extension:update name=#{@_name}"]
+    messages = [
+      "You already have the #{@name} extension installed.",
+      "If you're trying to update it, use the update command instead.",
+      "rake ray:extension:update name=#{@name}"
+    ]
     output(messages)
     rm_r("#{@ray}/tmp")
     exit
