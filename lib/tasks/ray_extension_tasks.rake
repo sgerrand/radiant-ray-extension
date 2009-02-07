@@ -374,11 +374,11 @@ def install_submodules(submodule_urls, submodule_paths)
   if @download == "git"
     if File.exist?('.git/HEAD')
       submodule_urls.each do |url|
-        sh("git submodule add #{url} #{@path}/#{@extension}/#{submodule_paths[submodule_urls.index(url)]}")
+        sh("git submodule add #{url} #{@path}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
       end
     else
       submodule_urls.each do |url|
-        Dir.chdir("#{@path}/#{@extension}") do
+        Dir.chdir("#{@path}/#{@name}") do
           sh "git submodule init"
           sh "git submodule update"
         end
@@ -396,13 +396,16 @@ def install_submodules(submodule_urls, submodule_paths)
           sh("tar xzvf #{url}.tar.gz")
         rescue Exception
           rm("#{url}.tar.gz")
-          messages = ["The #{url} extension archive is not decompressing properly.", "You can usually fix this by simply running the command again."]
+          messages = [
+            "GitHub failed to serve the requested archive.",
+            "These issues are usually temporary, just try again."
+          ]
           output(messages)
           exit
         end
         rm("#{url}.tar.gz")
       end
-      sh("mv #{@ray}/tmp/* #{@path}/#{@extension}/#{submodule_paths[submodule_urls.index(url)]}")
+      sh("mv #{@ray}/tmp/* #{@path}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
       rm_r("#{@ray}/tmp")
     end
   else
