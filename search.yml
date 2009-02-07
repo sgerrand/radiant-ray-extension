@@ -499,10 +499,6 @@ repositories:
   url: http://github.com/cradle/radiant-can-haz-error-extension
   description: Simple page that will throw an error. For testing how your site handles errors.
   owner: cradle
-- name: legacy_path_handler
-  url: http://github.com/intinig/legacy_path_handler
-  description: Radiant Extension for 301 redirection of old URLs
-  owner: intinig
 - name: radiant-dashboard-extension
   url: http://github.com/saturnflyer/radiant-dashboard-extension
   description: Provides an area to view (and extend) recent activity in Radiant.
@@ -666,3 +662,7 @@ repositories:
 #   url: http://github.com/digitalpulp/radiant-sphinx-search-extension
 #   description: Adds Thinking Sphinx support to Radiant pages
 #   owner: digitalpulp
+# - name: legacy_path_handler
+#   url: http://github.com/intinig/legacy_path_handler
+#   description: Radiant Extension for 301 redirection of old URLs
+#   owner: intinig
