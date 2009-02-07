@@ -323,13 +323,15 @@ def check_dependencies
 end
 
 def check_submodules
-  if File.exist?("#{@path}/#{@_name}/.gitmodules")
-    submodules = []
-    File.readlines("#{@path}/#{@_name}/.gitmodules").map do |f|
+  if File.exist?("#{@path}/#{@name}/.gitmodules")
+    submodule_urls = []
+    submodule_paths = []
+    File.readlines("#{@path}/#{@name}/.gitmodules").map do |f|
       line = f.rstrip
-      submodules << line.gsub(/\turl\ =\ /, '') if line.include? 'url = '
+      submodule_urls << line.gsub(/\turl\ =\ /, '') if line.include? 'url = '
+      submodule_paths << line.gsub(/\tpath\ =\ /, '') if line.include? 'path = '
     end
-    install_submodules(submodules)
+    install_submodules(submodule_urls, submodule_paths)
   end
 end
 
@@ -368,36 +370,39 @@ def install_dependencies
   end
 end
 
-def install_submodules(submodules)
+def install_submodules(submodule_urls, submodule_paths)
   if @download == "git"
     if File.exist?('.git/HEAD')
-      submodules.each do |submodule|
-        sh("git submodule add #{submodule} vendor/plugins/#{submodule.gsub(/(git:\/\/github.com\/.*\/)(.*)(.git)/, "\\2")}")
+      submodule_urls.each do |url|
+        sh("git submodule add #{url} #{@path}/#{@extension}/#{submodule_paths[submodule_urls.index(url)]}")
       end
     else
-      submodules.each do |submodule|
-        sh("git clone #{submodule} vendor/plugins/#{submodule.gsub(/(git:\/\/github.com\/.*\/)(.*)(.git)/, "\\2")}")
+      submodule_urls.each do |url|
+        Dir.chdir("#{@path}/#{@extension}") do
+          sh "git submodule init"
+          sh "git submodule update"
+        end
       end
     end
   elsif @download == "http"
-    submodules.each do |submodule|
+    submodule_urls.each do |url|
       File.makedirs("#{@ray}/tmp")
       submodule.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "http:\\2/tarball/master")
-      tarball = open("#{submodule}", "User-Agent" => "open-uri").read
+      tarball = open("#{url}", "User-Agent" => "open-uri").read
       submodule.gsub!(/http:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
-      open("#{@ray}/tmp/#{submodule}.tar.gz", "wb") {|f| f.write(tarball)}
+      open("#{@ray}/tmp/#{url}.tar.gz", "wb") {|f| f.write(tarball)}
       Dir.chdir("#{@ray}/tmp") do
         begin
-          sh("tar xzvf #{submodule}.tar.gz")
+          sh("tar xzvf #{url}.tar.gz")
         rescue Exception
-          rm("#{submodule}.tar.gz")
-          messages = ["The #{submodule} extension archive is not decompressing properly.", "You can usually fix this by simply running the command again."]
+          rm("#{url}.tar.gz")
+          messages = ["The #{url} extension archive is not decompressing properly.", "You can usually fix this by simply running the command again."]
           output(messages)
           exit
         end
-        rm("#{submodule}.tar.gz")
+        rm("#{url}.tar.gz")
       end
-      sh("mv #{@ray}/tmp/* vendor/plugins/#{submodule}")
+      sh("mv #{@ray}/tmp/* #{@path}/#{@extension}/#{submodule_paths[submodule_urls.index(url)]}")
       rm_r("#{@ray}/tmp")
     end
   else
