@@ -1,6 +1,7 @@
 namespace :ray do
   require 'ftools'
   require 'yaml'
+  require 'open-uri'
 
   @path = "vendor/extensions"
   @ray  = "#{@path}/ray"
@@ -247,7 +248,6 @@ def git_extension_install
 end
 
 def http_extension_install
-  require 'open-uri'
   File.makedirs("#{@ray}/tmp")
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
