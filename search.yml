@@ -599,7 +599,7 @@ repositories:
   owner: saturnflyer
 - name: change_author
   url: http://github.com/saturnflyer/radiant-change_author-extension
-  description:It allows administrators to set the author of each page.
+  description: It allows administrators to set the author of each page.
   owner: saturnflyer
 - name: code_ray
   url: http://github.com/phallstrom/code_ray
