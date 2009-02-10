@@ -79,10 +79,6 @@ repositories:
   url: http://github.com/johnmuhl/radiant-ray-extension
   description: Ray makes managing Radiant extensions a breeze. Uses git or http.
   owner: johnmuhl
-- name: radiant-translator-extension
-  url: http://github.com/cradle/radiant-translator-extension
-  description: Radiant extension that allows for different page parts to be rendered depending on the user's Accept-Language header.
-  owner: cradle
 - name: radiant-banner-rotator-extension
   url: http://github.com/seancribbs/radiant-banner-rotator-extension
   description: A simple Radiant extension that supports randomly rotating banners on pages.

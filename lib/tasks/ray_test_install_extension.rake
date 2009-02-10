@@ -143,7 +143,6 @@ def test_install_extension
     "thirty-boxes",
     "top-level-page",
     "translator",
-    "translator",
     "trike-tags",
     "twitter",
     "upcoming-events",
