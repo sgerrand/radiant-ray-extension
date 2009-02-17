@@ -73,16 +73,14 @@ namespace :ray do
     end
     desc "Setup a new remote on an extension."
     task :remote do
+      require_git
       messages = [
-        "The remote command requires an extension name and a GitHub username.",
+        "================================================================================",
+        "AN EXTENSION NAME AND GITHUB USERNAME ARE REQUIRED! For example:",
         "rake ray:extension:remote name=extension_name hub=user_name"
       ]
-      require_options = [
-        ENV["name"],
-        ENV["hub"]
-      ]
+      require_options = [ENV["name"], ENV["hub"]]
       validate_command(messages, require_options)
-      require_git
       add_remote
     end
     desc "Install an extension bundle."
@@ -134,6 +132,10 @@ def install_extension
   search_extensions(show = nil)
   determine_install_path # cancels installation if extension exists
   replace_github_username if ENV["hub"]
+  if ENV["lib"]
+    @gem_dependencies = [ENV["lib"]]
+    install_dependencies
+  end
   git_extension_install if @download == "git"
   http_extension_install if @download == "http"
   check_submodules
@@ -266,9 +268,14 @@ def install_bundle
         name = extension[i]["name"]
         options = []
         options << " hub=" + extension[i]["hub"] if extension[i]["hub"]
-        options << " remote=" + extension[i]["remote"] if extension[i]["remote"]
         options << " lib=" + extension[i]["lib"] if extension[i]["lib"]
         sh("rake ray:extension:install name=#{name}#{options}")
+        if extension[i]["remote"].length > 0
+          for j in 0...extension[i]["remote"].length
+            sh("rake ray:extension:remote name=#{name} hub=#{extension[i]["remote"][j]}")
+          end
+          sh("rake ray:extension:pull name=#{name}")
+        end
       end
     end
   end
@@ -837,10 +844,10 @@ end
 def quarantine_extension(cause)
   move_to_disabled
   messages = [
-        "The #{@name} extension failed to install properly.",
-        "Specifically, the failure was caused by the extension's #{cause} task:",
-        "Run `rake radiant:extensions:#{@name}:#{cause} --trace` for more details.",
-        "The extension has been disabled and placed in #{@p}/.disabled"
+    "The #{@name} extension failed to install properly.",
+    "Specifically, the failure was caused by the extension's #{cause} task:",
+    "Run `rake radiant:extensions:#{@name}:#{cause} --trace` for more details.",
+    "The extension has been disabled and placed in #{@p}/.disabled"
   ]
   output(messages)
   exit
@@ -849,7 +856,8 @@ def require_git
   get_download_preference
   unless @download == "git"
     messages = [
-      "This commands requires git.",
+      "================================================================================",
+      "THIS COMMANDS REQUIRES GIT!",
       "Refer to http://git-scm.com/ for installation instructions."
     ]
     output(messages)
@@ -889,11 +897,11 @@ def restart_server
 end
 def add_remote
   hub = ENV["hub"]
-  choose_extension_to_install
+  search_extensions(show = nil)
   @url.gsub!(/(http)(:\/\/github.com\/).*(\/.*)/, "git\\2" + hub + "\\3")
-  @extension.gsub!(/-/, "_")
-  if File.exist?("#{@p}/#{@extension}/.git")
-    Dir.chdir("#{@p}/#{@extension}") do
+  extension = ENV['name']
+  if File.exist?("#{@p}/#{extension}/.git")
+    Dir.chdir("#{@p}/#{extension}") do
       sh("git remote add #{hub} #{@url}.git")
       sh("git fetch #{hub}")
       branches = `git branch -a`.split("\n")
@@ -916,7 +924,7 @@ def add_remote
     output(messages)
     exit
   else
-    messages = ["#{@p}/#{@extension} is not a git repository."]
+    messages = ["#{@p}/#{extension} is not a git repository."]
     output(messages)
     exit
   end
