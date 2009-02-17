@@ -1,57 +1,65 @@
 namespace :ray do
 
   require "ftools"
-  require "yaml"
+  require "fileutils"
   require "open-uri"
+  require "tmpdir"
+  require "yaml"
 
-  @path = "vendor/extensions"
-  @ray  = "#{@path}/ray"
-  @conf = "#{@ray}/config"
+  @p = "vendor/extensions"
+  @r = "#{@p}/ray"
+  @c = "#{@r}/config"
 
   namespace :extension do
+    desc "Install an extension."
     task :install do
       messages = [
-        "An extension name is required.",
-        "rake ray:i name=extension_name"
+        "================================================================================",
+        "AN EXTENSION NAME IS REQUIRED! For example:",
+        "rake ray:extension:install name=extension_name"
       ]
       require_options = [ENV["name"]]
       validate_command(messages, require_options)
-      install_extension(messages, require_options)
+      install_extension
     end
+    desc "Search available extensions."
     task :search do
       messages = [
-        "A search term is required.",
-        "rake ray:s term=search_term"
+        "================================================================================",
+        "A SEARCH TERM IS REQUIRED! For example:",
+        "rake ray:extension:search term=search_term"
       ]
       require_options = [ENV["term"]]
       validate_command(messages, require_options)
-      search_extensions
-      search_results
+      search_extensions(show = true)
     end
+    desc "Disable an extension."
     task :disable do
-      name = ENV["name"]
       messages = [
-        "An extension name is required.",
-        "rake ray:d name=extension_name"
+        "================================================================================",
+        "AN EXTENSION NAME IS REQUIRED! For example,",
+        "rake ray:extension:disable name=extension_name"
       ]
       require_options = [ENV["name"]]
       validate_command(messages, require_options)
-      disable_extension(name)
+      disable_extension
     end
+    desc "Enable an extension."
     task :enable do
-      name = ENV["name"]
       messages = [
-        "An extension name is required.",
+        "================================================================================",
+        "AN EXTENSION NAME IS REQUIRED! For example:",
         "rake ray:extension:enable name=extension_name"
       ]
       require_options = [ENV["name"]]
       validate_command(messages, require_options)
-      enable_extension(name)
+      enable_extension
     end
     desc "Uninstall an extension"
     task :uninstall do
       messages = [
-        "An extension name is required.",
+        "================================================================================",
+        "AN EXTENSION NAME IS REQUIRED! For example:",
         "rake ray:extension:uninstall name=extension_name"
       ]
       require_options = [ENV["name"]]
@@ -110,33 +118,21 @@ namespace :ray do
     end
   end
 
+  # i've gotten progressively lazier
   task :ext => ["extension:install"]
+  task :search => ["extension:search"]
   task :dis => ["extension:disable"]
   task :en => ["extension:enable"]
-  task :search => ["extension:search"]
-
-  desc "Disable an extension."
-  task :d => ["extension:disable"]
-  desc "Install an extension."
   task :i => ["extension:install"]
-  desc "Enable an extension."
-  task :e => ["extension:enable"]
-  desc "Search available extensions."
   task :s => ["extension:search"]
+  task :d => ["extension:disable"]
+  task :e => ["extension:enable"]
+
 end
-def install_extension(messages, require_options)
-  puts("================================================================================")
+def install_extension
   get_download_preference
-  unless @download == "git" or @download == "http"
-    messages = [
-      "Your download preference is broken, to repair it run:",
-      "rake ray:setup:restart server=[mongrel|passenger]"
-    ]
-    output(messages)
-    exit
-  end
-  choose_extension_to_install
-  determine_install_path
+  search_extensions(show = nil)
+  determine_install_path # cancels installation if extension exists
   replace_github_username if ENV["hub"]
   git_extension_install if @download == "git"
   http_extension_install if @download == "http"
@@ -144,39 +140,52 @@ def install_extension(messages, require_options)
   check_dependencies
   run_extension_tasks
   messages = [
+    "================================================================================",
     "The #{@name} extension has been installed successfully."
   ]
   output(messages)
   restart_server
 end
-def disable_extension(name)
-  @name = name
+def disable_extension
+  @name = ENV["name"]
   move_to_disabled
   messages = [
-    "The #{@name} extension has been disabled. Enable it with:",
-    "rake ray:e name=#{@name}"
+    "================================================================================",
+    "The #{@name} extension has been disabled.",
+    "You can re-enable it later by running:",
+    "rake ray:extension:enable name=#{@name}"
   ]
   output(messages)
   restart_server
 end
-def enable_extension(name)
-  if File.exist?("#{@path}/.disabled/#{name}")
-    begin
-      move("#{@path}/.disabled/#{name}", "#{@path}/#{name}")
-    rescue Exception
-      messages = ["You already have a copy of the #{name} extension installed."]
-      output(messages)
-      exit
-    end
+def enable_extension
+  name = ENV["name"]
+  if File.exist?("#{@p}/#{name}")
+    remove_dir("#{@p}/.disabled/#{name}")
     messages = [
-      "The #{name} extension has been enabled. Disable it with:",
-      "rake ray:d name=#{name}"
+      "================================================================================",
+      "The #{name} extension was re-installed after it was disabled.",
+      "So there is no reason to re-enable the version you previously disabled.",
+      "I removed the duplicate, disabled copy of the extension."
+    ]
+    output(messages)
+    exit
+  end
+  if File.exist?("#{@p}/.disabled/#{name}")
+    move("#{@p}/.disabled/#{name}", "#{@p}/#{name}")
+    messages = [
+      "================================================================================",
+      "The #{name} extension has been enabled",
+      "You can disable it again later by running:",
+      "rake ray:extension:disable name=#{name}"
     ]
     output(messages)
   else
     messages = [
-      "The #{name} extension was not disabled by Ray. Install it with:",
-      "rake ray:i name=#{name}"
+      "================================================================================",
+      "The #{name} extension is not disabled.",
+      "If you were trying to install the extension try running:",
+      "rake ray:extension:install name=#{name}"
     ]
     output(messages)
     exit
@@ -188,7 +197,7 @@ def update_extension
   # update all extensions, except ray
   if name == "all"
     get_download_preference
-    extensions = Dir.entries(@path) - [".", "..", ".DS_Store", ".disabled", "ray"]
+    extensions = Dir.entries(@p) - [".", "..", ".DS_Store", ".disabled", "ray"]
     if @download == "git"
       extensions.each do |extension|
         git_extension_update(extension)
@@ -282,25 +291,13 @@ def git_extension_install
     end
   end
   if File.exist?(".git/HEAD")
-    begin
-      sh("git submodule add #{@url}.git #{@path}/#{@name}")
-    rescue Exception => err
-      messages = [err]
-      output(messages)
-      exit
-    end
+    sh("git submodule add #{@url}.git #{@p}/#{@name}")
   else
-    begin
-      sh("git clone #{@url}.git #{@path}/#{@name}")
-    rescue Exception => err
-      messages = [err]
-      output(messages)
-      exit
-    end
+    sh("git clone #{@url}.git #{@p}/#{@name}")
   end
 end
 def http_extension_install
-  File.makedirs("#{@ray}/tmp")
+  File.makedirs("#{@r}/tmp")
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
   rescue OpenURI::HTTPError
@@ -311,8 +308,8 @@ def http_extension_install
     output(messages)
     exit
   end
-  open("#{@ray}/tmp/#{@name}.tar.gz", "wb") { |f| f.write(tarball) }
-  Dir.chdir("#{@ray}/tmp") do
+  open("#{@r}/tmp/#{@name}.tar.gz", "wb") { |f| f.write(tarball) }
+  Dir.chdir("#{@r}/tmp") do
     begin
       sh("tar xzvf #{@name}.tar.gz")
     rescue Exception
@@ -327,7 +324,7 @@ def http_extension_install
     rm("#{@name}.tar.gz")
   end
   begin
-    sh("mv #{@ray}/tmp/* #{@path}/#{@name}")
+    sh("mv #{@r}/tmp/* #{@p}/#{@name}")
   rescue
     messages = [
       "You already have the #{@name} extension installed.",
@@ -335,30 +332,30 @@ def http_extension_install
       "rake ray:extension:update name=#{@name}"
     ]
     output(messages)
-    rm_r("#{@ray}/tmp")
+    remove_dir("#{@r}/tmp")
     exit
   end
-  rm_r("#{@ray}/tmp")
+  remove_dir("#{@r}/tmp")
 end
 def git_extension_update(name)
-  Dir.chdir("#{@path}/#{name}") do
+  Dir.chdir("#{@p}/#{name}") do
     sh("git checkout master")
     sh("git pull origin master")
   end
 end
 def http_extension_update(name)
-  Dir.chdir("#{@path}/#{name}") do
+  Dir.chdir("#{@p}/#{name}") do
     sh("rake ray:extension:disable name=#{name}")
     sh("rake ray:extension:install name=#{name}")
-    rm_r("#{@ray}/disabled_extensions/#{name}")
+    remove_dir("#{@r}/disabled_extensions/#{name}")
   end
 end
 def check_dependencies
-  if File.exist?("#{@path}/#{@name}/dependency.yml")
+  if File.exist?("#{@p}/#{@name}/dependency.yml")
     @extension_dependencies = []
     @gem_dependencies       = []
     @plugin_dependencies    = []
-    File.open("#{@path}/#{@name}/dependency.yml").map do |f|
+    File.open("#{@p}/#{@name}/dependency.yml").map do |f|
       YAML.load_documents(f) do |dependency|
         for i in 0...dependency.length
           @extension_dependencies << dependency[i]["extension"] if dependency[i].include?("extension")
@@ -371,10 +368,10 @@ def check_dependencies
   end
 end
 def check_submodules
-  if File.exist?("#{@path}/#{@name}/.gitmodules")
+  if File.exist?("#{@p}/#{@name}/.gitmodules")
     submodule_urls = []
     submodule_paths = []
-    File.readlines("#{@path}/#{@name}/.gitmodules").map do |f|
+    File.readlines("#{@p}/#{@name}/.gitmodules").map do |f|
       line = f.rstrip
       submodule_urls << line.gsub(/\turl\ =\ /, "") if line.include? "url = "
       submodule_paths << line.gsub(/\tpath\ =\ /, "") if line.include? "path = "
@@ -423,11 +420,11 @@ def install_submodules(submodule_urls, submodule_paths)
   if @download == "git"
     if File.exist?(".git/HEAD")
       submodule_urls.each do |url|
-        sh("git submodule add #{url} #{@path}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
+        sh("git submodule add #{url} #{@p}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
       end
     else
       submodule_urls.each do |url|
-        Dir.chdir("#{@path}/#{@name}") do
+        Dir.chdir("#{@p}/#{@name}") do
           sh("git submodule init")
           sh("git submodule update")
         end
@@ -435,12 +432,12 @@ def install_submodules(submodule_urls, submodule_paths)
     end
   elsif @download == "http"
     submodule_urls.each do |url|
-      File.makedirs("#{@ray}/tmp")
+      File.makedirs("#{@r}/tmp")
       submodule.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "http:\\2/tarball/master")
       tarball = open("#{url}", "User-Agent" => "open-uri").read
       submodule.gsub!(/http:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
-      open("#{@ray}/tmp/#{url}.tar.gz", "wb") { |f| f.write(tarball) }
-      Dir.chdir("#{@ray}/tmp") do
+      open("#{@r}/tmp/#{url}.tar.gz", "wb") { |f| f.write(tarball) }
+      Dir.chdir("#{@r}/tmp") do
         begin
           sh("tar xzvf #{url}.tar.gz")
         rescue Exception
@@ -454,8 +451,8 @@ def install_submodules(submodule_urls, submodule_paths)
         end
         rm("#{url}.tar.gz")
       end
-      sh("mv #{@ray}/tmp/* #{@path}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
-      rm_r("#{@ray}/tmp")
+      sh("mv #{@r}/tmp/* #{@p}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
+      remove_dir("#{@r}/tmp")
     end
   else
     messages = [
@@ -466,8 +463,8 @@ def install_submodules(submodule_urls, submodule_paths)
   end
 end
 def run_extension_tasks
-  if File.exist?("#{@path}/#{@name}/lib/tasks")
-    rake_files = Dir.entries("#{@path}/#{@name}/lib/tasks") - [".", ".."]
+  if File.exist?("#{@p}/#{@name}/lib/tasks")
+    rake_files = Dir.entries("#{@p}/#{@name}/lib/tasks") - [".", ".."]
     if rake_files.length == 1
       rake_file = rake_files[0]
     else
@@ -476,7 +473,7 @@ def run_extension_tasks
       end
     end
     tasks = []
-    File.readlines("#{@path}/#{@name}/lib/tasks/#{rake_file}").map do |f|
+    File.readlines("#{@p}/#{@name}/lib/tasks/#{rake_file}").map do |f|
       line = f.rstrip
       tasks << "install" if line.include? "task :install =>"
       tasks << "migrate" if line.include? "task :migrate =>"
@@ -487,7 +484,7 @@ def run_extension_tasks
         if tasks.include?("uninstall")
           begin
             sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:uninstall")
-            puts("Uninstall task ran successfully.")
+            puts("Successfully uninstalled")
           rescue Exception
             messages = [
               "The #{@name} extension failed to uninstall properly.",
@@ -502,7 +499,7 @@ def run_extension_tasks
           if tasks.include?("migrate")
             begin
               sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:migrate VERSION=0")
-              puts("Migrated to VERSION=0 successfully.")
+              puts("Successfully migrated to VERSION=0")
             rescue Exception
               messages = [
                 "The #{@name} extension failed to uninstall properly.",
@@ -518,11 +515,11 @@ def run_extension_tasks
           if tasks.include?("update")
             require "find"
             files = []
-            Find.find("#{@path}/#{@name}/public") { |file| files << file }
+            Find.find("#{@p}/#{@name}/public") { |file| files << file }
             files.each do |f|
               if f.include?(".")
                 unless f.include?(".DS_Store")
-                  file = f.gsub(/#{@path}\/#{@name}\/public/, "public")
+                  file = f.gsub(/#{@p}\/#{@name}\/public/, "public")
                   File.delete("#{file}") rescue nil
                 end
               end
@@ -535,9 +532,6 @@ def run_extension_tasks
             output(messages)
           end
         end
-        File.makedirs("#{@ray}/tmp")
-        move("#{@path}/#{@name}", "#{@ray}/tmp/#{@name}")
-        rm_r("#{@ray}/tmp/#{@name}")
       else
         if tasks.include?("install")
           begin
@@ -566,7 +560,7 @@ def run_extension_tasks
         end
       end
     end
-    puts("no tasks to run")
+    puts("No tasks to run") if tasks.empty?
     if @uninstall
       if tasks.include?("uninstall")
         begin
@@ -587,11 +581,11 @@ def run_extension_tasks
         if tasks.include?("update")
           require "find"
           files = []
-          Find.find("#{@path}/#{@name}/public") { |file| files << file }
+          Find.find("#{@p}/#{@name}/public") { |file| files << file }
           files.each do |f|
             if f.include?(".")
               unless f.include?(".DS_Store")
-                file = f.gsub(/#{@path}\/#{@name}\/public/, "public")
+                file = f.gsub(/#{@p}\/#{@name}\/public/, "public")
                 File.delete("#{file}") rescue nil
               end
             end
@@ -613,96 +607,110 @@ end
 def uninstall_extension
   @uninstall = true
   @name = ENV["name"].gsub(/-/, "_")
-  unless File.exist?("#{@path}/#{@name}")
-    messages = ["The #{@name} extension is not installed."]
+  unless File.exist?("#{@p}/#{@name}")
+    messages = [
+      "================================================================================",
+      "The #{@name} extension is not installed."
+    ]
     output(messages)
     exit
   end
   run_extension_tasks
-  messages = ["The #{@name} extension has been uninstalled."]
+  File.makedirs("#{@r}/tmp")
+  move("#{@p}/#{@name}", "#{@r}/tmp/#{@name}")
+  remove_dir("#{@r}/tmp")
+  messages = [
+    "================================================================================",
+    "The #{@name} extension has been uninstalled."
+  ]
   output(messages)
 end
-def search_extensions
-  @search_name = ENV["name"] if ENV["name"]
-  @search_term = ENV["term"] if ENV["term"]
-  @extensions = []
-  @authors = []
-  @urls = []
-  @descriptions = []
-  if File.exist?("#{@ray}/search.yml")
-    cached_search
-  else
-    online_search
-  end
-end
-def cached_search
-  File.open("#{@ray}/search.yml") do |repositories|
-    YAML.load_documents(repositories) do |repository|
-      for i in 0...repository["repositories"].length
-        e = repository["repositories"][i]["name"]
-        if @search_name or @search_term
-          d = repository["repositories"][i]["description"]
-          if @search_name
-            @search_term = @search_name
-          elsif @search_term
-            @search_name = @search_term
+def search_extensions(show)
+  if File.exist?("#{@r}/search.yml")
+    name = ENV["name"] if ENV["name"]
+    term = ENV["term"] if ENV["term"]
+    extensions = []
+    authors = []
+    urls = []
+    descriptions = []
+    File.open("#{@r}/search.yml") do |repositories|
+      YAML.load_documents(repositories) do |repository|
+        for i in 0...repository["repositories"].length
+          e = repository["repositories"][i]["name"]
+          if name or term
+            d = repository["repositories"][i]["description"]
+            if name
+              term = name
+            elsif term
+              name = term
+            end
+            if e.include?(term) or e.include?(name) or d.include?(term) or d.include?(name)
+              extensions << e
+              authors << repository["repositories"][i]["owner"]
+              urls << repository["repositories"][i]["url"]
+              descriptions << d
+            end
+          else
+            extensions << e
+            authors << repository["repositories"][i]["owner"]
+            urls << repository["repositories"][i]["url"]
+            descriptions << repository["repositories"][i]["description"]
           end
-          if e.include?(@search_term) or e.include?(@search_name) or d.include?(@search_term) or d.include?(@search_name)
-            @extensions << e
-            @authors << repository["repositories"][i]["owner"]
-            @urls << repository["repositories"][i]["url"]
-            @descriptions << d
-          end
-        else
-          @extensions << e
-          @authors << repository["repositories"][i]["owner"]
-          @urls << repository["repositories"][i]["url"]
-          @descriptions << repository["repositories"][i]["description"]
         end
       end
     end
-  end
-end
-def online_search
-  puts("Online searching is not implemented.") # TODO: implement online_search
-  exit
-end
-def search_results
-  if @extensions.length == 0
-    messages = ["Your search term '#{@search_term}' did not match any extensions."]
+    if show
+      show_search_results(term, extensions, authors, urls, descriptions)
+    else
+      choose_extension_to_install(name, extensions, authors, urls, descriptions)
+    end
+  else # TODO: there isn't any reason not to grab a copy from the repository
+    messages = [
+      "Online searching is not implemented. Manually download the search file from,",
+      "http://github.com/johnmuhl/radiant-ray-extension/raw/master/search.yml",
+      "and place it in `/path/to/radiant/vendor/extensions/ray/search.yml`",
+      "Once you have that file in place retry your command."
+    ]
     output(messages)
     exit
   end
-  for i in 0...@extensions.length
-    extension = @extensions[i].gsub(/radiant-/, "").gsub(/-extension/, "")
-    if @descriptions[i].length >= 63
-      description = @descriptions[i][0..63] + "..."
-    elsif @descriptions[i].length == 0
+end
+def show_search_results(term, extensions, authors, urls, descriptions)
+  puts("================================================================================")
+  if extensions.length == 0
+    messages = ["Your search term '#{term}' did not match any extensions."]
+    output(messages)
+    exit
+  end
+  for i in 0...extensions.length
+    extension = extensions[i].gsub(/radiant-/, "").gsub(/-extension/, "")
+    if descriptions[i].length >= 63
+      description = descriptions[i][0..63] + "..."
+    elsif descriptions[i].length == 0
       description = "(no description provided)"
     else
-      description = @descriptions[i]
+      description = descriptions[i]
     end
     messages = [
       "  extension: #{extension}",
-      "     author: #{@authors[i]}",
+      "     author: #{authors[i]}",
       "description: #{description}",
-      "    command: rake ray:ext name=#{extension}"
+      "    command: rake ray:extension:install name=#{extension}"
     ]
     output(messages)
   end
   exit
 end
-def choose_extension_to_install
-  search_extensions
-  if @extensions.length == 1
-    @url = @urls[0]
+def choose_extension_to_install(name, extensions, authors, urls, descriptions)
+  if extensions.length == 1
+    @url = urls[0]
     return
   end
-  if @extensions.include?(@search_name) or @extensions.include?("radiant-#{@search_name}-extension")
-    @extensions.each do |e|
+  if extensions.include?(name) or extensions.include?("radiant-#{name}-extension")
+    extensions.each do |e|
       e.gsub!(/radiant[-|_]/, "").gsub!(/[-|_]extension/, "")
-      @url = @urls[@extensions.index(e)]
-      break if e == @search_name
+      @url = urls[extensions.index(e)]
+      break if e == name
     end
   else
     messages = [
@@ -711,33 +719,41 @@ def choose_extension_to_install
       "Use the command listed to install the appropriate extension."
     ]
     output(messages)
-    search_results
+    show_search_results(term = name, extensions, authors, urls, descriptions)
   end
 end
 def get_download_preference
   begin
-    File.open("#{@conf}/download.txt", "r") { |f| @download = f.gets.strip! }
+    File.open("#{@c}/download.txt", "r") { |f| @download = f.gets.strip! }
   rescue
     set_download_preference
   end
+  unless @download == "git" or @download == "http"
+    messages = [
+      "Your download preference is broken, to repair it run:",
+      "rake ray:setup:restart server=[mongrel|passenger]"
+    ]
+    output(messages)
+    exit
+  end
 end
 def set_download_preference
-  File.makedirs("#{@conf}")
+  File.makedirs("#{@c}")
   begin
     sh("git --version")
     @download = "git"
   rescue Exception
     @download = "http"
   end
-  File.open("#{@conf}/download.txt", "w") { |f| f.puts(@download) }
+  File.open("#{@c}/download.txt", "w") { |f| f.puts(@download) }
   messages = ["Your download preference has been set to #{@download}."]
   output(messages)
 end
 def set_restart_preference
-  File.makedirs("#{@conf}")
+  File.makedirs("#{@c}")
   preference = ENV["server"]
   if preference == "mongrel" or preference == "passenger"
-    File.open("#{@conf}/restart.txt", "w") {|f| f.puts(preference)}
+    File.open("#{@c}/restart.txt", "w") {|f| f.puts(preference)}
     messages = [
       "Your restart preference has been set to #{preference}.",
       "Now I'll auto-restart your server whenever necessary."
@@ -773,7 +789,7 @@ def replace_github_username
   @url.gsub!(/(http:\/\/github.com\/).*(\/.*)/, "\\1#{ENV["hub"]}\\2")
 end
 def determine_install_path
-  File.makedirs("#{@ray}/tmp")
+  File.makedirs("#{@r}/tmp")
   # download an html list of the repository contents
   begin
     html = open("#{@url}.git", "User-Agent" => "open-uri").read
@@ -781,30 +797,38 @@ def determine_install_path
     puts("GitHub is having trouble serving the request, just try it again.")
     exit
   end
-  open("#{@ray}/tmp/#{ENV["name"]}.html", "w") { |f| f.write(html) }
+  open("#{@r}/tmp/#{ENV["name"]}.html", "w") { |f| f.write(html) }
   # inspect the html list to determine the install path
   name = []
-  File.readlines("#{@path}/ray/tmp/#{ENV["name"]}.html").map do |f|
+  File.readlines("#{@p}/ray/tmp/#{ENV["name"]}.html").map do |f|
     line = f.rstrip
     name << line if line.include?("_extension.rb")
   end
   @name = name[0].to_s
   @name.strip!.gsub!(/<li> <a href=".*">/, "").gsub!(/<\/a> <\/li>/, "").gsub!(/_extension.rb/, "")
-  rm_r("#{@ray}/tmp")
+  remove_dir("#{@r}/tmp")
+  check_for_existing_installation
+end
+def check_for_existing_installation
+  if File.exist?("#{@p}/#{@name}")
+    messages = ["The #{@name} extension is already installed."]
+    output(messages)
+    exit
+  end
 end
 def move_to_disabled
-  File.makedirs("#{@path}/.disabled")
-  if File.exist?("#{@path}/#{@name}")
+  File.makedirs("#{@p}/.disabled")
+  if File.exist?("#{@p}/#{@name}")
     begin
-      move("#{@path}/#{@name}", "#{@path}/.disabled/#{@name}")
+      move("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
     rescue Exception => error
-      rm_r("#{@path}/.disabled/#{@name}")
-      move("#{@path}/#{@name}", "#{@path}/.disabled/#{@name}")
+      remove_dir("#{@p}/.disabled/#{@name}")
+      move("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
     end
   else
     messages = [
-      "The #{@name} extension is not installed. Install it with:",
-      "rake ray:extension:install name=#{@name}"
+      "================================================================================",
+      "The #{@name} extension is not installed."
     ]
     output(messages)
     exit
@@ -816,7 +840,7 @@ def quarantine_extension(cause)
         "The #{@name} extension failed to install properly.",
         "Specifically, the failure was caused by the extension's #{cause} task:",
         "Run `rake radiant:extensions:#{@name}:#{cause} --trace` for more details.",
-        "The extension has been disabled and placed in #{@path}/.disabled"
+        "The extension has been disabled and placed in #{@p}/.disabled"
   ]
   output(messages)
   exit
@@ -834,12 +858,15 @@ def require_git
 end
 def restart_server
   begin
-    File.open("#{@conf}/restart.txt", "r") { |f| @server = f.gets.strip! }
+    File.open("#{@c}/restart.txt", "r") { |f| @server = f.gets.strip! }
   rescue
     messages = [
-      "You need to restart your server or set a restart preference.",
-      "rake ray:setup:restart server=mongrel",
-      "rake ray:setup:restart server=passenger"
+      "Setup a restart preference if you'd like your server automatically restarted.",
+      "Run the command corresponding to your application server:",
+      "rake ray:setup:restart server=mongrel_cluster",
+      "rake ray:setup:restart server=passenger",
+      "================================================================================",
+      "YOU NEED TO RESTART YOUR SERVER!"
     ]
     output(messages)
     exit
@@ -865,8 +892,8 @@ def add_remote
   choose_extension_to_install
   @url.gsub!(/(http)(:\/\/github.com\/).*(\/.*)/, "git\\2" + hub + "\\3")
   @extension.gsub!(/-/, "_")
-  if File.exist?("#{@path}/#{@extension}/.git")
-    Dir.chdir("#{@path}/#{@extension}") do
+  if File.exist?("#{@p}/#{@extension}/.git")
+    Dir.chdir("#{@p}/#{@extension}") do
       sh("git remote add #{hub} #{@url}.git")
       sh("git fetch #{hub}")
       branches = `git branch -a`.split("\n")
@@ -889,7 +916,7 @@ def add_remote
     output(messages)
     exit
   else
-    messages = ["#{@path}/#{@extension} is not a git repository."]
+    messages = ["#{@p}/#{@extension} is not a git repository."]
     output(messages)
     exit
   end
@@ -898,7 +925,7 @@ def pull_remote
   name = ENV["name"] if ENV[ "name" ]
   if name
     @pull_branch = []
-    Dir.chdir("#{@path}/#{name}") do
+    Dir.chdir("#{@p}/#{name}") do
       if File.exist?(".git")
         branches = `git branch`.split("\n")
         branches.each do |branch|
@@ -912,7 +939,7 @@ def pull_remote
           sh("git checkout #{@current_branch}")
         end
       else
-        messages = ["#{@path}/#{name} is not a git repository."]
+        messages = ["#{@p}/#{name} is not a git repository."]
         output(messages)
         exit
       end
@@ -924,9 +951,9 @@ def pull_remote
       exit
     end
   else
-    extensions = @name ? @name.gsub(/\-/, "_") : Dir.entries(@path) - [".", "..", ".DS_Store", ".disabled", "ray"]
+    extensions = @name ? @name.gsub(/\-/, "_") : Dir.entries(@p) - [".", "..", ".DS_Store", ".disabled", "ray"]
     extensions.each do |extension|
-      Dir.chdir("#{@path}/#{extension}") do
+      Dir.chdir("#{@p}/#{extension}") do
         if File.exist?(".git")
           @pull_branch = []
           branches = `git branch`.split("\n")
@@ -945,7 +972,7 @@ def pull_remote
             end
           end
         else
-          messages = ["#{@path}/#{extension} is not a git repository."]
+          messages = ["#{@p}/#{extension} is not a git repository."]
           output(messages)
         end
       end
