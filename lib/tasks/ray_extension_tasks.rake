@@ -484,7 +484,7 @@ def run_extension_tasks
     end
     unless tasks.empty?
       if @uninstall
-        if @tasks.include?("uninstall")
+        if tasks.include?("uninstall")
           begin
             sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:uninstall")
             puts("Uninstall task ran successfully.")
@@ -499,7 +499,7 @@ def run_extension_tasks
             exit
           end
         else
-          if @tasks.include?("migrate")
+          if tasks.include?("migrate")
             begin
               sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:migrate VERSION=0")
               puts("Migrated to VERSION=0 successfully.")
@@ -515,7 +515,7 @@ def run_extension_tasks
             end
           end
           # do a simple search to find files to remove, misses are frequent
-          if @tasks.include?("update")
+          if tasks.include?("update")
             require "find"
             files = []
             Find.find("#{@path}/#{@name}/public") { |file| files << file }
