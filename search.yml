@@ -613,6 +613,18 @@ repositories:
   url: http://github.com/djcp/radiant-fckeditor
   description: fckeditor filter for page parts – with file uploads and spell checking.
   owner: djcp
+- name: atom-import
+  url:  http://github.com/seancribbs/radiant-atom-import-extension/tarball/master
+  description: Imports Atom feeds into a standard blog layout in Radiant. Co-developed with James Avery.
+  owner: seancribbs
+- name: polls
+  url: http://github.com/nuex/radiant-polls-extension/tarball/master
+  description: Adds multiple-choice online polls to Radiant. Includes tags for total number of responses and percentage of responses received per answer.
+  owner: nuex
+- name: flickr_thumbnails
+  url: http://github.com/cannikin/flickr_thumbnails
+  description: A tag that lets you do a flickr search and returns an unordered list of thumbnails inline in your page. Simple! Requires you to get a flickr API key first (see the README for info).
+  owner: cannikin
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
