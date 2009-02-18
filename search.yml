@@ -625,6 +625,10 @@ repositories:
   url: http://github.com/cannikin/flickr_thumbnails
   description: A tag that lets you do a flickr search and returns an unordered list of thumbnails inline in your page. Simple! Requires you to get a flickr API key first (see the README for info).
   owner: cannikin
+- name: vhost
+  url: http://github.com/jgarber/radiant-vhost-extension
+  description: This extension allows you to host multiple separate sites with their own pages, snippets, and layouts on the same Radiant instance. Everything is scoped to the site, so you must log in separately at each domain. Thus, you can host multiple clients' sites and they don't know they don't have their own instance.
+  owner: jgarber
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
@@ -657,10 +661,6 @@ repositories:
 #   url: http://github.com/tricycle/radiant-static-caching-extension
 #   description: "Beta: Monkeypatch caching to write #{path}.html files so url rewrites can be used to serve cached content"
 #   owner: tricycle
-# - name: radiant-vhost-extension
-#   url: http://github.com/dennisc/radiant-vhost-extension
-#   description: Host multiple, independent web sites from a single Radiant instance. Each domain is completely separate.  Great for multiple clients.
-#   owner: dennisc
 # - name: page_attachments
 #   url: http://github.com/AndrewO/page_attachments
 #   description: A clone of Radiant's page_attachments extension with a bugfix
