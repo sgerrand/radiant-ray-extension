@@ -160,6 +160,7 @@ def test_install_extension
     "atom-import",
     "polls",
     "flickr_thumbnails",
+    "vhost",
     "wrappits"
   ]
   extensions.each do |extension|
