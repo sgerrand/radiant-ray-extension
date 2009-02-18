@@ -115,6 +115,16 @@ namespace :ray do
     end
   end
 
+  namespace :help do
+    desc "Show Ray shortcuts."
+    task :shortcuts do
+      puts("rake ray:i name=x # install")
+      puts("rake ray:d name=x # disable")
+      puts("rake ray:e name=x # enable")
+      puts("rake ray:s term=x # search")
+    end
+  end
+
   # i've gotten progressively lazier
   task :ext => ["extension:install"]
   task :search => ["extension:search"]
