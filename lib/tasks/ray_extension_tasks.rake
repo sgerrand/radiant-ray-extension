@@ -337,7 +337,7 @@ def git_extension_install
 end
 
 def http_extension_install
-  FileUtils.mkdir("#{@r}/tmp")
+  FileUtils.makedirs("#{@r}/tmp")
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
   rescue OpenURI::HTTPError
@@ -474,7 +474,7 @@ def install_submodules(submodule_urls, submodule_paths)
     end
   elsif @download == "http"
     submodule_urls.each do |url|
-      FileUtils.mkdir("#{@r}/tmp")
+      FileUtils.makedirs("#{@r}/tmp")
       submodule.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "http:\\2/tarball/master")
       tarball = open("#{url}", "User-Agent" => "open-uri").read
       submodule.gsub!(/http:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
@@ -665,7 +665,7 @@ def uninstall_extension
     exit
   end
   run_extension_tasks
-  FileUtils.mkdir("#{@r}/tmp")
+  FileUtils.makedirs("#{@r}/tmp")
   FileUtils.mv("#{@p}/#{@name}", "#{@r}/tmp/#{@name}")
   remove_dir("#{@r}/tmp")
   messages = [
@@ -795,7 +795,7 @@ def get_download_preference
 end
 
 def set_download_preference
-  FileUtils.mkdir("#{@c}")
+  FileUtils.makedirs("#{@c}")
   begin
     sh("git --version")
     @download = "git"
@@ -811,7 +811,7 @@ def set_download_preference
 end
 
 def set_restart_preference
-  FileUtils.mkdir("#{@c}")
+  FileUtils.makedirs("#{@c}")
   preference = ENV["server"]
   if preference == "mongrel_cluster" or preference == "passenger"
     File.open("#{@c}/restart.txt", "w") {|f| f.puts(preference)}
@@ -855,7 +855,7 @@ def replace_github_username
 end
 
 def determine_install_path
-  FileUtils.mkdir("#{@r}/tmp")
+  FileUtils.makedirs("#{@r}/tmp")
   # download an html list of the repository contents
   begin
     html = open("#{@url}.git", "User-Agent" => "open-uri").read
@@ -892,7 +892,7 @@ def check_for_existing_installation
 end
 
 def move_to_disabled
-  FileUtils.mkdir("#{@p}/.disabled")
+  FileUtils.makedirs("#{@p}/.disabled")
   if File.exist?("#{@p}/#{@name}")
     begin
       FileUtils.mv("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
@@ -952,7 +952,7 @@ def restart_server
     exit
   end
   if @server == "passenger"
-    FileUtils.mkdir("tmp")
+    FileUtils.makedirs("tmp")
     FileUtils.touch("tmp/restart.txt")
     puts("Passenger restarted.")
   elsif @server == "mongrel_cluster"
