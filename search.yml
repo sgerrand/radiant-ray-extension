@@ -614,11 +614,11 @@ repositories:
   description: fckeditor filter for page parts – with file uploads and spell checking.
   owner: djcp
 - name: atom-import
-  url:  http://github.com/seancribbs/radiant-atom-import-extension/tarball/master
+  url: http://github.com/seancribbs/radiant-atom-import-extension
   description: Imports Atom feeds into a standard blog layout in Radiant. Co-developed with James Avery.
   owner: seancribbs
 - name: polls
-  url: http://github.com/nuex/radiant-polls-extension/tarball/master
+  url: http://github.com/nuex/radiant-polls-extension
   description: Adds multiple-choice online polls to Radiant. Includes tags for total number of responses and percentage of responses received per answer.
   owner: nuex
 - name: flickr_thumbnails
