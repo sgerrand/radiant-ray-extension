@@ -1,6 +1,5 @@
 namespace :ray do
   namespace :test do
-    desc "Run extension installation tests."
     task :install do
       test_install_extension
     end
