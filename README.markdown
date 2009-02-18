@@ -18,6 +18,7 @@ Table of contents
       <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-disable">Disabling extensions</a></li>
       <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-enable">Enabling extensions</a></li>
       <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-uninstall">Uninstalling extensions</a></li>
+      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-update">Updating extensions</a></li>
       <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-bundle">Bundling extensions</a></li>
     </ol>
   </li>
