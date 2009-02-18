@@ -6,22 +6,22 @@ Usage
 ---
 
     # install an extension
-    rake ray:ext name=extension_name
+    rake ray:extension:install name=extension_name
     
     # search for an extension
-    rake ray:search term=search
+    rake ray:extension:search term=search
     
     # disable an extension
-    rake ray:dis name=extension_name
+    rake ray:extension:disable name=extension_name
     
     # enable an extension
-    rake ray:en name=extension_name
+    rake ray:extension:enable name=extension_name
     
     # uninstall an extension
-    rake ray:rm name=extension_name
+    rake ray:extension:uninstall name=extension_name
     
     # setup server auto-restart for a mongrel_cluster
-    rake ray:setup:restart server=mongrel
+    rake ray:setup:restart server=mongrel_cluster
     
     # setup server auto-restart for passenger
     rake ray:setup:restart server=passenger
@@ -49,6 +49,9 @@ Usage
     
     # update all extensions
     rake ray:extension:update name=all
+    
+    # show common command shortcuts
+    rake ray:help:shortcuts
 
 Bugs & feature requests
 ---
