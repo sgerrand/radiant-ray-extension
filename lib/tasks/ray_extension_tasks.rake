@@ -676,9 +676,6 @@ def uninstall_extension
 end
 
 def search_extensions(show)
-  unless File.exist?("#{@r}/search.yml")
-    download_search_file
-  end
   check_search_freshness
   name = ENV["name"] if ENV["name"]
   term = ENV["term"] if ENV["term"]
