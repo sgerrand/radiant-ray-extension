@@ -1,6 +1,7 @@
-# http://github.com/api/v1/yaml/search/radiant+extension?page=X
+# the github api has more broken than working ...
 # http://support.github.com/discussions/feature-requests/11
-# updated: 2009/01/30
+# http://support.github.com/discussions/site/172
+# this file was manually updated: 2009/02/18
 ---
 repositories:
 - name: radiant-extensions-extension
