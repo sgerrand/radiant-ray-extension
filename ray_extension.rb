@@ -2,8 +2,8 @@
 # require_dependency 'application'
 
 class RayExtension < Radiant::Extension
-  version "2.0b5"
-  description "In Flux."
+  version "2.0"
+  description "Friendly extension management"
   url "http://wiki.github.com/johnmuhl/radiant-ray-extension"
   
   # define_routes do |map|
