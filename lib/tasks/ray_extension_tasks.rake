@@ -210,12 +210,12 @@ def update_extension
     get_download_preference
     extensions = Dir.entries(@p) - [".", "..", ".DS_Store", ".disabled", "ray"]
     if @download == "git"
-      extensions.each do |extension|
-        git_extension_update(extension)
+      extensions.each do |name|
+        git_extension_update(name)
       end
     elsif @download == "http"
-      extensions.each do |extension|
-        http_extension_update(extension)
+      extensions.each do |name|
+        http_extension_update(name)
       end
     else
       messages = [
