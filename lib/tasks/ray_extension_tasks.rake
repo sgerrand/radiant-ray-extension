@@ -676,54 +676,46 @@ def uninstall_extension
 end
 
 def search_extensions(show)
-  if File.exist?("#{@r}/search.yml")
-    name = ENV["name"] if ENV["name"]
-    term = ENV["term"] if ENV["term"]
-    extensions = []
-    authors = []
-    urls = []
-    descriptions = []
-    File.open("#{@r}/search.yml") do |repositories|
-      YAML.load_documents(repositories) do |repository|
-        for i in 0...repository["repositories"].length
-          e = repository["repositories"][i]["name"]
-          if name or term
-            d = repository["repositories"][i]["description"]
-            if name
-              term = name
-            elsif term
-              name = term
-            end
-            if e.include?(term) or e.include?(name) or d.include?(term) or d.include?(name)
-              extensions << e
-              authors << repository["repositories"][i]["owner"]
-              urls << repository["repositories"][i]["url"]
-              descriptions << d
-            end
-          else
+  unless File.exist?("#{@r}/search.yml")
+    download_search_file
+  end
+  check_search_freshness
+  name = ENV["name"] if ENV["name"]
+  term = ENV["term"] if ENV["term"]
+  extensions = []
+  authors = []
+  urls = []
+  descriptions = []
+  File.open("#{@r}/search.yml") do |repositories|
+    YAML.load_documents(repositories) do |repository|
+      for i in 0...repository["repositories"].length
+        e = repository["repositories"][i]["name"]
+        if name or term
+          d = repository["repositories"][i]["description"]
+          if name
+            term = name
+          elsif term
+            name = term
+          end
+          if e.include?(term) or e.include?(name) or d.include?(term) or d.include?(name)
             extensions << e
             authors << repository["repositories"][i]["owner"]
             urls << repository["repositories"][i]["url"]
-            descriptions << repository["repositories"][i]["description"]
+            descriptions << d
           end
+        else
+          extensions << e
+          authors << repository["repositories"][i]["owner"]
+          urls << repository["repositories"][i]["url"]
+          descriptions << repository["repositories"][i]["description"]
         end
       end
     end
-    if show
-      show_search_results(term, extensions, authors, urls, descriptions)
-    else
-      choose_extension_to_install(name, extensions, authors, urls, descriptions)
-    end
-  else # TODO: there isn't any reason not to grab a copy from the repository
-    messages = [
-      "================================================================================",
-      "Online searching is not implemented. Manually download the search file from,",
-      "http://github.com/johnmuhl/radiant-ray-extension/raw/master/search.yml",
-      "and place it in `/path/to/radiant/vendor/extensions/ray/search.yml`",
-      "Once you have that file in place retry your command."
-    ]
-    output(messages)
-    exit
+  end
+  if show
+    show_search_results(term, extensions, authors, urls, descriptions)
+  else
+    choose_extension_to_install(name, extensions, authors, urls, descriptions)
   end
 end
 
@@ -1082,6 +1074,35 @@ def pull_remote
     output(messages)
     exit
   end
+end
+
+def check_search_freshness
+  if File.exist?("#{@r}/search.yml")
+    mod_time = File.mtime("#{@r}/search.yml")
+    time_now = Time.now
+    if mod_time < time_now - (60 * 60 * 24 * 2)
+      download_search_file
+    end
+  else
+    download_search_file
+  end
+end
+
+def download_search_file
+  begin
+    search = open("http://cloud.github.com/downloads/johnmuhl/radiant-ray-extension/search.yml", "User-Agent" => "open-uri").read
+  rescue Exception
+    messages = [
+      "================================================================================",
+      "GitHub failed to serve the requested search file.",
+      "These are usually temporary issues, just try it again."
+    ]
+    output(messages)
+    exit
+  end
+  open("#{@r}/search.yml", "wb") { |f| f.write(search) }
+  messages = ["Search file updated."]
+  output(messages)
 end
 
 namespace :radiant do
