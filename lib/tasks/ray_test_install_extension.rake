@@ -161,6 +161,7 @@ def test_install_extension
     "polls",
     "flickr_thumbnails",
     "vhost",
+    "shortcut",
     "wrappits"
   ]
   extensions.each do |extension|

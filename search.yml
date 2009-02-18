@@ -630,6 +630,10 @@ repositories:
   url: http://github.com/jgarber/radiant-vhost-extension
   description: This extension allows you to host multiple separate sites with their own pages, snippets, and layouts on the same Radiant instance. Everything is scoped to the site, so you must log in separately at each domain. Thus, you can host multiple clients' sites and they don't know they don't have their own instance.
   owner: jgarber
+- name: shortcut
+  url: http://github.com/saturnflyer/radiant-shortcut-extension
+  description: Allows you to set pages as shortcuts so that they may be found from the root by their nested url or slug
+  owner: saturnflyer
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
