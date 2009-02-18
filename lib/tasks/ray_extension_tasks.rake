@@ -181,7 +181,7 @@ def enable_extension
     exit
   end
   if File.exist?("#{@p}/.disabled/#{name}")
-    move("#{@p}/.disabled/#{name}", "#{@p}/#{name}")
+    FileUtils.mv("#{@p}/.disabled/#{name}", "#{@p}/#{name}")
     messages = [
       "================================================================================",
       "The #{name} extension has been enabled",
@@ -324,7 +324,7 @@ def git_extension_install
   end
 end
 def http_extension_install
-  File.makedirs("#{@r}/tmp")
+  FileUtils.mkdir("#{@r}/tmp")
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
   rescue OpenURI::HTTPError
@@ -459,7 +459,7 @@ def install_submodules(submodule_urls, submodule_paths)
     end
   elsif @download == "http"
     submodule_urls.each do |url|
-      File.makedirs("#{@r}/tmp")
+      FileUtils.mkdir("#{@r}/tmp")
       submodule.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "http:\\2/tarball/master")
       tarball = open("#{url}", "User-Agent" => "open-uri").read
       submodule.gsub!(/http:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
@@ -643,8 +643,8 @@ def uninstall_extension
     exit
   end
   run_extension_tasks
-  File.makedirs("#{@r}/tmp")
-  move("#{@p}/#{@name}", "#{@r}/tmp/#{@name}")
+  FileUtils.mkdir("#{@r}/tmp")
+  FileUtils.mv("#{@p}/#{@name}", "#{@r}/tmp/#{@name}")
   remove_dir("#{@r}/tmp")
   messages = [
     "================================================================================",
@@ -765,7 +765,7 @@ def get_download_preference
   end
 end
 def set_download_preference
-  File.makedirs("#{@c}")
+  FileUtils.mkdir("#{@c}")
   begin
     sh("git --version")
     @download = "git"
@@ -777,7 +777,7 @@ def set_download_preference
   output(messages)
 end
 def set_restart_preference
-  File.makedirs("#{@c}")
+  FileUtils.mkdir("#{@c}")
   preference = ENV["server"]
   if preference == "mongrel_cluster" or preference == "passenger"
     File.open("#{@c}/restart.txt", "w") {|f| f.puts(preference)}
@@ -816,7 +816,7 @@ def replace_github_username
   @url.gsub!(/(http:\/\/github.com\/).*(\/.*)/, "\\1#{ENV["hub"]}\\2")
 end
 def determine_install_path
-  File.makedirs("#{@r}/tmp")
+  FileUtils.mkdir("#{@r}/tmp")
   # download an html list of the repository contents
   begin
     html = open("#{@url}.git", "User-Agent" => "open-uri").read
@@ -844,13 +844,13 @@ def check_for_existing_installation
   end
 end
 def move_to_disabled
-  File.makedirs("#{@p}/.disabled")
+  FileUtils.mkdir("#{@p}/.disabled")
   if File.exist?("#{@p}/#{@name}")
     begin
-      move("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
+      FileUtils.mv("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
     rescue Exception => error
       remove_dir("#{@p}/.disabled/#{@name}")
-      move("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
+      FileUtils.mv("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
     end
   else
     messages = [
@@ -900,7 +900,7 @@ def restart_server
     exit
   end
   if @server == "passenger"
-    File.makedirs("tmp")
+    FileUtils.mkdir("tmp")
     File.open("tmp/restart.txt", "w") { |f| }
     puts("Passenger restarted.")
   elsif @server == "mongrel_cluster"
