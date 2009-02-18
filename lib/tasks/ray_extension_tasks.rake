@@ -103,7 +103,7 @@ namespace :ray do
     task :restart do
       messages = [
         "An server type is required.",
-        "rake ray:setup:restart server=mongrel",
+        "rake ray:setup:restart server=mongrel_cluster",
         "rake ray:setup:restart server=passenger"
       ]
       require_options = [ENV["server"]]
@@ -738,7 +738,7 @@ def get_download_preference
   unless @download == "git" or @download == "http"
     messages = [
       "Your download preference is broken, to repair it run:",
-      "rake ray:setup:restart server=[mongrel|passenger]"
+      "rake ray:setup:restart server=[mongrel_cluster|passenger]"
     ]
     output(messages)
     exit
@@ -759,7 +759,7 @@ end
 def set_restart_preference
   File.makedirs("#{@c}")
   preference = ENV["server"]
-  if preference == "mongrel" or preference == "passenger"
+  if preference == "mongrel_cluster" or preference == "passenger"
     File.open("#{@c}/restart.txt", "w") {|f| f.puts(preference)}
     messages = [
       "Your restart preference has been set to #{preference}.",
@@ -772,7 +772,7 @@ def set_restart_preference
       "I don't know how to restart #{preference}.",
       "Only Mongrel clusters and Phusion Passenger are currently supported.",
       "Run one of the following commands:",
-      "rake ray:setup:restart server=mongrel",
+      "rake ray:setup:restart server=mongrel_cluster",
       "rake ray:setup:restart server=passenger"
     ]
     output(messages)
@@ -883,13 +883,13 @@ def restart_server
     File.makedirs("tmp")
     File.open("tmp/restart.txt", "w") { |f| }
     puts("Passenger restarted.")
-  elsif @server == "mongrel"
+  elsif @server == "mongrel_cluster"
     sh("mongrel_rails cluster::restart")
     puts("Mongrel cluster restarted.")
   else
     messages = [
       "Your restart preference is broken, to repair it run one of:",
-      "rake ray:setup:restart server=mongrel",
+      "rake ray:setup:restart server=mongrel_cluster",
       "rake ray:setup:restart server=passenger"
     ]
     output(messages)
