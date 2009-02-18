@@ -9,7 +9,11 @@ Table of contents
 =================
 
 <ol>
-  <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/installation">Installation</a></li>
+  <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/installation">Installation</a>
+    <ol>
+      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/installation#upgrade">Upgrading from Ray 1.x</a></li>
+    </ol>
+  </li>
   <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/bugs-feature-requests">Bugs &amp; feature requests</a></li>
   <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage">Usage</a>
     <ol>
