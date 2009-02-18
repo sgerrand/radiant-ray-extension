@@ -1,9 +1,7 @@
 namespace :ray do
 
-  require "ftools"
   require "fileutils"
   require "open-uri"
-  require "tmpdir"
   require "yaml"
 
   @p = "vendor/extensions"
