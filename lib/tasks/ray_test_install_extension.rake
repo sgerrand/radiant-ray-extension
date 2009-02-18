@@ -153,6 +153,14 @@ def test_install_extension
     "variables",
     "wmd-filter",
     "wordpress_link_saver",
+    "invisible_pages",
+    "change_author",
+    "code_ray",
+    "categories",
+    "fckeditor",
+    "atom-import",
+    "polls",
+    "flickr_thumbnails",
     "wrappits"
   ]
   extensions.each do |extension|
