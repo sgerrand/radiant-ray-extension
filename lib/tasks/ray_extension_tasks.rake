@@ -1079,8 +1079,7 @@ end
 def check_search_freshness
   if File.exist?("#{@r}/search.yml")
     mod_time = File.mtime("#{@r}/search.yml")
-    time_now = Time.now
-    if mod_time < time_now - (60 * 60 * 24 * 2)
+    if mod_time < Time.now - (60 * 60 * 24 * 2)
       download_search_file
     end
   else
