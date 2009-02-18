@@ -568,7 +568,7 @@ def run_extension_tasks
               if f.include?(".")
                 unless f.include?(".DS_Store")
                   file = f.gsub(/#{@p}\/#{@name}\/public/, "public")
-                  FileUtils.rm("#{file}") :force => true
+                  FileUtils.rm("#{file}", :force => true)
                 end
               end
             end
@@ -634,7 +634,7 @@ def run_extension_tasks
             if f.include?(".")
               unless f.include?(".DS_Store")
                 file = f.gsub(/#{@p}\/#{@name}\/public/, "public")
-                FileUtils.rm("#{file}") :force => true
+                FileUtils.rm("#{file}", :force => true)
               end
             end
           end
