@@ -340,7 +340,7 @@ def http_extension_install
   FileUtils.makedirs("#{@r}/tmp")
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
-  rescue OpenURI::HTTPError
+  rescue Exception
     messages = [
       "================================================================================",
       "GitHub failed to serve the requested extension archive.",
