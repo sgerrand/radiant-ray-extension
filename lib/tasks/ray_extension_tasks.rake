@@ -89,8 +89,7 @@ namespace :ray do
     end
     desc "View all available extensions."
     task :all do
-      search_extensions
-      search_results
+      search_extensions(show = true)
     end
     desc "Update an extension."
     task :update do
