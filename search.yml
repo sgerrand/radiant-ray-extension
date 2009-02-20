@@ -634,6 +634,10 @@ repositories:
   url: http://github.com/saturnflyer/radiant-shortcut-extension
   description: Allows you to set pages as shortcuts so that they may be found from the root by their nested url or slug
   owner: saturnflyer
+- name: drag-order
+  url: http://github.com/bright4/radiant-drag-order
+  description: This extension allows pages to be moved to any arbitrary (valid) place in the document tree structure by dragging the page to its new position and dropping it there.
+  owner: bright4
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
