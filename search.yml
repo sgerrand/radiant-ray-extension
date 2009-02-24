@@ -638,6 +638,14 @@ repositories:
   url: http://github.com/bright4/radiant-drag-order
   description: This extension allows pages to be moved to any arbitrary (valid) place in the document tree structure by dragging the page to its new position and dropping it there.
   owner: bright4
+- name: staff-profiles
+  url: http://github.com/zapnap/radiant-staff-profiles-extension
+  description: Simple staff or member profiles for Radiant CMS. Used for education institutions, training organizations, cast and crew of a film, company management profiles, etc.
+  owner: zapnap
+- name: stocks
+  url: http://github.com/nuex/radiant-stocks-extension
+  description: Tags for showing latest stock market information. Currently supports Yahoo Finance.
+  owner: nuex
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
