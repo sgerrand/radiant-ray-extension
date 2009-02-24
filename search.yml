@@ -646,6 +646,10 @@ repositories:
   url: http://github.com/nuex/radiant-stocks-extension
   description: Tags for showing latest stock market information. Currently supports Yahoo Finance.
   owner: nuex
+- name: url_login
+  url: http://github.com/mikehale/radiant-url-login-extension
+  description: Log the user in with a secret token in the url and optionally redirect them to a specified page.
+  owner: mikehale
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
