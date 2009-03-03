@@ -650,6 +650,18 @@ repositories:
   url: http://github.com/mikehale/radiant-url-login-extension
   description: Log the user in with a secret token in the url and optionally redirect them to a specified page.
   owner: mikehale
+- name: radiant-groups
+  url: http://github.com/vincentp/radiant-groups
+  description: Allow you to manage back-end access to Radiant CMS.
+  owner: vincentp
+- name: archive-hacks
+  url: http://github.com/alno/radiant-archive-hacks-extension
+  description: Alters a default Archive extension: Groupping pages by another pattern, specified in Radiant::Config (for example, by %Y/%m) Skip groupping of some pages in archive, specified by pattern in Radiant::Config Ability to have archive as site root
+  owner: alno
+- name: code
+  url: http://github.com/alno/radiant-code-extension
+  description: Extension which provides support for code highlighting to Radiant CMS via different code highlighting libraries (syntax,coderay,ultraviolet,highlight.js)
+  owner: alno
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
