@@ -1086,7 +1086,7 @@ end
 
 def download_search_file
   begin
-    search = open("http://cloud.github.com/downloads/johnmuhl/radiant-ray-extension/search.yml", "User-Agent" => "open-uri").read
+    search = open("http://github.com/johnmuhl/radiant-ray-extension/raw/master/search.yml", "User-Agent" => "open-uri").read
   rescue Exception
     messages = [
       "================================================================================",
