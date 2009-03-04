@@ -656,7 +656,7 @@ repositories:
   owner: vincentp
 - name: archive-hacks
   url: http://github.com/alno/radiant-archive-hacks-extension
-  description: Alters a default Archive extension: Groupping pages by another pattern, specified in Radiant::Config (for example, by %Y/%m) Skip groupping of some pages in archive, specified by pattern in Radiant::Config Ability to have archive as site root
+  description: Alters a default Archive extension. Groupping pages by another pattern, specified in RadiantConfig (for example, by %Y/%m) Skip groupping of some pages in archive, specified by pattern in RadiantConfig Ability to have archive as site root
   owner: alno
 - name: code
   url: http://github.com/alno/radiant-code-extension
