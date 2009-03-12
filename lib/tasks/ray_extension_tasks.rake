@@ -462,14 +462,14 @@ def install_submodules(submodule_urls, submodule_paths)
   if @download == "git"
     if File.exist?(".git/HEAD")
       submodule_urls.each do |url|
-        sh("git submodule add #{url} #{@p}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
-      end
-    else
-      submodule_urls.each do |url|
         Dir.chdir("#{@p}/#{@name}") do
           sh("git submodule init")
           sh("git submodule update")
         end
+      end
+    else
+      submodule_urls.each do |url|
+        sh("git clone #{url} #{@p}/#{@name}/#{submodule_paths[submodule_urls.index(url)]}")
       end
     end
   elsif @download == "http"
