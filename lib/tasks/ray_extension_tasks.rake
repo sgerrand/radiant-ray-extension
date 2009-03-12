@@ -529,17 +529,22 @@ def run_extension_tasks
       tasks << "update" if line.include? "task :update =>"
     end
     unless tasks.empty?
+      if ENV['RAILS_ENV']
+        env = ENV['RAILS_ENV']
+      else
+        env = "development"
+      end
       if @uninstall
         if tasks.include?("uninstall")
           begin
-            sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:uninstall")
+            sh("rake #{env} radiant:extensions:#{@name}:uninstall")
             puts("Successfully uninstalled")
           rescue Exception
             messages = [
               "================================================================================",
               "The #{@name} extension failed to uninstall properly.",
               "You can uninstall the extension manually by running:",
-              "rake radiant:extensions:#{@name}:migrate VERSION=0",
+              "rake #{env} radiant:extensions:#{@name}:migrate VERSION=0",
               "and then removing any associated files and directories."
             ]
             output(messages)
@@ -548,7 +553,7 @@ def run_extension_tasks
         else
           if tasks.include?("migrate")
             begin
-              sh("rake #{RAILS_ENV} radiant:extensions:#{@name}:migrate VERSION=0")
+              sh("rake #{env} radiant:extensions:#{@name}:migrate VERSION=0")
               puts("Successfully migrated to VERSION=0")
             rescue Exception
               messages = [
@@ -586,7 +591,7 @@ def run_extension_tasks
       else
         if tasks.include?("install")
           begin
-            sh("rake radiant:extensions:#{@name}:install")
+            sh("rake #{env} radiant:extensions:#{@name}:install")
           rescue Exception => error
             cause = "install"
             quarantine_extension(cause)
@@ -594,7 +599,7 @@ def run_extension_tasks
         else
           if tasks.include?("migrate")
             begin
-              sh("rake radiant:extensions:#{@name}:migrate")
+              sh("rake #{env} radiant:extensions:#{@name}:migrate")
             rescue Exception => error
               cause = "migrate"
               quarantine_extension(cause)
@@ -602,7 +607,7 @@ def run_extension_tasks
           end
           if tasks.include?("update")
             begin
-              sh("rake radiant:extensions:#{@name}:update")
+              sh("rake #{env} radiant:extensions:#{@name}:update")
             rescue Exception => error
               cause = "update"
               quarantine_extension(cause)
