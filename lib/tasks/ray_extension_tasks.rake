@@ -883,12 +883,10 @@ end
 def move_to_disabled
   FileUtils.makedirs("#{@p}/.disabled")
   if File.exist?("#{@p}/#{@name}")
-    begin
-      FileUtils.mv("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
-    rescue Exception => error
+    if File.exist?("#{@p}/.disabled/#{@name}")
       remove_dir("#{@p}/.disabled/#{@name}")
-      FileUtils.mv("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
     end
+    FileUtils.mv("#{@p}/#{@name}", "#{@p}/.disabled/#{@name}")
   else
     messages = [
       "================================================================================",
