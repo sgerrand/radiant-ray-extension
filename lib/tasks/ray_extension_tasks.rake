@@ -783,8 +783,11 @@ def get_download_preference
     messages = [
       "================================================================================",
       "Your download preference is broken, to repair it run one of:",
+      "NOTE: `mongrel` and `thin` must be running as daemons",
       "rake ray:setup:restart server=mongrel_cluster",
-      "rake ray:setup:restart server=passenger"
+      "rake ray:setup:restart server=passenger",
+      "rake ray:setup:restart server=mongrel",
+      "rake ray:setup:restart server=thin",
     ]
     output(messages)
     exit
@@ -809,8 +812,9 @@ end
 
 def set_restart_preference
   FileUtils.makedirs("#{@c}")
+  supported_servers = ["mongrel_cluster", "mongrel", "passenger", "thin"]
   preference = ENV["server"]
-  if preference == "mongrel_cluster" or preference == "passenger"
+  if supported_servers.include?(preference)
     File.open("#{@c}/restart.txt", "w") {|f| f.puts(preference)}
     messages = [
       "================================================================================",
@@ -824,8 +828,12 @@ def set_restart_preference
       "I don't know how to restart #{preference}.",
       "Only Mongrel clusters and Phusion Passenger are currently supported.",
       "Run one of the following commands:",
+      "NOTE: `mongrel` and `thin` must be running as daemons",
       "rake ray:setup:restart server=mongrel_cluster",
-      "rake ray:setup:restart server=passenger"
+      "rake ray:setup:restart server=passenger",
+      "rake ray:setup:restart server=mongrel",
+      "rake ray:setup:restart server=thin"
+      
     ]
     output(messages)
     exit
@@ -938,8 +946,11 @@ def restart_server
     messages = [
       "Setup a restart preference if you'd like your server automatically restarted.",
       "Run the command corresponding to your application server:",
+      "NOTE: `mongrel` and `thin` must be running as daemons",
       "rake ray:setup:restart server=mongrel_cluster",
       "rake ray:setup:restart server=passenger",
+      "rake ray:setup:restart server=mongrel",
+      "rake ray:setup:restart server=thin",
       "================================================================================",
       "YOU NEED TO RESTART YOUR SERVER!"
     ]
@@ -953,6 +964,12 @@ def restart_server
   elsif @server == "mongrel_cluster"
     sh("mongrel_rails cluster::restart")
     puts("Mongrel cluster restarted.")
+  elsif @server == "mongrel"
+    sh("mongrel_rails restart")
+    puts("Mongrel has been restarted")
+  elsif @server == "thin"
+    sh("thin restart")
+    puts("Thin has been restarted")
   else
     messages = [
       "================================================================================",
