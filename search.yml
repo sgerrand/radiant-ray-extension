@@ -682,6 +682,18 @@ repositories:
   url: http://github.com/seancribbs/radiant-feed-reader-extension
   description: Lets you parse and iterate over items from external RSS and Atom feeds. Requires the Feedzirra library.
   owner: seancribbs
+- name: page-origin
+  url: http://github.com/atinypixel/radiant-page-origin-extension
+  description: When you go to create or edit a page, you will now see the parent page title right under the page title text field. Great for the forgetful.
+  owner: atinypixel
+- name: compressor
+  url: http://github.com/saturnflyer/radiant-compressor-extension
+  description: Compressor provides an option to strip all non space-character whitespace, and replace double spaces with single spaces in the Radiant ResponseCache.
+  owner: saturnflyer
+- name: keyword_filter
+  url: http://github.com/bogado/radiant-keyword_filter-extension
+  description: Adds tags to selective filter content based on the keywords of the current page. This is useful to create tags for your pages based on the keywords.
+  owner: bogado
 # - name: radiant-gorillafy-extension
 #   url: http://github.com/jomz/radiant-gorillafy-extension
 #   description: Alters the admin interface and hosts some other snippets
