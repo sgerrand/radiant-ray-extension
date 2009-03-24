@@ -746,25 +746,26 @@ def get_download_preference
 end
 
 def set_download_preference
-  if File.exist?("#{@c}/2")
-    puts "need to upgrade your preferences"
+  if File.exist?("#{@c}/download.txt")
+    File.open("#{@c}/download.txt", "r") { |f| @download = f.gets.strip! }
+    rm("#{@c}/download.txt")
   else
-    unless File.exist?("#{@r}/preferences.yml")
-      File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
-    end
     begin
       sh("git --version")
       @download = "git"
     rescue Exception
       @download = "http"
     end
-    File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  download: #{@download}") }
-    messages = [
-      "================================================================================",
-      "Your download preference has been set to #{@download}."
-    ]
-    output(messages)
   end
+  unless File.exist?("#{@r}/preferences.yml")
+    File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+  end
+  File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  download: #{@download}") }
+  messages = [
+    "================================================================================",
+    "Your download preference has been set to #{@download}."
+  ]
+  output(messages)
 end
 
 def set_restart_preference
