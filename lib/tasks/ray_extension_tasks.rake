@@ -730,10 +730,11 @@ end
 
 def get_download_preference
   begin
-    File.open("#{@c}/download.txt", "r") { |f| @download = f.gets.strip! }
+    preferences = YAML::load_file("#{@r}/preferences.yml")
   rescue
     set_download_preference
   end
+  @download = preferences["download"].strip
   unless @download == "git" or @download == "http"
     messages = [
       "================================================================================",
@@ -892,7 +893,7 @@ end
 
 def restart_server
   begin
-    File.open("#{@c}/restart.txt", "r") { |f| @server = f.gets.strip! }
+    preferences = YAML::load_file("#{@r}/preferences.yml")
   rescue
     messages = [
       "Setup a restart preference if you'd like your server automatically restarted.",
@@ -908,6 +909,7 @@ def restart_server
     output(messages)
     exit
   end
+  @server = preferences["restart"].strip
   if @server == "passenger"
     FileUtils.makedirs("tmp")
     FileUtils.touch("tmp/restart.txt")
