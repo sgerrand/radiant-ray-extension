@@ -729,11 +729,10 @@ def choose_extension_to_install(name, extensions, authors, urls, descriptions)
 end
 
 def get_download_preference
-  begin
-    preferences = YAML::load_file("#{@r}/preferences.yml")
-  rescue
+  unless File.exist?("#{@r}/preferences.yml")
     set_download_preference
   end
+  preferences = YAML::load_file("#{@r}/preferences.yml")
   @download = preferences["download"].strip
   unless @download == "git" or @download == "http"
     messages = [
@@ -747,19 +746,25 @@ def get_download_preference
 end
 
 def set_download_preference
-  FileUtils.makedirs("#{@c}")
-  begin
-    sh("git --version")
-    @download = "git"
-  rescue Exception
-    @download = "http"
+  if File.exist?("#{@c}/2")
+    puts "need to upgrade your preferences"
+  else
+    unless File.exist?("#{@r}/preferences.yml")
+      File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+    end
+    begin
+      sh("git --version")
+      @download = "git"
+    rescue Exception
+      @download = "http"
+    end
+    File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  download: #{@download}") }
+    messages = [
+      "================================================================================",
+      "Your download preference has been set to #{@download}."
+    ]
+    output(messages)
   end
-  File.open("#{@c}/download.txt", "w") { |f| f.puts(@download) }
-  messages = [
-    "================================================================================",
-    "Your download preference has been set to #{@download}."
-  ]
-  output(messages)
 end
 
 def set_restart_preference
