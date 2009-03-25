@@ -898,6 +898,14 @@ def require_git
 end
 
 def restart_server
+  if File.exist?("#{@c}/restart.txt")
+    File.open("#{@c}/restart.txt", "r") { |f| @server = f.gets.strip! }
+    rm("#{@c}/restart.txt")
+    unless File.exist?("#{@r}/preferences.yml")
+      File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+    end
+    File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  restart: #{@server}") }
+  end
   begin
     preferences = YAML::load_file("#{@r}/preferences.yml")
   rescue
