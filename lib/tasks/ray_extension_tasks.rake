@@ -792,7 +792,6 @@ def set_restart_preference
       "rake ray:setup:restart server=passenger",
       "rake ray:setup:restart server=mongrel",
       "rake ray:setup:restart server=thin"
-      
     ]
     output(messages)
     exit
