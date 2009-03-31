@@ -162,7 +162,7 @@ def install_extension
 end
 
 def disable_extension
-  @name = ENV["name"]
+  normalize_name
   move_to_disabled
   messages = [
     "================================================================================",
@@ -175,33 +175,33 @@ def disable_extension
 end
 
 def enable_extension
-  name = ENV["name"]
-  if File.exist?("#{@p}/#{name}")
-    remove_dir("#{@p}/.disabled/#{name}")
+  normalize_name
+  if File.exist?("#{@p}/#{@name}")
+    remove_dir("#{@p}/.disabled/#{@name}")
     messages = [
       "================================================================================",
-      "The #{name} extension was re-installed after it was disabled.",
+      "The #{@name} extension was re-installed after it was disabled.",
       "So there is no reason to re-enable the version you previously disabled.",
       "I removed the duplicate, disabled copy of the extension."
     ]
     output(messages)
     exit
   end
-  if File.exist?("#{@p}/.disabled/#{name}")
-    FileUtils.mv("#{@p}/.disabled/#{name}", "#{@p}/#{name}")
+  if File.exist?("#{@p}/.disabled/#{@name}")
+    FileUtils.mv("#{@p}/.disabled/#{@name}", "#{@p}/#{@name}")
     messages = [
       "================================================================================",
-      "The #{name} extension has been enabled",
+      "The #{@name} extension has been enabled",
       "You can disable it again later by running:",
-      "rake ray:extension:disable name=#{name}"
+      "rake ray:extension:disable name=#{@name}"
     ]
     output(messages)
   else
     messages = [
       "================================================================================",
-      "The #{name} extension is not disabled.",
+      "The #{@name} extension is not disabled.",
       "If you were trying to install the extension try running:",
-      "rake ray:extension:install name=#{name}"
+      "rake ray:extension:install name=#{@name}"
     ]
     output(messages)
     exit
@@ -621,7 +621,7 @@ end
 
 def uninstall_extension
   @uninstall = true
-  @name = ENV["name"].gsub(/-/, "_")
+  normalize_name
   unless File.exist?("#{@p}/#{@name}")
     messages = [
       "================================================================================",
@@ -1089,6 +1089,14 @@ def download_search_file
   open("#{@r}/search.yml", "wb") { |f| f.write(search) }
   messages = ["Search file updated."]
   output(messages)
+end
+
+def normalize_name
+  if ENV["name"].include?("-")
+    @name = ENV["name"].gsub("-", "_")
+  else
+    @name = ENV['name']
+  end
 end
 
 namespace :radiant do
