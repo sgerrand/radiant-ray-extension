@@ -394,11 +394,12 @@ def http_extension_update(name)
 end
 
 def check_dependencies
-  if File.exist?("#{@p}/#{@name}/dependency.yml")
+  d = Dir.entries("#{@p}/#{@name}").detect { |f| f.match /^dependenc/ }
+  if d
     @extension_dependencies = []
     @gem_dependencies       = []
     @plugin_dependencies    = []
-    File.open("#{@p}/#{@name}/dependency.yml").map do |f|
+    File.open("#{@p}/#{@name}/#{d}").map do |f|
       YAML.load_documents(f) do |dependency|
         for i in 0...dependency.length
           @extension_dependencies << dependency[i]["extension"] if dependency[i].include?("extension")
