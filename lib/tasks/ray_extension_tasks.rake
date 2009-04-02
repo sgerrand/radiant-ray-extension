@@ -162,7 +162,7 @@ def install_extension
 end
 
 def disable_extension
-  @name = ENV["name"]
+  normalize_name
   move_to_disabled
   messages = [
     "================================================================================",
@@ -175,33 +175,33 @@ def disable_extension
 end
 
 def enable_extension
-  name = ENV["name"]
-  if File.exist?("#{@p}/#{name}")
-    remove_dir("#{@p}/.disabled/#{name}")
+  normalize_name
+  if File.exist?("#{@p}/#{@name}")
+    remove_dir("#{@p}/.disabled/#{@name}")
     messages = [
       "================================================================================",
-      "The #{name} extension was re-installed after it was disabled.",
+      "The #{@name} extension was re-installed after it was disabled.",
       "So there is no reason to re-enable the version you previously disabled.",
       "I removed the duplicate, disabled copy of the extension."
     ]
     output(messages)
     exit
   end
-  if File.exist?("#{@p}/.disabled/#{name}")
-    FileUtils.mv("#{@p}/.disabled/#{name}", "#{@p}/#{name}")
+  if File.exist?("#{@p}/.disabled/#{@name}")
+    FileUtils.mv("#{@p}/.disabled/#{@name}", "#{@p}/#{@name}")
     messages = [
       "================================================================================",
-      "The #{name} extension has been enabled",
+      "The #{@name} extension has been enabled",
       "You can disable it again later by running:",
-      "rake ray:extension:disable name=#{name}"
+      "rake ray:extension:disable name=#{@name}"
     ]
     output(messages)
   else
     messages = [
       "================================================================================",
-      "The #{name} extension is not disabled.",
+      "The #{@name} extension is not disabled.",
       "If you were trying to install the extension try running:",
-      "rake ray:extension:install name=#{name}"
+      "rake ray:extension:install name=#{@name}"
     ]
     output(messages)
     exit
@@ -394,11 +394,12 @@ def http_extension_update(name)
 end
 
 def check_dependencies
-  if File.exist?("#{@p}/#{@name}/dependency.yml")
+  d = Dir.entries("#{@p}/#{@name}").detect { |f| f.match /^dependenc/ }
+  if d
     @extension_dependencies = []
     @gem_dependencies       = []
     @plugin_dependencies    = []
-    File.open("#{@p}/#{@name}/dependency.yml").map do |f|
+    File.open("#{@p}/#{@name}/#{d}").map do |f|
       YAML.load_documents(f) do |dependency|
         for i in 0...dependency.length
           @extension_dependencies << dependency[i]["extension"] if dependency[i].include?("extension")
@@ -621,7 +622,7 @@ end
 
 def uninstall_extension
   @uninstall = true
-  @name = ENV["name"].gsub(/-/, "_")
+  normalize_name
   unless File.exist?("#{@p}/#{@name}")
     messages = [
       "================================================================================",
@@ -729,11 +730,11 @@ def choose_extension_to_install(name, extensions, authors, urls, descriptions)
 end
 
 def get_download_preference
-  begin
-    File.open("#{@c}/download.txt", "r") { |f| @download = f.gets.strip! }
-  rescue
+  unless File.exist?("#{@r}/preferences.yml")
     set_download_preference
   end
+  preferences = YAML::load_file("#{@r}/preferences.yml")
+  @download = preferences["download"].strip
   unless @download == "git" or @download == "http"
     messages = [
       "================================================================================",
@@ -746,14 +747,21 @@ def get_download_preference
 end
 
 def set_download_preference
-  FileUtils.makedirs("#{@c}")
-  begin
-    sh("git --version")
-    @download = "git"
-  rescue Exception
-    @download = "http"
+  if File.exist?("#{@c}/download.txt")
+    File.open("#{@c}/download.txt", "r") { |f| @download = f.gets.strip! }
+    rm("#{@c}/download.txt")
+  else
+    begin
+      sh("git --version")
+      @download = "git"
+    rescue Exception
+      @download = "http"
+    end
   end
-  File.open("#{@c}/download.txt", "w") { |f| f.puts(@download) }
+  unless File.exist?("#{@r}/preferences.yml")
+    File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+  end
+  File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  download: #{@download}") }
   messages = [
     "================================================================================",
     "Your download preference has been set to #{@download}."
@@ -784,7 +792,6 @@ def set_restart_preference
       "rake ray:setup:restart server=passenger",
       "rake ray:setup:restart server=mongrel",
       "rake ray:setup:restart server=thin"
-      
     ]
     output(messages)
     exit
@@ -891,8 +898,16 @@ def require_git
 end
 
 def restart_server
-  begin
+  if File.exist?("#{@c}/restart.txt")
     File.open("#{@c}/restart.txt", "r") { |f| @server = f.gets.strip! }
+    rm("#{@c}/restart.txt")
+    unless File.exist?("#{@r}/preferences.yml")
+      File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+    end
+    File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  restart: #{@server}") }
+  end
+  begin
+    preferences = YAML::load_file("#{@r}/preferences.yml")
   rescue
     messages = [
       "Setup a restart preference if you'd like your server automatically restarted.",
@@ -908,6 +923,7 @@ def restart_server
     output(messages)
     exit
   end
+  @server = preferences["restart"].strip
   if @server == "passenger"
     FileUtils.makedirs("tmp")
     FileUtils.touch("tmp/restart.txt")
@@ -1073,6 +1089,14 @@ def download_search_file
   open("#{@r}/search.yml", "wb") { |f| f.write(search) }
   messages = ["Search file updated."]
   output(messages)
+end
+
+def normalize_name
+  if ENV["name"].include?("-")
+    @name = ENV["name"].gsub("-", "_")
+  else
+    @name = ENV['name']
+  end
 end
 
 namespace :radiant do
