@@ -720,7 +720,7 @@ def choose_extension_to_install(name, extensions, authors, urls, descriptions)
     end
   else
     messages = [
-      "I couldn't find an extension named '#{@search_name}'.",
+      "I couldn't find an extension named '#{name}'.",
       "The following is a list of extensions that might be related.",
       "Use the command listed to install the appropriate extension."
     ]
