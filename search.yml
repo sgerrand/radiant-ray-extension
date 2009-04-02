@@ -694,67 +694,11 @@ repositories:
   url: http://github.com/bogado/radiant-keyword_filter-extension
   description: Adds tags to selective filter content based on the keywords of the current page. This is useful to create tags for your pages based on the keywords.
   owner: bogado
-# - name: radiant-gorillafy-extension
-#   url: http://github.com/jomz/radiant-gorillafy-extension
-#   description: Alters the admin interface and hosts some other snippets
-#   owner: jomz
-# - name: radiant-conferences-extensions
-#   url: http://github.com/farra/radiant-conferences-extensions
-#   description: Manage conferences with speakers, sessions and sponsors with Radiant CMS
-#   owner: farra
-# - name: radiant-mailer-logger-extension
-#   url: http://github.com/tricycle/radiant-mailer-logger-extension
-#   description: "Alpha: Extends mailer with database logging functionality"
-#   owner: tricycle
-# - name: radiant-full-text-search-extension
-#   url: http://github.com/mataki/radiant-full-text-search-extension
-#   description: HyperEstraier web front extension for radiant
-#   owner: mataki
-# - name: radiant-ldap-extension
-#   url: http://github.com/radiant/radiant-ldap-extension
-#   description: An extension for Radiant CMS to support access to LDAP directories.
-#   owner: radiant
-# - name: radiant-members-extension
-#   url: http://github.com/farra/radiant-members-extension
-#   description: Extends the Radiant user model to support site members
-#   owner: farra
-# - name: radiant-paperclipped_multisite-extension
-#   url: http://github.com/kbingman/radiant-paperclipped_multisite-extension
-#   description: Adds multisite support to paperclipped, showing assets only for the current site if the user is not an admin
-#   owner: kbingman
-# - name: radiant-static-caching-extension
-#   url: http://github.com/tricycle/radiant-static-caching-extension
-#   description: "Beta: Monkeypatch caching to write #{path}.html files so url rewrites can be used to serve cached content"
-#   owner: tricycle
-# - name: page_attachments
-#   url: http://github.com/AndrewO/page_attachments
-#   description: A clone of Radiant's page_attachments extension with a bugfix
-#   owner: AndrewO
-# - name: ba
-#   url: http://github.com/aslakhellesoy/ba
-#   description: Ba is a Radiant extension for conference and event management
-#   owner: aslakhellesoy
-# - name: assets_extension
-#   url: http://github.com/kbingman/assets_extension
-#   description: Radiant Image and Assets Extension
-#   owner: kbingman
-# - name: radiant-database-mailer-extension
-#   url: http://github.com/Aissac/radiant-database-mailer-extension
-#   description: Save fields from mailer forms to the database.
-#   owner: Aissac
-# - name: radiant-globalize-extension
-#   url: http://github.com/Aissac/radiant-globalize-extension
-#   description: Translate content in Radiant CMS using the Globalize Rails plugin.
-#   owner: Aissac
-# - name: site_language
-#   url: http://github.com/DefV/site_language
-#   description: Radiant Extension for multiple language support
-#   owner: DefV
-# - name: radiant-sphinx-search-extension
-#   url: http://github.com/digitalpulp/radiant-sphinx-search-extension
-#   description: Adds Thinking Sphinx support to Radiant pages
-#   owner: digitalpulp
-# - name: legacy_path_handler
-#   url: http://github.com/intinig/legacy_path_handler
-#   description: Radiant Extension for 301 redirection of old URLs
-#   owner: intinig
+- name: route-handler
+  url: http://github.com/astashov/radiant-route-handler-extension
+  description: Lets you specify dynamic parameters in your URLs, and place these parameters on the page, or use them in any attributes of any Radius tags. It can be used for pagination, with ‘webservices’ extension, etc.
+  owner: astashov
+- name: twitter_tags
+  url: http://github.com/wonko/twitter_tags
+  description: Allows to include the latest tweets from a user in the page – see it in action on openminds.be
+  owner: wonko
