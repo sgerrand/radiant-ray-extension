@@ -702,3 +702,11 @@ repositories:
   url: http://github.com/wonko/twitter_tags
   description: Allows to include the latest tweets from a user in the page – see it in action on openminds.be
   owner: wonko
+- name: stereotype
+  url: http://github.com/Aissac/radiant-stereotype-extension
+  description: * Define named templates (stereotypes) for Pages; * Templates are assigned per-parent Page, making all children have the defined ’stereotype’ by their parent; * You can specify the new page’s parts, filters, layout and page type.
+  owner: Aissac
+- name: custom-fields
+  url: http://github.com/Aissac/radiant-custom-fields-extension
+  description: * Provides the ability to add custom fields to a Page; * The Page model is not changed, custom_fields are added as a belongs_to association; * Admin interface for managing assigned custom fields; * Radius tags for accessing custom fields.
+  owner: Aissac
