@@ -1,7 +1,8 @@
 # the github api has more broken than working ...
 # http://support.github.com/discussions/feature-requests/11
 # http://support.github.com/discussions/site/172
-# this file was manually updated: 2009/02/18
+# http://support.github.com/discussions/site/283
+# this file was manually updated: 2009/04/04
 ---
 repositories:
 - name: radiant-extensions-extension
