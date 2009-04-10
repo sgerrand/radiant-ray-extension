@@ -711,3 +711,7 @@ repositories:
   url: http://github.com/Aissac/radiant-custom-fields-extension
   description: * Provides the ability to add custom fields to a Page; * The Page model is not changed, custom_fields are added as a belongs_to association; * Admin interface for managing assigned custom fields; * Radius tags for accessing custom fields.
   owner: Aissac
+- name: page_options
+  url: http://github.com/avonderluft/radiant-page_options-extension
+  description: enables per page admin options, such as setting caching to a non-default value, or turning it off altogether
+  owner: avonderluft
