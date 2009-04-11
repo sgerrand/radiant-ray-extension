@@ -923,7 +923,7 @@ def restart_server
     output(messages)
     exit
   end
-  @server = preferences["restart"].strip
+  @server = preferences["restart"].strip if preferences["restart"]
   if @server == "passenger"
     FileUtils.makedirs("tmp")
     FileUtils.touch("tmp/restart.txt")
