@@ -629,7 +629,7 @@ repositories:
   owner: cannikin
 - name: radiant-vhost-extension
   url: http://github.com/jgarber/radiant-vhost-extension
-  description: This extension allows you to host multiple separate sites with their own pages, snippets, and layouts on the same Radiant instance. Everything is scoped to the site, so you must log in separately at each domain. Thus, you can host multiple clients' sites and they don't know they don't have their own instance.
+  description: This extension allows you to host multiple separate sites with their own pages, snippets, and layouts on the same Radiant instance. Everything is scoped to the site, so you must log in separately at each domain. Thus, you can host multiple clients sites and they dont know they dont have their own instance.
   owner: jgarber
 - name: radiant-shortcut-extension
   url: http://github.com/saturnflyer/radiant-shortcut-extension
@@ -719,3 +719,7 @@ repositories:
   url: http://github.com/saturnflyer/radiant-user_pref_control-extension
   description: Allow other extensions to provide user preferences in Radiant CMS
   owner: saturnflyer
+- name: radiant-reader-extension
+  url: http://github.com/spanner/radiant-reader-extension
+  description: this provides multi-site reader/member registration and management for the benefit of other, more interesting extensions
+  owner: spanner
