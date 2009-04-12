@@ -939,12 +939,18 @@ def restart_server
     puts("Thin has been restarted")
   else
     messages = [
-      "================================================================================",
-      "Your restart preference is broken, to repair it run one of:",
+      "Setup a restart preference if you'd like your server automatically restarted.",
+      "Run the command corresponding to your application server:",
+      "NOTE: `mongrel` and `thin` must be running as daemons",
       "rake ray:setup:restart server=mongrel_cluster",
-      "rake ray:setup:restart server=passenger"
+      "rake ray:setup:restart server=passenger",
+      "rake ray:setup:restart server=mongrel",
+      "rake ray:setup:restart server=thin",
+      "================================================================================",
+      "YOU NEED TO RESTART YOUR SERVER!"
     ]
     output(messages)
+    exit
   end
 end
 
