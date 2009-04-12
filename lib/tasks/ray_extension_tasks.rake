@@ -399,16 +399,33 @@ def check_dependencies
     @extension_dependencies = []
     @gem_dependencies       = []
     @plugin_dependencies    = []
-    File.open("#{@p}/#{@name}/#{d}").map do |f|
-      YAML.load_documents(f) do |dependency|
-        for i in 0...dependency.length
-          @extension_dependencies << dependency[i]["extension"] if dependency[i].include?("extension")
-          @gem_dependencies << dependency[i]["gem"] if dependency[i].include?("gem")
-          @plugin_dependencies << dependency[i]["plugin"] if dependency[i].include?("plugin")
+    File.open("#{@p}/#{@name}/#{d}") do |f|
+      YAML.load_documents(f) do |d|
+        for i in 0...d.length
+          if d[i]["extension"]
+            dependency = {}
+            dependency["name"] = d[i]["extension"]
+            dependency["hub"] = d[i]["hub"] if d[i]["hub"]
+            dependency["radiant_min_version"] = d[i]["radiant_min_version"] if d[i]["radiant_min_version"]
+            dependency["radiant_max_version"] = d[i]["radiant_max_version"] if d[i]["radiant_max_version"]
+            install_extension_dependencies(dependency)
+          else
+            @gem_dependencies << d[i]["gem"] if d[i].include?("gem")
+            @plugin_dependencies << d[i]["plugin"] if d[i].include?("plugin")
+            install_dependencies
+          end
         end
       end
     end
-    install_dependencies
+  end
+end
+
+def install_extension_dependencies(dependency)
+  if dependency["hub"]
+    system("rake ray:extension:install name=#{dependency["name"]} hub=#{dependency["hub"]}")
+  else
+    ENV["hub"] = nil
+    system("rake ray:extension:install name=#{dependency["name"]}")
   end
 end
 
