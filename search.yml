@@ -715,3 +715,7 @@ repositories:
   url: http://github.com/avonderluft/radiant-page_options-extension
   description: enables per page admin options, such as setting caching to a non-default value, or turning it off altogether
   owner: avonderluft
+- name: user_pref_control
+  url: http://github.com/saturnflyer/radiant-user_pref_control-extension
+  description: Allow other extensions to provide user preferences in Radiant CMS
+  owner: saturnflyer
