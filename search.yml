@@ -591,11 +591,11 @@ repositories:
   url: http://github.com/saturnflyer/radiant-page_group_rbac_migrator-extension
   description: Migrates data from Page Group Permissions to using RBAC Page Edit and maintains the connection between pages, users and roles/groups.
   owner: saturnflyer
-- name: invisible_pages
+- name: radiant-invisible_pages-extension
   url: http://github.com/saturnflyer/radiant-invisible_pages-extension
   description: Invisible Pages was developed for dealing with migrated content from another system to allow older content to continue living at it’s normal URL. The design of this extension assumes that you have some content that may be directly under your Home page, but you don’t want the Radiant interface to have so many pages on the index. Invisible Pages will keep your interface clean.
   owner: saturnflyer
-- name: change_author
+- name: radiant-change_author-extension
   url: http://github.com/saturnflyer/radiant-change_author-extension
   description: It allows administrators to set the author of each page.
   owner: saturnflyer
@@ -603,11 +603,11 @@ repositories:
   url: http://github.com/phallstrom/code_ray
   description: Provides syntax highlighting via the CodeRay ruby gem.
   owner: phallstrom
-- name: dav
+- name: radiant-dav-extension
   url: http://github.com/willcodeforfoo/radiant-dav-extension
   description: Access Radiant through WebDAV, by myself and Michael Kessler
   owner: willcodeforfoo
-- name: categories
+- name: radiant-categories-extension
   url: http://github.com/eph3meral/radiant-categories-extension
   description: Basic categorization support.
   owner: eph3meral
@@ -615,11 +615,11 @@ repositories:
   url: http://github.com/djcp/radiant-fckeditor
   description: fckeditor filter for page parts – with file uploads and spell checking.
   owner: djcp
-- name: atom-import
+- name: radiant-atom-import-extension
   url: http://github.com/seancribbs/radiant-atom-import-extension
   description: Imports Atom feeds into a standard blog layout in Radiant. Co-developed with James Avery.
   owner: seancribbs
-- name: polls
+- name: radiant-polls-extension
   url: http://github.com/nuex/radiant-polls-extension
   description: Adds multiple-choice online polls to Radiant. Includes tags for total number of responses and percentage of responses received per answer.
   owner: nuex
@@ -627,11 +627,11 @@ repositories:
   url: http://github.com/cannikin/flickr_thumbnails
   description: A tag that lets you do a flickr search and returns an unordered list of thumbnails inline in your page. Simple! Requires you to get a flickr API key first (see the README for info).
   owner: cannikin
-- name: vhost
+- name: radiant-vhost-extension
   url: http://github.com/jgarber/radiant-vhost-extension
   description: This extension allows you to host multiple separate sites with their own pages, snippets, and layouts on the same Radiant instance. Everything is scoped to the site, so you must log in separately at each domain. Thus, you can host multiple clients' sites and they don't know they don't have their own instance.
   owner: jgarber
-- name: shortcut
+- name: radiant-shortcut-extension
   url: http://github.com/saturnflyer/radiant-shortcut-extension
   description: Allows you to set pages as shortcuts so that they may be found from the root by their nested url or slug
   owner: saturnflyer
@@ -639,15 +639,15 @@ repositories:
   url: http://github.com/bright4/radiant-drag-order
   description: This extension allows pages to be moved to any arbitrary (valid) place in the document tree structure by dragging the page to its new position and dropping it there.
   owner: bright4
-- name: staff-profiles
+- name: radiant-staff-profiles-extension
   url: http://github.com/zapnap/radiant-staff-profiles-extension
   description: Simple staff or member profiles for Radiant CMS. Used for education institutions, training organizations, cast and crew of a film, company management profiles, etc.
   owner: zapnap
-- name: stocks
+- name: radiant-stocks-extension
   url: http://github.com/nuex/radiant-stocks-extension
   description: Tags for showing latest stock market information. Currently supports Yahoo Finance.
   owner: nuex
-- name: url_login
+- name: radiant-url-login-extension
   url: http://github.com/mikehale/radiant-url-login-extension
   description: Log the user in with a secret token in the url and optionally redirect them to a specified page.
   owner: mikehale
@@ -655,47 +655,47 @@ repositories:
   url: http://github.com/vincentp/radiant-groups
   description: Allow you to manage back-end access to Radiant CMS.
   owner: vincentp
-- name: archive-hacks
+- name: radiant-archive-hacks-extension
   url: http://github.com/alno/radiant-archive-hacks-extension
   description: Alters a default Archive extension. Groupping pages by another pattern, specified in RadiantConfig (for example, by %Y/%m) Skip groupping of some pages in archive, specified by pattern in RadiantConfig Ability to have archive as site root
   owner: alno
-- name: code
+- name: radiant-code-extension
   url: http://github.com/alno/radiant-code-extension
   description: Extension which provides support for code highlighting to Radiant CMS via different code highlighting libraries (syntax,coderay,ultraviolet,highlight.js)
   owner: alno
-- name: ultrasphinx-search
+- name: radiant-ultrasphinx-search-extension
   url: http://github.com/Aissac/radiant-ultrasphinx-search-extension
   description: Features, Full text search for content and page titles. Radius tags for iterating over search results, checking if there are no results and excerpting matches. Results pagination with will_paginate.
   owner: Aissac
-- name: webservices
+- name: radiant-webservices-extension
   url: http://github.com/astashov/radiant-webservices-extension
   description: Allows to use responses of remote webservices on your pages, e.g., weather, horoscopes, geocodes, etc.
   owner: astashov
-- name: date-converter
+- name: radiant-date-converter-extension
   url: http://github.com/astashov/radiant-date-converter-extension
   description: Adds tag for converting dates from one format to another.
   owner: astashov
-- name: truncate
+- name: radiant-truncate-extension
   url: http://github.com/astashov/radiant-truncate-extension
   description: Adds tag for truncating contents.
   owner: astashov
-- name: feed-reader
+- name: radiant-feed-reader-extension
   url: http://github.com/seancribbs/radiant-feed-reader-extension
   description: Lets you parse and iterate over items from external RSS and Atom feeds. Requires the Feedzirra library.
   owner: seancribbs
-- name: page-origin
+- name: radiant-page-origin-extension
   url: http://github.com/atinypixel/radiant-page-origin-extension
   description: When you go to create or edit a page, you will now see the parent page title right under the page title text field. Great for the forgetful.
   owner: atinypixel
-- name: compressor
+- name: radiant-compressor-extension
   url: http://github.com/saturnflyer/radiant-compressor-extension
   description: Compressor provides an option to strip all non space-character whitespace, and replace double spaces with single spaces in the Radiant ResponseCache.
   owner: saturnflyer
-- name: keyword_filter
+- name: radiant-keyword_filter-extension
   url: http://github.com/bogado/radiant-keyword_filter-extension
   description: Adds tags to selective filter content based on the keywords of the current page. This is useful to create tags for your pages based on the keywords.
   owner: bogado
-- name: route-handler
+- name: radiant-route-handler-extension
   url: http://github.com/astashov/radiant-route-handler-extension
   description: Lets you specify dynamic parameters in your URLs, and place these parameters on the page, or use them in any attributes of any Radius tags. It can be used for pagination, with ‘webservices’ extension, etc.
   owner: astashov
@@ -703,19 +703,19 @@ repositories:
   url: http://github.com/wonko/twitter_tags
   description: Allows to include the latest tweets from a user in the page – see it in action on openminds.be
   owner: wonko
-- name: stereotype
+- name: radiant-stereotype-extension
   url: http://github.com/Aissac/radiant-stereotype-extension
   description: * Define named templates (stereotypes) for Pages; * Templates are assigned per-parent Page, making all children have the defined ’stereotype’ by their parent; * You can specify the new page’s parts, filters, layout and page type.
   owner: Aissac
-- name: custom-fields
+- name: radiant-custom-fields-extension
   url: http://github.com/Aissac/radiant-custom-fields-extension
   description: * Provides the ability to add custom fields to a Page; * The Page model is not changed, custom_fields are added as a belongs_to association; * Admin interface for managing assigned custom fields; * Radius tags for accessing custom fields.
   owner: Aissac
-- name: page_options
+- name: radiant-page_options-extension
   url: http://github.com/avonderluft/radiant-page_options-extension
   description: enables per page admin options, such as setting caching to a non-default value, or turning it off altogether
   owner: avonderluft
-- name: user_pref_control
+- name: radiant-user_pref_control-extension
   url: http://github.com/saturnflyer/radiant-user_pref_control-extension
   description: Allow other extensions to provide user preferences in Radiant CMS
   owner: saturnflyer
