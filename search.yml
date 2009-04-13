@@ -77,10 +77,6 @@ repositories:
   url: http://github.com/tricycle/radiant-comments-extension
   description: from http://svn.artofmission.com/svn/plugins/radiant/extensions/comments
   owner: tricycle
-- name: radiant-ray-extension
-  url: http://github.com/johnmuhl/radiant-ray-extension
-  description: Ray makes managing Radiant extensions a breeze. Uses git or http.
-  owner: johnmuhl
 - name: radiant-banner-rotator-extension
   url: http://github.com/seancribbs/radiant-banner-rotator-extension
   description: A simple Radiant extension that supports randomly rotating banners on pages.
@@ -196,12 +192,12 @@ repositories:
   description: "This is an extension for Radiant CMS to create a lead capture form, store the leads and forward them to CRM servers. "
   owner: jhulten
 - name: radiant-thirty-boxes-extension
-  url: http://github.com/johnmuhl/radiant-thirty-boxes-extension
+  url: http://github.com/wemrysi/radiant-thirty-boxes-extension
   description: An extension for the Radiant CMS that allows you to display events from your 30 Boxes calendar.
-  owner: johnmuhl
+  owner: wemrysi
 - name: radiant-copy-move
   url: http://github.com/pilu/radiant-copy-move
-  description: It's an extension for Radiant CMS. It allows for a page to be copied (or moved) under a new parent.
+  description: It is an extension for Radiant CMS. It allows for a page to be copied (or moved) under a new parent.
   owner: pilu
 - name: radiant-language-switch
   url: http://github.com/lorenjohnson/radiant-language-switch
@@ -324,9 +320,9 @@ repositories:
   description: An extension for Radiant CMS that manages a Product and Category list that can be used to provide product lists and order forms across the site.
   owner: jstirk
 - name: radiant-conditional-tags-extension
-  url: http://github.com/johnmuhl/radiant-conditional-tags-extension
+  url: http://github.com/SwankInnovations/radiant-conditional-tags-extension
   description: Adds powerful conditional evaluation and branching to Radiant Pages.
-  owner: johnmuhl
+  owner: SwankInnovations
 - name: radiant-file-system-mirror-extension
   url: http://github.com/moklett/radiant-file-system-mirror-extension
   description: Allows you to pull and push Layout, Snippet, and Page Part content between the file system and the Radiant database.
@@ -336,9 +332,9 @@ repositories:
   description: Helpful Radius tags not (yet) found in the Radiant core standard tags.
   owner: moklett
 - name: radiant-variables-extension
-  url: http://github.com/johnmuhl/radiant-variables-extension
+  url: http://github.com/SwankInnovations/radiant-variables-extension
   description: Store, retrieve, and otherwise work with your own variables from within Radiant
-  owner: johnmuhl
+  owner: SwankInnovations
 - name: radiant-upcoming-events-extension
   url: http://github.com/zapnap/radiant-upcoming-events-extension
   description: Simple administrative interface and tags to manage upcoming events in the Radiant CMS
