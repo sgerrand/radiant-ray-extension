@@ -719,3 +719,7 @@ repositories:
   url: http://github.com/spanner/radiant-reader-extension
   description: this provides multi-site reader/member registration and management for the benefit of other, more interesting extensions
   owner: spanner
+- name: commodity
+  url: http://github.com/boost/radiant-commodity
+  description: this provides multi-site reader/member registration and management for the benefit of other, more interesting extensions
+  owner: boost
