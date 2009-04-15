@@ -723,3 +723,7 @@ repositories:
   url: http://github.com/boost/radiant-commodity
   description: this provides multi-site reader/member registration and management for the benefit of other, more interesting extensions
   owner: boost
+- name: radiant-wym-editor-filter-extension
+  url: http://github.com/jomz/radiant-wym-editor-filter-extension
+  description: This filter adds a WYSIWYM editor to Radiant.
+  owner: jomz
