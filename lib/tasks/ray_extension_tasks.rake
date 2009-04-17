@@ -499,9 +499,9 @@ def install_submodules(submodule_urls, submodule_paths)
   elsif @download == "http"
     submodule_urls.each do |url|
       FileUtils.makedirs("#{@r}/tmp")
-      submodule.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "http:\\2/tarball/master")
+      url.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "http:\\2/tarball/master")
       tarball = open("#{url}", "User-Agent" => "open-uri").read
-      submodule.gsub!(/http:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
+      url.gsub!(/http:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
       open("#{@r}/tmp/#{url}.tar.gz", "wb") { |f| f.write(tarball) }
       Dir.chdir("#{@r}/tmp") do
         begin
