@@ -393,7 +393,7 @@ repositories:
   owner: kbingman
 - name: radiant-compress-css-filter-extension
   url: http://github.com/tricycle/radiant-compress-css-filter-extension
-  description: Beta: reduce white space and noise in stylesheets
+  description: Beta reduce white space and noise in stylesheets
   owner: tricycle
 - name: radiant-redirecting-fnf-page-extension
   url: http://github.com/tricycle/radiant-redirecting-fnf-page-extension
