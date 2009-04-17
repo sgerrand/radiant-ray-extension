@@ -421,11 +421,86 @@ def check_dependencies
 end
 
 def install_extension_dependencies(dependency)
-  if dependency["hub"]
-    system("rake ray:extension:install name=#{dependency["name"]} hub=#{dependency["hub"]}")
+  if dependency["radiant_min_version"] or dependency["radiant_max_version"]
+    version = Radiant::Version.to_s
+    if dependency["radiant_min_version"] and dependency["radiant_max_version"]
+      min = dependency["radiant_min_version"]
+      max = dependency["radiant_max_version"]
+      min_max_sanity_check(min, max)
+      if min < version and max > version
+        if dependency["hub"]
+          system("rake ray:extension:install name=#{dependency["name"]} hub=#{dependency["hub"]}")
+        else
+          ENV["hub"] = nil
+          system("rake ray:extension:install name=#{dependency["name"]}")
+        end
+      elsif min > version
+        system("rake ray:extension:disable name=#{@name}")
+        messages = [
+                    "You need at least Radiant #{min} to use the #{@name} extension."
+                   ]
+        output(messages)
+        exit
+      elsif max < version
+        messages = [
+                    "The #{dependency['name']} extension is no longer needed and was not installed."
+                   ]
+        output(messages)
+      end
+    elsif dependency["radiant_min_version"] and dependency["radiant_max_version"] == nil
+      min = dependency["radiant_min_version"]
+      if min > version
+        system("rake ray:extension:disable name=#{@name}")
+        messages = [
+                    "You need at least Radiant #{min} to use the #{@name} extension."
+                   ]
+        output(messages)
+        exit
+      else
+        if dependency["hub"]
+          system("rake ray:extension:install name=#{dependency["name"]} hub=#{dependency["hub"]}")
+        else
+          ENV["hub"] = nil
+          system("rake ray:extension:install name=#{dependency["name"]}")
+        end
+      end
+    elsif dependency["radiant_max_version"] and dependency["radiant_min_version"] == nil
+      max = dependency["radiant_max_version"]
+      if max < version
+        messages = [
+                    "The #{dependency['name']} extension is no longer needed and was not installed."
+                   ]
+        output(messages)
+      else
+        if dependency["hub"]
+          system("rake ray:extension:install name=#{dependency["name"]} hub=#{dependency["hub"]}")
+        else
+          ENV["hub"] = nil
+          system("rake ray:extension:install name=#{dependency["name"]}")
+        end
+      end
+    end
   else
-    ENV["hub"] = nil
-    system("rake ray:extension:install name=#{dependency["name"]}")
+    if dependency["hub"]
+      system("rake ray:extension:install name=#{dependency["name"]} hub=#{dependency["hub"]}")
+    else
+      ENV["hub"] = nil
+      system("rake ray:extension:install name=#{dependency["name"]}")
+    end
+  end
+end
+
+def min_max_sanity_check(min, max)
+  min = min.gsub("\.", "").to_i + 1
+  max = max.gsub("\.", "").to_i
+  if min == max
+    system("rake ray:extension:disable name=#{@name}")
+    messages = [
+                "The author of the #{@name} extension has inadvertently specified a minimum and",
+                "maximum version that make it impossible to install. Please contact the author."
+               ]
+    output(messages)
+    exit
   end
 end
 
