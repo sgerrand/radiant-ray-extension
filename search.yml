@@ -47,7 +47,7 @@ repositories:
   owner: radiant
 - name: radiant-mailer-extension
   url: http://github.com/radiant/radiant-mailer-extension
-  description: An extension for Radiant CMS that allows you to create 'contact us' and other mail-bound forms.
+  description: An extension for Radiant CMS that allows you to create contact us and other mail-bound forms.
   owner: radiant
 - name: radiant-sass-filter-extension
   url: http://github.com/radiant/radiant-sass-filter-extension
@@ -95,7 +95,7 @@ repositories:
   owner: martinbtt
 - name: radiant-multi-site-hacks-extension
   url: http://github.com/tricycle/radiant-multi-site-hacks-extension
-  description: " \t Alpha: Custom extensions to the RadiantCMS core MultiSite extension: http://dev.radiantcms.org/svn/radiant/trunk/extensions/multi_site/"
+  description: Alpha Custom extensions to the RadiantCMS core MultiSite extension
   owner: tricycle
 - name: radiant-help_use_cases-extension
   url: http://github.com/saturnflyer/radiant-help_use_cases-extension
@@ -125,7 +125,7 @@ repositories:
   owner: saturnflyer
 - name: radiant-nested-layouts-extension
   url: http://github.com/moklett/radiant-nested-layouts-extension
-  description: "An extension for Radiant CMS which provides tags for creating nested layouts. "
+  description: An extension for Radiant CMS which provides tags for creating nested layouts.
   owner: moklett
 - name: radiant-rss-feed-extension
   url: http://github.com/danielegozzi/radiant-rss-feed-extension
@@ -149,7 +149,7 @@ repositories:
   owner: yoon
 - name: radiant-templates-extension
   url: http://github.com/seancribbs/radiant-templates-extension
-  description: An extension for Radiant CMS to create page "templates" or "inner layouts" that constrain the structure and editing UI of a page.
+  description: An extension for Radiant CMS to create page templates or inner layouts that constrain the structure and editing UI of a page.
   owner: seancribbs
 - name: radiant-linksmanager-extension
   url: http://github.com/lacostej/radiant-linksmanager-extension
@@ -189,7 +189,7 @@ repositories:
   owner: screenconcept
 - name: radiant-leads-extension
   url: http://github.com/jhulten/radiant-leads-extension
-  description: "This is an extension for Radiant CMS to create a lead capture form, store the leads and forward them to CRM servers. "
+  description: This is an extension for Radiant CMS to create a lead capture form, store the leads and forward them to CRM servers.
   owner: jhulten
 - name: radiant-thirty-boxes-extension
   url: http://github.com/wemrysi/radiant-thirty-boxes-extension
@@ -205,17 +205,17 @@ repositories:
   owner: lorenjohnson
 - name: radiant-utility-tags
   url: http://github.com/lorenjohnson/radiant-utility-tags
-  description: "Mostly proprietary Radiant CMS extension utility Radius tag library. "
+  description: Mostly proprietary Radiant CMS extension utility Radius tag library.
   owner: lorenjohnson
 - name: radiant-tags-extension
   url: http://github.com/jomz/radiant-tags-extension
-  description: Extends Radiant CMS with tagging capabilities. Tagging as in "2.0" and tagclouds.
+  description: Extends Radiant CMS with tagging capabilities. Tagging as in 2.0 and tagclouds.
   owner: jomz
 ---
 repositories:
 - name: radiant-trike-tags-extension
   url: http://github.com/tricycle/radiant-trike-tags-extension
-  description: "Beta: A handfull of Radiant tags that we've found generally useful."
+  description: Beta A handfull of Radiant tags that we have found generally useful.
   owner: tricycle
 - name: radiant-portfolio
   url: http://github.com/saturnflyer/radiant-portfolio
@@ -247,11 +247,11 @@ repositories:
   owner: nelstrom
 - name: radiant-sectionalize-extension
   url: http://github.com/djcp/radiant-sectionalize-extension
-  description: A set of radius tags designed to make splitting Radiant sites into "sections" easier for more flexible CSS layouts.
+  description: A set of radius tags designed to make splitting Radiant sites into sections easier for more flexible CSS layouts.
   owner: djcp
 - name: radiant-redcloth4-extension
   url: http://github.com/jgarber/radiant-redcloth4-extension
-  description: Overrides Radiant's packaged RedCloth version so you can use a newer RedCloth gem.
+  description: Overrides Radiant packaged RedCloth version so you can use a newer RedCloth gem.
   owner: jgarber
 - name: radiant-wordpress_link_saver-extension
   url: http://github.com/saturnflyer/radiant-wordpress_link_saver-extension
@@ -267,7 +267,7 @@ repositories:
   owner: saturnflyer
 - name: radiant-jump-page-extension
   url: http://github.com/mikehale/radiant-jump-page-extension
-  description: Provides a 'jump page' for all external links from your radiant site.
+  description: Provides a jump page for all external links from your radiant site.
   owner: mikehale
 - name: radiant-file_based_layout-extension
   url: http://github.com/RSpace/radiant-file_based_layout-extension
@@ -349,7 +349,7 @@ repositories:
   owner: ceaser
 - name: radiant_page_preview_extension
   url: http://github.com/vigetlabs/radiant_page_preview_extension
-  description: This extension allows you to view previews of pages, even if they are not in "published" mode.
+  description: This extension allows you to view previews of pages, even if they are not in published mode.
   owner: vigetlabs
 - name: radiant-concurrent_draft-extension
   url: http://github.com/avonderluft/radiant-concurrent_draft-extension
@@ -361,7 +361,7 @@ repositories:
   owner: adsmart
 - name: radiant-page_attachments_xsendfile-extension
   url: http://github.com/jgarber/radiant-page_attachments_xsendfile-extension
-  description: Works with the page_attachments extension to make attached files available under the page they're attached to, so you can link to files at sane URLs.
+  description: Works with the page_attachments extension to make attached files available under the page they are attached to, so you can link to files at sane URLs.
   owner: jgarber
 - name: radiant-sns_file_system-extension
   url: http://github.com/nelstrom/radiant-sns_file_system-extension
@@ -369,7 +369,7 @@ repositories:
   owner: nelstrom
 - name: radiant-first-reorder-extension
   url: http://github.com/jomz/radiant-first-reorder-extension
-  description: This is a patched version of the original reorder extension (the one with drag&drop reordering on a seperate page)
+  description: This is a patched version of the original reorder extension (the one with drag and drop reordering on a seperate page)
   owner: jomz
 - name: radiant_language_redirect_extension
   url: http://github.com/intinig/radiant_language_redirect_extension
@@ -393,29 +393,29 @@ repositories:
   owner: kbingman
 - name: radiant-compress-css-filter-extension
   url: http://github.com/tricycle/radiant-compress-css-filter-extension
-  description: "Beta: reduce white space and noise in stylesheets"
+  description: Beta: reduce white space and noise in stylesheets
   owner: tricycle
 - name: radiant-redirecting-fnf-page-extension
   url: http://github.com/tricycle/radiant-redirecting-fnf-page-extension
-  description: "Beta: FileNotFound page that supports 301 and 302 redirects in addition to 404"
+  description: Beta FileNotFound page that supports 301 and 302 redirects in addition to 404
   owner: tricycle
 - name: radiant-greedy-page-extension
   url: http://github.com/tricycle/radiant-greedy-page-extension
-  description: "Beta: A page that will return for any url that implies a child page"
+  description: Beta A page that will return for any url that implies a child page
   owner: tricycle
 - name: radiant-shopping-trike-extension
   url: http://github.com/tricycle/radiant-shopping-trike-extension
-  description: "Alpha: A simple shopping cart for RadiantCMS"
+  description: Alpha A simple shopping cart for RadiantCMS
   owner: tricycle
 - name: radiant-subscriber-lists-extension
   url: http://github.com/nelstrom/radiant-subscriber-lists-extension
-  description: Allows you to create one or more lists to which your site's visitors may subscribe, by submitting their email address.
+  description: Allows you to create one or more lists to which your site visitors may subscribe, by submitting their email address.
   owner: nelstrom
 ---
 repositories:
 - name: radiant-file-browser-extension
   url: http://github.com/tricycle/radiant-file-browser-extension
-  description: "Alpha: Lists the contents of a server-side directory, and allows uploading of files to it"
+  description: Alpha Lists the contents of a server-side directory, and allows uploading of files to it
   owner: tricycle
 - name: find_fu
   url: http://github.com/inz/find_fu
@@ -479,7 +479,7 @@ repositories:
   owner: saturnflyer
 - name: radiant-sibling-tags-extension
   url: http://github.com/nelstrom/radiant-sibling-tags-extension
-  description: Allows you to refer to the current page's previous/next sibling.
+  description: Allows you to refer to the current page previous/next sibling.
   owner: nelstrom
 - name: radiant-blog-extension
   url: http://github.com/saturnflyer/radiant-blog-extension
@@ -557,7 +557,7 @@ repositories:
   owner: santry
 - name: enkodertags
   url: http://github.com/santry/enkodertags
-  description: An extension for the Radiant CMS with tags for hiding web content from robots using Dan Benjamin's enkoder
+  description: An extension for the Radiant CMS with tags for hiding web content from robots using Dan Benjamin enkoder
   owner: santry
 - name: page_redirect
   url: http://github.com/randomutterings/page_redirect
