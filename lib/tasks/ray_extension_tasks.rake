@@ -787,11 +787,13 @@ def set_download_preference
 end
 
 def set_restart_preference
-  FileUtils.makedirs("#{@c}")
   supported_servers = ["mongrel_cluster", "mongrel", "passenger", "thin"]
   preference = ENV["server"]
   if supported_servers.include?(preference)
-    File.open("#{@c}/restart.txt", "w") {|f| f.puts(preference)}
+    unless File.exist?("#{@r}/preferences.yml")
+      File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+    end
+    File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  restart: #{preference}") }
     messages = [
       "================================================================================",
       "Your restart preference has been set to #{preference}."
