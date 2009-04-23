@@ -93,6 +93,14 @@ namespace :ray do
     task :update do
       update_extension
     end
+    desc "Go to an extension's page on Github."
+    task :home do
+      print("Extension name: ")
+      ENV["name"] = STDIN.gets.strip!
+      search_extensions(show = false)
+      sh("open #{@url}/tree/master")
+      exit
+    end
   end
 
   namespace :setup do
@@ -136,6 +144,7 @@ namespace :ray do
   task :s => ["extension:search"]
   task :d => ["extension:disable"]
   task :e => ["extension:enable"]
+  task :h => ["extension:home"]
 
 end
 
