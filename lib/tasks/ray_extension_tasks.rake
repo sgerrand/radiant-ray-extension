@@ -95,10 +95,11 @@ namespace :ray do
     end
     desc "Go to an extension's page on Github."
     task :home do
+      require "#{@r}/lib/launchy"
       print("Extension name: ")
       ENV["name"] = STDIN.gets.strip!
       search_extensions(show = false)
-      sh("open #{@url}/tree/master")
+      Launchy.open("#{@url}/tree/master")
       exit
     end
   end
