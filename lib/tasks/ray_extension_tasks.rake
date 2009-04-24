@@ -979,12 +979,14 @@ end
 def quarantine_extension(cause)
   move_to_disabled
   messages = [
-    "================================================================================",
-    "The #{@name} extension failed to install properly.",
-    "Specifically, the failure was caused by the extension's #{cause} task:",
-    "Run `rake radiant:extensions:#{@name}:#{cause} --trace` for more details.",
-    "The extension has been disabled and placed in #{@p}/.disabled"
-  ]
+              "================================================================================",
+              "The #{@name} extension failed to install properly.",
+              "Specifically, the failure was caused by the extension's #{cause} task:",
+              "The extension has been disabled and placed in #{@p}/.disabled",
+              "If you would like to troubleshoot the extension re-enable it by running:",
+              "`rake ray:extension:enable name=#{@name}` then run the #{cause} task with:",
+              "`rake radiant:extensions:#{@name}:#{cause} --trace` and inspect the output."
+             ]
   output(messages)
   exit
 end
