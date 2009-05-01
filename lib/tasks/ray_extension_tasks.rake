@@ -152,8 +152,10 @@ end
 def install_extension
   get_download_preference
   search_extensions(show = nil)
-  determine_install_path # cancels installation if extension exists
   replace_github_username if ENV["hub"]
+  replace_extension_name if ENV["fullname"]
+  determine_install_path # cancels installation if extension exists
+
   if ENV["lib"]
     @gem_dependencies = [ENV["lib"]]
     install_dependencies
@@ -302,6 +304,7 @@ def install_bundle
         options = []
         options << " hub=" + extension[i]["hub"] if extension[i]["hub"]
         options << " lib=" + extension[i]["lib"] if extension[i]["lib"]
+        options << " fullname=" + extension[i]["fullname"] if extension[i]["fullname"]
         sh("rake ray:extension:install name=#{name}#{options}")
         remote = extension[i]["remote"] if extension[i]["remote"]
         if remote
@@ -821,6 +824,15 @@ def choose_extension_to_install(name, extensions, authors, urls, descriptions)
       @url = urls[extensions.index(e)]
       break if e == name
     end
+  elsif extensions.length == 0
+    @blind_luck = true
+    messages = [
+      "I couldn't find an extension named '#{name}', or sounding like it.",
+      "Let me try fetching it from github directly.."
+    ]
+    output(messages)
+    @url = "http://github.com/radiant/radiant-#{name}-extension"
+    return
   else
     messages = [
       "I couldn't find an extension named '#{name}'.",
@@ -922,16 +934,29 @@ def replace_github_username
   @url.gsub!(/(http:\/\/github.com\/).*(\/.*)/, "\\1#{ENV["hub"]}\\2")
 end
 
+def replace_extension_name
+  @url.gsub!(/(http:\/\/github.com\/.*\/)(.*)/, "\\1#{ENV["fullname"]}")
+end
+
 def determine_install_path
   FileUtils.makedirs("#{@r}/tmp")
   # download an html list of the repository contents
   begin
     html = open("#{@url}.git", "User-Agent" => "open-uri").read
   rescue OpenURI::HTTPError
-    messages = [
-      "================================================================================",
-      "GitHub is having trouble serving the request, just try it again."
-    ]
+    if @blind_luck
+      messages = [
+        "================================================================================",
+        "Failed to download the extension at #{@url}",
+        "Check the url above in your browser to get a hint of what's going on.",
+        "GitHub may be having trouble serving the request, or you gave me wrong extension info."
+      ]
+    else
+      messages = [
+        "================================================================================",
+        "GitHub is having trouble serving the request, just try it again."
+      ]
+    end
     output(messages)
     exit
   end
