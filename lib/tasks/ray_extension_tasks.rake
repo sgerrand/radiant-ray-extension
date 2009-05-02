@@ -303,17 +303,17 @@ def install_bundle
         options << " hub=" + extension[i]["hub"] if extension[i]["hub"]
         options << " lib=" + extension[i]["lib"] if extension[i]["lib"]
         sh("rake ray:extension:install name=#{name}#{options}")
-        begin
-          extension[i]["remote"].length
-        rescue Exception
-          messages = [
-            "================================================================================",
-            "Your extensions.yml file is using Ray 1.x features no longer in Ray 2.",
-            "Refer to the wiki for upgrade information, http://is.gd/jV5h"
-          ]
-          output(messages)
-          exit
-        end
+        #begin
+        #  extension[i]["remote"].length
+        #rescue Exception
+        #  messages = [
+        #    "================================================================================",
+        #    "Your extensions.yml file is using Ray 1.x features no longer in Ray 2.",
+        #    "Refer to the wiki for upgrade information, http://is.gd/jV5h"
+        #  ]
+        #  output(messages)
+        #  exit
+        #end
         if extension[i]["remote"].length > 0
           for j in 0...extension[i]["remote"].length
             sh("rake ray:extension:remote name=#{name} hub=#{extension[i]["remote"][j]}")
