@@ -50,6 +50,7 @@ Authors
 * john muhl
 * Michael Kessler
 * Arik Jones
+* Benny Degezelle
 
 MIT License
 ============
