@@ -380,7 +380,10 @@ def http_extension_install
   end
   sh("mv #{@r}/tmp/* #{@p}/#{@name}")
   remove_dir("#{@r}/tmp")
-  rm("#{@p}/#{@name}/.gitmodules") if File.exist?("#{@p}/#{@name}/.gitmodules")
+  if File.exist?("#{@p}/#{@name}/.gitmodules")
+    check_submodules
+    rm("#{@p}/#{@name}/.gitmodules")
+  end
 end
 
 def git_extension_update(name)
