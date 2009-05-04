@@ -529,10 +529,10 @@ def check_submodules
 end
 
 def install_dependencies
-  if @extension_dependencies.length > 0
+  if @extension_dependencies
     @extension_dependencies.each { |e| system "rake ray:extension:install name=#{e}" }
   end
-  if @gem_dependencies.length > 0
+  if @gem_dependencies
     gem_sources = `gem sources`.split("\n")
     gem_sources.each { |g| @github = g if g.include?("github") }
     sh("gem sources --add http://gems.github.com") unless @github
@@ -548,7 +548,7 @@ def install_dependencies
       end
     end
   end
-  if @plugin_dependencies.length > 0
+  if @plugin_dependencies
     messages = [
       "================================================================================",
       "Plugin dependencies are not supported by Ray, use git submodules instead.",
