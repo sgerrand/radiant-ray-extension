@@ -743,6 +743,7 @@ def uninstall_extension
   remove_dir("#{@r}/tmp")
   messages = ["The #{@name} extension has been uninstalled."]
   output(messages)
+  restart_server
 end
 
 def search_extensions(show)
