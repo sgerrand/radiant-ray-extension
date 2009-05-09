@@ -727,3 +727,19 @@ repositories:
   url: http://github.com/jomz/radiant-wym-editor-filter-extension
   description: This filter adds a WYSIWYM editor to Radiant.
   owner: jomz
+- name: radiant-reverb_nation-extension
+  url: http://github.com/eostrom/radiant-reverb_nation-extension
+  description: Provides tags to fetch concert listings from ReverbNation.com and incorporate them into Radiant pages.
+  owner: eostrom
+- name: radiant-highrise
+  url: http://github.com/kmayer/radiant-highrise
+  description: Use typical radiant tags to get “Person” data out of your Highrise account.
+  owner: kmayer
+- name: radiant-page-part-handling-extension
+  url: http://github.com/screenconcept/radiant-page-part-handling-extension
+  description: Enhance page parts to load single parts depending on a URL parameter and behave differently on an AJAX request
+  owner: screenconcept
+- name: radiant-quicktime-extension
+  url: http://github.com/svoop/radiant-quicktime-extension
+  description: Tags for embedding QuickTime movies into pages.
+  owner: svoop
