@@ -743,3 +743,11 @@ repositories:
   url: http://github.com/svoop/radiant-quicktime-extension
   description: Tags for embedding QuickTime movies into pages.
   owner: svoop
+- name: radiant-admin_data-extension
+  url: http://github.com/saturnflyer/radiant-admin_data-extension
+  description: This extension uses the admin_data plugin to provide a simple CRUD interface for your database tables.
+  owner: saturnflyer
+- name: radiant-chronicle-extension
+  url: http://github.com/jgarber/radiant-chronicle-extension
+  description: This extension adds versioning to pages and uses a pages status to determine its visibility. The most recent published or hidden version is visible in live mode and the most recent version a.k.a. the current version is visible in dev mode regardless of its status. Thus you can work on a draft in dev mode preview exactly how it will look and then make it live when you are ready by changing its status to published. Also shows diffs between versions.
+  owner: jgarber
