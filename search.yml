@@ -434,9 +434,9 @@ repositories:
   description: ""
   owner: MrGossett
 - name: radiant-wmd-filter-extension
-  url: http://github.com/MrGossett/radiant-wmd-filter-extension
+  url: http://github.com/saturnflyer/radiant-wmd_filter-extension
   description: Use WMD to write Markdown in a WYSIWYM editor
-  owner: MrGossett
+  owner: saturnflyer
 - name: radiant-wrappits-extension
   url: http://github.com/nelstrom/radiant-wrappits-extension
   description: Allows you to create double tag snippets (<r:snippet></r:snippet>), whose content can be inserted in the snippet with <r:yield/>.
