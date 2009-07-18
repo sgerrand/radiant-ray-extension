@@ -73,10 +73,10 @@ repositories:
   url: http://github.com/skrat/radiant-metaweblog-extension
   description: Radiant extension to allow publishing/adding pages via MetaWeblog API (Google Docs, ScribeFire, ...)
   owner: skrat
-- name: radiant-comments-extension
-  url: http://github.com/tricycle/radiant-comments-extension
-  description: from http://svn.artofmission.com/svn/plugins/radiant/extensions/comments
-  owner: tricycle
+- name: radiant-comments
+  url: http://github.com/artofmission/radiant-comments
+  description: Radiant Comments
+  owner: artofmission
 - name: radiant-banner-rotator-extension
   url: http://github.com/seancribbs/radiant-banner-rotator-extension
   description: A simple Radiant extension that supports randomly rotating banners on pages.
@@ -547,16 +547,16 @@ repositories:
   url: http://github.com/zapnap/database_form
   description: Database Form Page Extension for Radiant CMS
   owner: zapnap
-- name: blogtags
-  url: http://github.com/santry/blogtags
+- name: blog_tags
+  url: http://github.com/santry/blog_tags
   description: An extension that provides some useful blogging tags for the Radiant CMS
   owner: santry
-- name: flickrtags
-  url: http://github.com/santry/flickrtags
+- name: flickr_tags
+  url: http://github.com/santry/flickr_tags
   description: An extension for the Radiant CMS that provides tags for embedding Flickr slideshows
   owner: santry
-- name: enkodertags
-  url: http://github.com/santry/enkodertags
+- name: enkoder_tags
+  url: http://github.com/santry/enkoder_tags
   description: An extension for the Radiant CMS with tags for hiding web content from robots using Dan Benjamin enkoder
   owner: santry
 - name: page_redirect
@@ -751,3 +751,35 @@ repositories:
   url: http://github.com/jgarber/radiant-chronicle-extension
   description: This extension adds versioning to pages and uses a pages status to determine its visibility. The most recent published or hidden version is visible in live mode and the most recent version a.k.a. the current version is visible in dev mode regardless of its status. Thus you can work on a draft in dev mode preview exactly how it will look and then make it live when you are ready by changing its status to published. Also shows diffs between versions.
   owner: jgarber
+- name: radiant-textile-toolbar-extension
+  url: http://github.com/pelargir/radiant-textile-toolbar-extension
+  description: Adds toolbars to Textile-enabled text areas in the admin.
+  owner: pelargir
+- name: radiant-spreedly-extension
+  url: http://github.com/pelargir/radiant-spreedly-extension
+  description: Adds support for paid subscriptions through Spreedly.
+  owner: pelargir
+- name: radiant-events-calendar-extension
+  url: http://github.com/davec/radiant-events-calendar-extension
+  description: Generate a monthly calendar of events in your pages. Includes highlighted days with events and mouseover tooltips with a summary of the day’s events. Full event listing is provided on a separate page.
+  owner: davec
+- name: radiant-ad_banners-extension
+  url: http://github.com/davec/radiant-ad_banners-extension
+  description: Display random banners in your pages. Uses a simple <r:ad_banner/> tag and avoids duplicates when multiple banners are included on a page.
+  owner: davec
+- name: radiant-questionnaire-extension
+  url: http://github.com/screenconcept/radiant-questionnaire-extension
+  description: This extension allows you to do a questionnaire with Radiant. In the backend you can create a questionnaire very easily. With simple radius tags you can display the questonnaire on the frontend. In the backend you can also clone a questionnaire (as example for multiple languages) and export the answers to Excel.
+  owner: screenconcept
+- name: radiant-rbac_assets-extension
+  url: http://github.com/dko/radiant-rbac_assets-extension
+  description: Based on rbac_snippets is an extension that utilizes the extension RBAC_Base to allow only users in the "Assets" role to edit assets.
+  owner: dko
+- name: radiant-static-caching-extension
+  url: http://github.com/tricycle/radiant-static-caching-extension
+  description: Caches rendered content in directory structure that mirrors the URL. Apache (or the web server of your choice) can then serve the static pages without hitting the Radiant application at all.
+  owner: tricycle
+- name: radiant-less_filter-extension
+  url: http://github.com/gusgollings/radiant-less_filter-extension
+  description: Allows you to create DRY CSS in Radiant using less by Alexis Sellier and Dmitry Fadeyev.
+  owner: gusgollings
