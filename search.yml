@@ -783,3 +783,7 @@ repositories:
   url: http://github.com/gusgollings/radiant-less_filter-extension
   description: Allows you to create DRY CSS in Radiant using less by Alexis Sellier and Dmitry Fadeyev.
   owner: gusgollings
+- name: radiant-quote_du_jour-extension
+  url: http://github.com/avonderluft/radiant-quote_du_jour-extension
+  description: enables you to display random quotes on a page
+  owner: avonderluft
