@@ -804,7 +804,12 @@ def get_download_preference
     set_download_preference
   end
   preferences = YAML::load_file("#{@r}/preferences.yml")
-  @download = preferences["download"].strip
+  dl = preferences["download"]
+  if dl
+    @download = dl.strip
+  else
+    set_download_preference
+  end
   unless @download == "git" or @download == "http"
     messages = [
       "Your download preference is broken, to repair it run:",
