@@ -787,3 +787,11 @@ repositories:
   url: http://github.com/avonderluft/radiant-quote_du_jour-extension
   description: enables you to display random quotes on a page
   owner: avonderluft
+- name: radiant-multilingual-pages-extension
+  url: http://github.com/yeah/radiant-multilingual-pages-extension
+  description: Provides multilingual pages for Radiant.
+  owner: yeah
+- name: modulo
+  url: http://github.com/lonnon/modulo
+  description: Supplies tags to display odd and even child pages
+  owner: lonnon
