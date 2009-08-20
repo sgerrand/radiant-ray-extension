@@ -109,7 +109,8 @@ namespace :ray do
         "rake ray:setup:restart server=mongrel",
         "rake ray:setup:restart server=passenger",
         "rake ray:setup:restart server=thin",
-        "NOTE: Mongrel and Thin must be running as daemons"
+        "rake ray:setup:restart server=unicorn",
+        "NOTE: Mongrel, Thin and Unicorn must be running as daemons"
       ]
       require_options = [ENV["server"]]
       validate_command(messages, require_options)
@@ -842,7 +843,7 @@ def set_download_preference
 end
 
 def set_restart_preference
-  supported_servers = ["mongrel_cluster", "mongrel", "passenger", "thin"]
+  supported_servers = ["mongrel_cluster", "mongrel", "passenger", "thin", "unicorn"]
   preference = ENV["server"]
   if supported_servers.include?(preference)
     unless File.exist?("#{@r}/preferences.yml")
@@ -857,13 +858,14 @@ def set_restart_preference
   else
     messages = [
       "I don't know how to restart #{preference}.",
-      "Single Mongrels, Mongrel clusters, Thin and Phusion Passenger are supported.",
+      "Single Mongrels, Mongrel clusters, Thin, Unicorn and Phusion Passenger are supported.",
       "NOTE: Mongrel and Thin must be running as daemons",
       "Run one of the following commands:",
       "rake ray:setup:restart server=mongrel_cluster",
       "rake ray:setup:restart server=passenger",
       "rake ray:setup:restart server=mongrel",
-      "rake ray:setup:restart server=thin"
+      "rake ray:setup:restart server=thin",
+      "rake ray:setup:restart server=unicorn"
     ]
     output(messages)
     exit
