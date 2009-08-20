@@ -1012,8 +1012,10 @@ def restart_server
     sh("thin restart")
     puts("Thin has been restarted")
   elsif @server == "unicorn"
-    sh("kill -HUP `cat tmp/pids/unicorn.pid`")
-    puts("Unicorn has been restarted")
+    if File.exist?("tmp/pids/unicorn.pid")
+      sh("kill -HUP `cat tmp/pids/unicorn.pid`")
+      puts("Unicorn has been restarted")
+    end
   else
     messages = [
       "Ray can automatically restart common application servers.",
