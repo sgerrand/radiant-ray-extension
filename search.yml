@@ -795,3 +795,7 @@ repositories:
   url: http://github.com/lonnon/modulo
   description: Supplies tags to display odd and even child pages
   owner: lonnon
+- name: radiant-electrostatic-extension
+  url: http://github.com/thumblemonks/radiant-electrostatic-extension
+  description: Electrostatic is a very simple Radiant extension focused on generating truly static content from the Pages in your instance of the CMS
+  owner: thumblemonks
