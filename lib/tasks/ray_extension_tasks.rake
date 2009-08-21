@@ -11,12 +11,8 @@ namespace :ray do
   namespace :extension do
     desc "Install an extension."
     task :install do
-      messages = [
-        "AN EXTENSION NAME IS REQUIRED! For example:",
-        "rake ray:extension:install name=extension_name"
-      ]
       require_options = [ENV["name"]]
-      validate_command(messages, require_options)
+      get_name(require_options)
       install_extension
     end
     desc "Search available extensions."
@@ -26,7 +22,7 @@ namespace :ray do
         "rake ray:extension:search term=search_term"
       ]
       require_options = [ENV["term"]]
-      validate_command(messages, require_options)
+      get_name(require_options, search=true)
       search_extensions(show = true)
     end
     desc "Disable an extension."
@@ -36,7 +32,7 @@ namespace :ray do
         "rake ray:extension:disable name=extension_name"
       ]
       require_options = [ENV["name"]]
-      validate_command(messages, require_options)
+      get_name(require_options)
       disable_extension
     end
     desc "Enable an extension."
@@ -46,7 +42,7 @@ namespace :ray do
         "rake ray:extension:enable name=extension_name"
       ]
       require_options = [ENV["name"]]
-      validate_command(messages, require_options)
+      get_name(require_options)
       enable_extension
     end
     desc "Uninstall an extension"
@@ -56,7 +52,7 @@ namespace :ray do
         "rake ray:extension:uninstall name=extension_name"
       ]
       require_options = [ENV["name"]]
-      validate_command(messages, require_options)
+      get_name(require_options)
       uninstall_extension
     end
     desc "Update existing remotes on an extension."
@@ -878,6 +874,20 @@ def validate_command(messages, require_options)
     unless option
       output(messages)
       exit
+    end
+  end
+end
+
+def get_name(require_options, search=nil)
+  if search
+    unless ENV['term']
+      print("Search term: ")
+      ENV['term'] = STDIN.gets.strip!
+    end
+  else
+    unless ENV['name']
+      print("Extension name: ")
+      ENV['name'] = STDIN.gets.strip!
     end
   end
 end
