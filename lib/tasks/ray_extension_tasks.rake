@@ -844,22 +844,23 @@ end
 
 def set_restart_preference
   supported_servers = ["mongrel_cluster", "mongrel", "passenger", "thin", "unicorn"]
-  preference = ENV["server"]
-  if supported_servers.include?(preference)
-    unless File.exist?("#{@r}/preferences.yml")
-      File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+  server = ENV["server"]
+  if supported_servers.include?(server)
+    if File.exist?("#{@r}/preferences.yml")
+      preferences = YAML::load_file("#{@r}/preferences.yml")
+      rm("#{@r}/preferences.yml")
+      dl = preferences["download"] if preferences["download"]
     end
-    File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  restart: #{preference}") }
-    messages = [
-      "Your restart preference has been set to #{preference}."
-    ]
+    File.open("#{@r}/preferences.yml", "w") { |f| f.puts("---\n") }
+    File.open("#{@r}/preferences.yml", "a") { |f| f.puts("  download: #{dl}\n  restart: #{server}") }
+    messages = ["Your restart preference has been set to #{server}."]
     output(messages)
     exit
   else
     messages = [
-      "I don't know how to restart #{preference}.",
+      "I don't know how to restart #{server}.",
       "Single Mongrels, Mongrel clusters, Thin, Unicorn and Phusion Passenger are supported.",
-      "NOTE: Mongrel and Thin must be running as daemons",
+      "NOTE: Mongrel, Thin and Unicorn must be running as daemons",
       "Run one of the following commands:",
       "rake ray:setup:restart server=mongrel_cluster",
       "rake ray:setup:restart server=passenger",
