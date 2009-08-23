@@ -2,7 +2,7 @@
 # require_dependency 'application'
 
 class RayExtension < Radiant::Extension
-  version "2.1"
+  version "2.2"
   description "Friendly extension management"
   url "http://wiki.github.com/johnmuhl/radiant-ray-extension"
 
