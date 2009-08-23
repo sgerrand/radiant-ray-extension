@@ -799,3 +799,7 @@ repositories:
   url: http://github.com/thumblemonks/radiant-electrostatic-extension
   description: Electrostatic is a very simple Radiant extension focused on generating truly static content from the Pages in your instance of the CMS
   owner: thumblemonks
+- name: radiant-haml_filter-extension
+  url: http://github.com/saturnflyer/radiant-haml_filter-extension
+  description: Provides a HAML filter for content.
+  owner: saturnflyer
