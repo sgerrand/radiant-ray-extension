@@ -1022,7 +1022,7 @@ def restart_server
     sh("mongrel_rails restart")
     puts("Mongrel has been restarted")
   elsif @server == "thin"
-    sh("thin restart")
+    sh("thin stop && thin -d start")
     puts("Thin has been restarted")
   elsif @server == "unicorn"
     if File.exist?("tmp/pids/unicorn.pid")
