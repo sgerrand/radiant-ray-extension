@@ -804,3 +804,27 @@ repositories:
   url: http://github.com/saturnflyer/radiant-haml_filter-extension
   description: Provides a HAML filter for content.
   owner: saturnflyer
+- name: radiant-recaptcha-extension
+  url: http://github.com/tekwiz/radiant-recaptcha-extension
+  description: This extension integrates reCAPTCHA into a Radiant app.
+  owner: tekwiz
+- name: radiant-recaptcha-mailer-extension
+  url: http://github.com/tekwiz/radiant-recaptcha-mailer-extension
+  description: Provides support for email forms and generic mailing functionality with Recaptcha validation provided by the recaptcha extension.
+  owner: tekwiz
+- name: radiant-file-system-resources-extension
+  url: http://github.com/terralien/radiant-file-system-resources-extension
+  description: Allows you to keep radius-based layouts and snippets on the file system.
+  owner: terralien
+- name: radiant-tei-tools
+  url: http://github.com/jgsmith/radiant-tei-tools
+  description: This extension provides a set of tools for managing TEI encoded text in Radiant.
+  owner: jgsmith
+- name: radiant-sitemap-xml-extension
+  url: http://github.com/Aissac/radiant-sitemap-xml-extension
+  description: Allows you to specify in Radiant admin which pages appear in the sitemap
+  owner: Aissac
+- name: radiant-no_dev_cache-extension
+  url: http://github.com/jgarber/radiant-no_dev_cache-extension
+  description: When caching was switched to Rack::Cache in Radiant 0.8 the bit where it wouldn't cache in dev mode was left out. This puts it back in.
+  owner: jgarber
