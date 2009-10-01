@@ -2,7 +2,8 @@
 # http://support.github.com/discussions/feature-requests/11
 # http://support.github.com/discussions/site/172
 # http://support.github.com/discussions/site/283
-# this file was manually updated: 2009/04/04
+# http://github.com/develop/develop.github.com/issues#issue/1
+# this file was manually updated: 2009/10/01
 ---
 repositories:
 - name: radiant-extensions-extension
