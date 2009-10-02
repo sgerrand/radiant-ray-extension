@@ -1,8 +1,3 @@
-IMPORTANT
-=========
-
-**GitHub has corrupted the Ray repository and nothing I can think to do has been able to uncorrupt it. Please use Gitorious to fetch the code. `git clone git://gitorious.org/ray/ray.git` -- if you use `script/extension install ray` to install you will automatically pull from Gitorious.**
-
 Overview
 ========
 
