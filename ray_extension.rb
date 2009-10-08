@@ -4,7 +4,7 @@
 class RayExtension < Radiant::Extension
   version "2.2"
   description "Friendly extension management"
-  url "http://wiki.github.com/johnmuhl/radiant-ray-extension"
+  url "http://johnmuhl.github.com/radiant-ray-extension/"
 
   # define_routes do |map|
   #   map.connect 'admin/ray/:action', :controller => 'admin/ray'

@@ -268,7 +268,7 @@ def install_bundle
     messages = [
       "You don't seem to have a bundle file available.",
       "Refer to the documentation for more information on extension bundles.",
-      "http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-bundle"
+      "http://johnmuhl.github.com/radiant-ray-extension/#ext-bundle"
     ]
     output(messages)
     exit
@@ -1005,7 +1005,7 @@ def restart_server
     messages = [
       "Ray can automatically restart common application servers.",
       "Refer to the documentation for more information on auto-restart.",
-      "http://wiki.github.com/johnmuhl/radiant-ray-extension/advanced-usage#setup-restart"
+      "http://johnmuhl.github.com/radiant-ray-extension/#setup-restart"
     ]
     output(messages, short=true)
     exit
@@ -1033,7 +1033,7 @@ def restart_server
     messages = [
       "Ray can automatically restart common application servers.",
       "Refer to the documentation for more information on auto-restart.",
-      "http://wiki.github.com/johnmuhl/radiant-ray-extension/advanced-usage#setup-restart"
+      "http://johnmuhl.github.com/radiant-ray-extension/#setup-restart"
     ]
     output(messages, short=true)
     exit

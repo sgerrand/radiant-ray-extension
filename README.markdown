@@ -9,37 +9,38 @@ Table of contents
 =================
 
 <ol>
-  <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/installation">Installation</a>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#installation">Installation</a>
     <ol>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/installation#upgrade">Upgrading from Ray 1.x</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#upgrading-with-git">Upgrading with Git</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#upgrading-with-http">Upgrading with HTTP</a></li>
     </ol>
   </li>
   <li><a href="http://github.com/johnmuhl/radiant-ray-extension/issues">Bugs &amp; feature requests</a></li>
-  <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage">Usage</a>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#usage">Usage</a>
     <ol>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-install">Installing extensions</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-search">Searching for extensions</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-disable">Disabling extensions</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-enable">Enabling extensions</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-uninstall">Uninstalling extensions</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-update">Updating extensions</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/usage#ext-bundle">Bundling extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-install">Installing extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-search">Searching for extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-disable">Disabling extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-enable">Enabling extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-uninstall">Uninstalling extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-update">Updating extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-bundle">Bundling extensions</a></li>
     </ol>
   </li>
-  <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/extension-dependencies">Extension dependencies</a></li>
-  <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/advanced-usage">Advanced usage</a>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#extension-dependencies">Extension dependencies</a></li>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#advanced-usage">Advanced usage</a>
     <ol>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/advanced-usage#setup-download">Download preference setup</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/advanced-usage#setup-restart">Server restart preference setup</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/advanced-usage#ext-remote">Adding extension remotes</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/advanced-usage#ext-pull">Pulling extension remotes</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#setup-download">Download preference setup</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#setup-restart">Server restart preference setup</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-remote">Adding extension remotes</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-pull">Pulling extension remotes</a></li>
     </ol>
   </li>
-  <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/legacy-information">Legacy information</a>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#legacy-information">Legacy information</a>
     <ol>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/legacy-information#shortcuts-redux">What happened to &#8220;some&#8221; shortcut?</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/legacy-information#ext-bundle">What changed in <code>extensions.yml</code>?</a></li>
-      <li><a href="http://wiki.github.com/johnmuhl/radiant-ray-extension/legacy-information#shortcuts">What if I don&#8217;t like the new commands?</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#shortcuts-redux">What happened to &#8220;some&#8221; shortcut?</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-bundle-diff">What changed in <code>extensions.yml</code>?</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#shortcuts">What if I don&#8217;t like the new commands?</a></li>
     </ol>
   </li>
 </ol>
