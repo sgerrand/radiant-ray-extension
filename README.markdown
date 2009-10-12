@@ -8,29 +8,42 @@ To use Ray you need `git` or `tar` installed in addition to the normal Radiant s
 Table of contents
 =================
 
-0. [Installation](http://johnmuhl.github.com/radiant-ray-extension/#installation)
-  0. [Upgrading with Git](http://johnmuhl.github.com/radiant-ray-extension/#upgrading-with-git)
-  0. [Upgrading with HTTP](http://johnmuhl.github.com/radiant-ray-extension/#upgrading-with-http)
-0. [Bugs & feature requests](http://github.com/johnmuhl/radiant-ray-extension/issues)
-0. [Usage](http://johnmuhl.github.com/radiant-ray-extension/#usage)
-  0. [Installing extensions](http://johnmuhl.github.com/radiant-ray-extension/#ext-install)
-  0. [Searching for extensions](http://johnmuhl.github.com/radiant-ray-extension/#ext-search)
-  0. [Disabling extensions](http://johnmuhl.github.com/radiant-ray-extension/#ext-disable)
-  0. [Enabling extensions](http://johnmuhl.github.com/radiant-ray-extension/#ext-enable)
-  0. [Uninstalling extensions](http://johnmuhl.github.com/radiant-ray-extension/#ext-uninstall)
-  0. [Updating extensions](http://johnmuhl.github.com/radiant-ray-extension/#ext-update)
-  0. [Bundling extensions](http://johnmuhl.github.com/radiant-ray-extension/#ext-bundle)
-0. [Extension dependencies](http://johnmuhl.github.com/radiant-ray-extension/#extension-dependencies)
-0. [Advanced usage](http://johnmuhl.github.com/radiant-ray-extension/#advanced-usage)
-  0. [Download preference setup](http://johnmuhl.github.com/radiant-ray-extension/#setup-download)
-  0. [Server restart preference setup](http://johnmuhl.github.com/radiant-ray-extension/#setup-restart)
-  0. [Adding extension remotes](http://johnmuhl.github.com/radiant-ray-extension/#ext-remote)
-  0. [Pulling extension remotes](http://johnmuhl.github.com/radiant-ray-extension/#ext-pull)
-0. [Legacy information](http://johnmuhl.github.com/radiant-ray-extension/#legacy-information)
-  0. [What happened to "some" shortcut?](http://johnmuhl.github.com/radiant-ray-extension/#shortcuts-redux)
-  0. [What changed in `extensions.yml`?](http://johnmuhl.github.com/radiant-ray-extension/#ext-bundle-diff)
-  0. [What if I don't like the new commands?](http://johnmuhl.github.com/radiant-ray-extension/#shortcuts)
-
+<ol>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#installation">Installation</a>
+    <ol>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#upgrading-with-git">Upgrading with Git</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#upgrading-with-http">Upgrading with HTTP</a></li>
+    </ol>
+  </li>
+  <li><a href="http://github.com/johnmuhl/radiant-ray-extension/issues">Bugs &amp; feature requests</a></li>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#usage">Usage</a>
+    <ol>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-install">Installing extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-search">Searching for extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-disable">Disabling extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-enable">Enabling extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-uninstall">Uninstalling extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-update">Updating extensions</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-bundle">Bundling extensions</a></li>
+    </ol>
+  </li>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#extension-dependencies">Extension dependencies</a></li>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#advanced-usage">Advanced usage</a>
+    <ol>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#setup-download">Download preference setup</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#setup-restart">Server restart preference setup</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-remote">Adding extension remotes</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-pull">Pulling extension remotes</a></li>
+    </ol>
+  </li>
+  <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#legacy-information">Legacy information</a>
+    <ol>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#shortcuts-redux">What happened to &#8220;some&#8221; shortcut?</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#ext-bundle-diff">What changed in <code>extensions.yml</code>?</a></li>
+      <li><a href="http://johnmuhl.github.com/radiant-ray-extension/#shortcuts">What if I don&#8217;t like the new commands?</a></li>
+    </ol>
+  </li>
+</ol>
 
 Authors
 =======
