@@ -772,9 +772,9 @@ def choose_extension_to_install(name, extensions, authors, urls, descriptions)
   end
   if extensions.include?(name) or extensions.include?("radiant-#{name}-extension")
     extensions.each do |e|
-      e = e.gsub(/radiant[-|_]/, "").gsub(/[-|_]extension/, "")
+      extension_name = e.gsub(/radiant[-|_]/, "").gsub(/[-|_]extension/, "")
       @url = urls[extensions.index(e)]
-      break if e == name
+      break if extension_name == name
     end
   elsif extensions.length == 0
     @blind_luck = true
