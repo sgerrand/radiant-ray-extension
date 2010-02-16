@@ -349,12 +349,8 @@ def http_extension_install
     end
     rm("#{@name}.tar.gz")
   end
-  sh("mv #{@r}/tmp/* #{@p}/#{@name}")
-  remove_dir("#{@r}/tmp")
-  if File.exist?("#{@p}/#{@name}/.gitmodules")
-    check_submodules
-    rm("#{@p}/#{@name}/.gitmodules")
-  end
+  @name = Dir.entries("#{@r}/tmp") - ['.', '..', '.DS_Store']
+  @http = true
 end
 
 def git_extension_update(name)
@@ -910,6 +906,7 @@ def determine_install_path
   # download repository contents
   git_extension_install if @download == "git"
   http_extension_install if @download == "http"
+  direcotory_name = @name if @http
   if @blind_luck
     messages = [
       "No extension could be found at: ",
@@ -925,6 +922,7 @@ def determine_install_path
   extension_files.each { |f|
     @name = f.gsub(/(.*)_extension.rb/, "\\1") if f =~ /.*_extension.rb/
   }
+  mv("#{@r}/tmp/#{direcotory_name}", "#{@r}/tmp/#{@name}")
   check_for_existing_installation
 end
 
@@ -936,6 +934,13 @@ def check_for_existing_installation
     exit
   else
     mv("#{@r}/tmp/#{@name}", "#{@p}/#{@name}")
+    remove_dir("#{@r}/tmp")
+    if @http
+      if File.exist?("#{@p}/#{@name}/.gitmodules")
+        check_submodules
+        rm("#{@p}/#{@name}/.gitmodules")
+      end
+    end
   end
 end
 
