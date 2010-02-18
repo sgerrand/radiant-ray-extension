@@ -1,0 +1,16 @@
+- content_for :page_css do
+  = render :partial => 'styles.html.haml'
+- content_for :page_scripts do
+  = render :partial => 'scripts.js.erb'
+
+.Help
+  = render :partial => 'help_nav'
+  .MainTopics
+    %h1= @cms_name + " Help"
+    - render_region :main do |main|
+      - main.render_region :introduction
+      - main.render_region :organizing
+      - main.render_region :editing
+  .Extras
+    - render_region :extras do |extras|
+      - extras.render_region :extension_docs_list 
