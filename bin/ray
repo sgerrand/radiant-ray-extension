@@ -1,0 +1,32 @@
+#! /usr/bin/env ruby
+
+begin
+  require 'ray'
+rescue LoadError
+  require 'rubygems'
+  require 'ray'
+end
+
+if ARGV.first =~ /[enable|disable|help|install|setup]/
+  options = ARGV
+else
+  puts "Invalid action"
+end
+
+ray = Ray.new options
+
+case
+when ray.action == 'enable'
+  ray.enable
+when ray.action == 'disable'
+  ray.disable
+when ray.action == 'help'
+  puts ray.help
+  ray.documenation if @options.include? 'doc'
+when ray.action == 'install'
+  ray.install
+when ray.action == 'setup'
+  ray.set_preferences
+end
+
+puts ray.error if ray.error
