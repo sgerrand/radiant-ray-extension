@@ -906,7 +906,7 @@ def determine_install_path
   # download repository contents
   git_extension_install if @download == "git"
   http_extension_install if @download == "http"
-  direcotory_name = @name if @http
+  @name = directory_name if @download == "http"
   if @blind_luck
     messages = [
       "No extension could be found at: ",
@@ -922,7 +922,7 @@ def determine_install_path
   extension_files.each { |f|
     @name = f.gsub(/(.*)_extension.rb/, "\\1") if f =~ /.*_extension.rb/
   }
-  mv("#{@r}/tmp/#{direcotory_name}", "#{@r}/tmp/#{@name}")
+  mv("#{@r}/tmp/#{@name}", "#{@p}/#{@name}")
   check_for_existing_installation
 end
 
