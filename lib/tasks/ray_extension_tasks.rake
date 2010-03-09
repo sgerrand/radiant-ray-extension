@@ -922,7 +922,6 @@ def determine_install_path
   extension_files.each { |f|
     @name = f.gsub(/(.*)_extension.rb/, "\\1") if f =~ /.*_extension.rb/
   }
-  mv("#{@r}/tmp/#{@name}", "#{@p}/#{@name}")
   check_for_existing_installation
 end
 
