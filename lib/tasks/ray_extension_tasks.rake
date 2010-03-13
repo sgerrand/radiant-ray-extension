@@ -918,11 +918,13 @@ def determine_install_path
   end
 
   # find vendor/extensions/ray/tmp/ext_name/ext_name_extension.rb
-  extension_files = Dir.entries("#{@r}/tmp/#{@name}") - ['.','..','.DS_Store']
-  extension_files.each { |f|
-    @name = f.gsub(/(.*)_extension.rb/, "\\1") if f =~ /.*_extension.rb/
-  }
-  check_for_existing_installation
+  unless @download == "git" && File.exist?(".git/HEAD")
+    extension_files = Dir.entries("#{@r}/tmp/#{@name}") - ['.','..','.DS_Store']
+    extension_files.each { |f|
+      @name = f.gsub(/(.*)_extension.rb/, "\\1") if f =~ /.*_extension.rb/
+    }
+    check_for_existing_installation
+  end
 end
 
 def check_for_existing_installation
