@@ -934,7 +934,7 @@ def check_for_existing_installation
     output(messages)
     exit
   else
-    mv("#{@r}/tmp/#{@name}", "#{@p}/#{@name}")
+    mv("#{@r}/tmp/#{ENV['name']}", "#{@p}/#{@name}")
     remove_dir("#{@r}/tmp")
     if @http
       if File.exist?("#{@p}/#{@name}/.gitmodules")
