@@ -906,7 +906,6 @@ def determine_install_path
   # download repository contents
   git_extension_install if @download == "git"
   http_extension_install if @download == "http"
-  @name = directory_name if @download == "http"
   if @blind_luck
     messages = [
       "No extension could be found at: ",
@@ -934,7 +933,7 @@ def check_for_existing_installation
     output(messages)
     exit
   else
-    mv("#{@r}/tmp/#{ENV['name']}", "#{@p}/#{@name}")
+    `mv #{@r}/tmp/* #{@p}/#{@name}`
     remove_dir("#{@r}/tmp")
     if @http
       if File.exist?("#{@p}/#{@name}/.gitmodules")
