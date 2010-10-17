@@ -1,0 +1,15 @@
+Autotest.add_hook :initialize do |at|
+
+  # i'm not really clear on how autotest mappings work
+  # but the incantation below at least makes specs run
+
+  at.clear_mappings
+
+  at.add_mapping %r%/^lib/(.*)\.rb$% do |_, m|
+    possible = File.basename(m[1])
+    files_matching %r%^spec/.*(#{possible}_spec|spec_#{possible})\.rb$%
+  end
+
+  at.add_mapping(%r%^spec/.*\.rb$%) {|filename, _| filename }
+
+end
