@@ -8,6 +8,7 @@ require 'rexml/document'
 require 'yaml'
 require 'ray/extension'
 require 'ray/preferences'
+require 'ray/search'
 
 class Ray
 
@@ -16,6 +17,7 @@ class Ray
 
   include Extension
   include Preferences
+  include Search
 
   def initialize command = '', arguments = [], options = {}
     @input = {
