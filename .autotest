@@ -1,15 +1,20 @@
+require 'autotest/restart'
+
 Autotest.add_hook :initialize do |at|
-
-  # i'm not really clear on how autotest mappings work
-  # but the incantation below at least makes specs run
-
-  at.clear_mappings
-
-  at.add_mapping %r%/^lib/(.*)\.rb$% do |_, m|
-    possible = File.basename(m[1])
-    files_matching %r%^spec/.*(#{possible}_spec|spec_#{possible})\.rb$%
-  end
-
-  at.add_mapping(%r%^spec/.*\.rb$%) {|filename, _| filename }
-
+  at.testlib = 'minitest/spec'
+  at.unit_diff = 'cat'
+  # at.extra_class_map['PreferencesSpec::HashExtensionsSpec'] = 'lib/ray/preferences.rb'
+  at.extra_class_map['PreferencesSpec'] = 'lib/ray/preferences.rb'
+  at.extra_class_map['PreferencesSpec::OpenSpec'] = 'lib/ray/preferences.rb'
+  at.extra_class_map['PreferencesSpec::SaveSpec'] = 'lib/ray/preferences.rb'
+  at.extra_class_map['ExtensionSpec::SearchSpec'] = 'lib/ray/extension.rb'
+  at.extra_class_map['ExtensionSpec::ArrayExtensionsSpec::CacheSpec'] = 'lib/ray/extension.rb'
+  at.extra_class_map['ExtensionSpec::SearchSpec::SearchResultSpec'] = 'lib/ray/extension.rb'
+  at.extra_class_map['ExtensionSpec::SearchSpec::ExtensionRegistrySearchSpec'] = 'lib/ray/extension.rb'
+  at.add_exception '.gems'
+  at.add_exception '.ray'
+  at.add_exception '.rbc'
+  at.add_exception 'mocks'
+  at.add_exception 'ray.gemspec'
+  at.add_exception 'VERSION'
 end
