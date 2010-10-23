@@ -91,7 +91,7 @@ describe Ray do
         @ray.preferences = { :key => :value }
         @ray.preferences[:key].must_equal :value
       end
-      # TODO: the next three `it`s may break if you have real prefs that differ
+      # FIXME: the next three `it`s may break if you have real prefs that differ
       describe ':download' do
         it 'is :git by default' do
           @ray.preferences[:download].must_equal :git
