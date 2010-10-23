@@ -34,7 +34,7 @@ describe Preferences do
 
   describe '#save' do
     before do
-      # randomize so tests can be run in parallel
+      # randomize so tests may be run in parallel
       @rand = (rand * 10000000).to_i
       FileUtils.cp "#{@path}/ray_local_preferences", "#{@path}/ray_local_preferences-#{@rand}"
       FileUtils.cp "#{@path}/ray_global_preferences", "#{@path}/ray_global_preferences-#{@rand}"
