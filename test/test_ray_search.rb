@@ -49,37 +49,51 @@ describe Search do
       results = Search.extension 'kramdown_filter'
       results.last[:cached_search].must_equal true
     end
-
     # NOTE: the next three tests do not run by default
     #       because they make network requests. if you
     #       want to run them uncomment `, nil`
-    describe 'Extension Registry search' do
-      it 'normalizes results to cachable format' do
-        results = Search.extension 'kramdown_filter', :registry#, nil
-        results[0][:name].must_match 'kramdown_filter'
-      end
+    it 'searchs the Extension Registry' do
+      results = Search.extension 'kramdown_filter', :registry#, nil
+      results[0][:name].must_match 'kramdown_filter'
     end
 
-    describe 'Github search' do
-      it 'normalizes results to cachable format' do
-        results = Search.extension 'kramdown_filter', :github#, nil
-        results[0][:name].must_match 'kramdown_filter'
-      end
+    it 'searches Github' do
+      results = Search.extension 'kramdown_filter', :github#, nil
+      results[0][:name].must_match 'kramdown_filter'
     end
 
-    describe 'Rubygems search' do
-      it 'normalizes results to cachable format' do
-        results = Search.extension 'kramdown_filter', :rubygems#, nil
-        results[0][:name].must_match 'kramdown_filter'
-      end
+    it 'searchs Rubygems' do
+      results = Search.extension 'kramdown_filter', :rubygems#, nil
+      results[0][:name].must_match 'kramdown_filter'
     end
   end
 
   describe 'Array extensions' do
     describe '#cache' do
       it 'caches search results' do
-        Extension.search 'kramdown_filter', :registry
+        Search.extension 'kramdown_filter', :registry
         File.read("#{ENV['HOME']}/.ray/search.cache").must_match '--- '
+      end
+    end
+
+    describe '#normalize' do
+    end
+
+    describe '#truncate' do
+      it 'is a String' do
+        Search.extension('kramdown_filter').truncate.must_be_kind_of String
+      end
+      it 'is truncated output' do
+        Search.extension('kramdown_filter').truncate.must_match '** kramdown_filter: '
+      end
+    end
+
+    describe '#info' do
+      it 'is a String' do
+        Ray::Search.extension('kramdown_filter').info.must_be_kind_of String
+      end
+      it 'is informational output' do
+        Ray::Search.extension('kramdown_filter').info.must_match /--\ kramdown_filter.*\n\ \ \ http/
       end
     end
   end

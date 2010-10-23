@@ -102,6 +102,52 @@ module Search
         return results
       end
     end
+
+    def truncate
+      self.pop
+      output = ''
+      self.each { |result|
+        name = result[:name]
+        description = result[:description]
+        truncate_at = (72 - name.length) - 8
+        output << "** #{name}: #{description[0...truncate_at]}...
+   Install: ray add #{name}
+   Details: ray info #{name}
+\n"
+      }
+      return output
+    end
+
+    def info
+      self.pop
+      output = ''
+      self.each { |result|
+        name = result[:name]
+        len = name.length
+        npad = '-' * (72 - (len + 4))
+        spad = ' ' * (36 - len)
+        gpad = ' ' * (42 - len)
+        upad = ' ' * (35 - len)
+        output << "-- #{name} #{npad}
+   #{(result[:url])[0...72]}
+
+#{(result[:description]).wrap}
+   GIT: ray add #{name}
+        ray add #{name} --submodule
+   GEM: ray add #{name} --gem
+        ray add #{name} --gem --sudo
+   ZIP: ray add #{name} --zip
+\n"
+      }
+      return output
+    end
+  end
+
+  class ::String
+    def wrap
+      col = 69
+      self.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "   \\1\\3\n")
+    end
   end
 
 end
