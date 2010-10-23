@@ -90,10 +90,10 @@ describe Search do
 
     describe '#info' do
       it 'is a String' do
-        Ray::Search.extension('kramdown_filter').info.must_be_kind_of String
+        Search.extension('kramdown_filter').info.must_be_kind_of String
       end
       it 'is informational output' do
-        Ray::Search.extension('kramdown_filter').info.must_match /--\ kramdown_filter.*\n\ \ \ http/
+        Search.extension('kramdown_filter').info.must_match /--\ kramdown_filter.*\n\ \ \ http/
       end
     end
   end
