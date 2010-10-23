@@ -28,12 +28,14 @@ Gem::Specification.new do |s|
     'lib/ray.rb',
     'lib/ray/extension.rb',
     'lib/ray/preferences.rb',
+    'lib/ray/search.rb'
   ]
 
   s.test_files = [
     'test/test_ray.rb',
-    'test/test_ray_extensions.rb',
+    'test/test_ray_extension.rb',
     'test/test_ray_preferences.rb',
+    'test/test_ray_search.rb',
     'test/mocks/ray_global_preferences',
     'test/mocks/ray_local_preferences'
   ]
