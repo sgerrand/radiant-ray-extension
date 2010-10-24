@@ -7,7 +7,7 @@ require 'ray/search'
 
 MiniTest::Unit.autorun
 
-RAY_ROOT = "#{Dir.pwd}/test/mocks"
+RAY_ROOT = "#{Dir.pwd}/test/mocks/.ray"
 
 describe Search do
   describe '#all' do

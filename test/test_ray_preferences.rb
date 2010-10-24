@@ -5,7 +5,9 @@ require 'rubygems'
 require 'minitest/spec'
 require 'ray/preferences'
 
-HOME = RAY_ROOT = "#{Dir.pwd}/test/mocks"
+# # HOME = RAY_ROOT = "#{Dir.pwd}/test/mocks/.ray"
+# 
+HOME = "test/mocks"
 
 MiniTest::Unit.autorun
 
@@ -23,12 +25,12 @@ describe Preferences do
       Preferences.open.must_be_kind_of Hash
     end
     it 'reads global preferences' do
-      prefs = Preferences.open :global, "#{RAY_ROOT}/ray_global_preferences"
+      prefs = Preferences.open :global, "test/mocks/.ray/ray_global_preferences"
       prefs.must_equal({ :sudo => false })
     end
     it 'reads local preferences' do
-      prefs = Preferences.open :local, "#{RAY_ROOT}/ray_local_preferences"
-      prefs.must_equal({ :download => :git, :sudo => true })
+      prefs = Preferences.open :local, "test/mocks/.ray/ray_local_preferences"
+      prefs.must_equal({ :download => :git, :restart => false, :sudo => false })
     end
   end
 
@@ -36,25 +38,25 @@ describe Preferences do
     before do
       # randomize so tests may be run in parallel
       @rand = (rand * 10000000).to_i
-      FileUtils.cp "#{RAY_ROOT}/ray_local_preferences", "#{RAY_ROOT}/ray_local_preferences-#{@rand}"
-      FileUtils.cp "#{RAY_ROOT}/ray_global_preferences", "#{RAY_ROOT}/ray_global_preferences-#{@rand}"
+      FileUtils.cp "test/mocks/.ray/ray_local_preferences", "test/mocks/.ray/ray_local_preferences-#{@rand}"
+      FileUtils.cp "test/mocks/.ray/ray_global_preferences", "test/mocks/.ray/ray_global_preferences-#{@rand}"
     end
     after do
-      FileUtils.rm "#{RAY_ROOT}/ray_local_preferences-#{@rand}"
-      FileUtils.rm "#{RAY_ROOT}/ray_global_preferences-#{@rand}"
+      FileUtils.rm_f "test/mocks/.ray/ray_local_preferences-#{@rand}"
+      FileUtils.rm_f "test/mocks/.ray/ray_global_preferences-#{@rand}"
     end
 
     it 'is a Hash' do
-      Preferences.save({}, :local, "#{RAY_ROOT}/ray_local_preferences-#{@rand}").must_be_kind_of Hash
+      Preferences.save(@prefs, :local, "test/mocks/.ray/ray_local_preferences").must_be_kind_of Hash
     end
     it 'writes global preferences' do
-      prefs = Preferences.save @prefs, :global, "#{RAY_ROOT}/ray_global_preferences-#{@rand}"
-      real = Preferences.open :global, "#{RAY_ROOT}/ray_global_preferences-#{@rand}"
+      prefs = Preferences.save @prefs, :global, "test/mocks/.ray/ray_global_preferences-#{@rand}"
+      real = Preferences.open :global, "test/mocks/.ray/ray_global_preferences-#{@rand}"
       real.must_equal @prefs
     end
     it 'writes local preferences' do
-      prefs = Preferences.save @prefs, :local, "#{RAY_ROOT}/ray_local_preferences-#{@rand}"
-      real = Preferences.open :local, "#{RAY_ROOT}/ray_local_preferences-#{@rand}"
+      prefs = Preferences.save @prefs, :local, "test/mocks/.ray/ray_local_preferences-#{@rand}"
+      real = Preferences.open :local, "test/mocks/.ray/ray_local_preferences-#{@rand}"
       real.must_equal @prefs
     end
   end
