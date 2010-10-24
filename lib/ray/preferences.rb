@@ -9,14 +9,8 @@ module Preferences
 
   def self.save preferences, scope = :local, file = nil
     pref_file = preference_file(scope, file)
-    File.open(pref_file, 'w') { |f| f.write preferences.to_s }
+    File.open(pref_file, 'w') { |file| file.write preferences.to_s }
     Preferences.open scope, pref_file
-  end
-
-  class ::Hash
-    def to_s
-      YAML::dump self
-    end
   end
 
   def self.preference_file scope, file
@@ -24,9 +18,16 @@ module Preferences
     when file
       file
     when :global
-      "#{ENV['HOME']}/.ray/preferences"
+      "#{HOME}/.ray/preferences"
     when :local
       "#{Dir.pwd}/.ray/preferences"
+    end
+  end
+
+  # Hash extensions
+  class ::Hash
+    def to_s
+      YAML::dump self
     end
   end
 end
