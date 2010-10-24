@@ -2,147 +2,172 @@
 
 module Search
 
-  def self.extension query, source = :registry, cache = true
-    if cache
-      begin
-        search_cache = YAML.load_file "#{ENV['HOME']}/.ray/search.cache"
-        hits = []
-        search_cache.each { |extension|
-          hits << extension if extension[:name].include? query
-        }
-        if hits.any?
-          hits << { :cached_search => true }
-          return hits
-        end
-      rescue
-        FileUtils.mkdir_p "#{ENV['HOME']}/.ray"
-        FileUtils.touch "#{ENV['HOME']}/.ray/search.cache"
+  def self.cache query
+    hits = []
+    begin
+      cache = YAML.load_file "#{RAY_ROOT}/search.cache" || []
+      cache.each { |extension|
+        hits << extension if extension[:name].include? query
+      } if cache.any?
+    rescue
+      hits = Search.all query
+    end
+    return hits
+  end
+
+  def self.all query
+    results = [
+      Search.registry(query),
+      Search.github(query),
+      Search.rubygems(query)
+    ]
+    return results.flatten
+  end
+
+  def self.registry query
+    results = []
+    response = ''
+    open("http://ext.radiantcms.org/extensions.xml").each_line { |line|
+      response << line
+    }
+    REXML::Document.new(response).elements.each('extensions/extension') { |el|
+      if el.elements['name'].text =~ /#{query}/
+        results << el
       end
+    }
+    return results.normalize_registry_results.cache
+  end
+  
+  def self.github query
+    response = ''
+    open("http://github.com/api/v2/yaml/repos/search/#{query}").each_line { |line|
+      response << line
+    }
+    results = [YAML.load(response)].normalize_github_results
+    results.cache
+    return results
+  end
+  
+  def self.rubygems query
+    response = open("http://rubygems.org/api/v1/search.json?query=#{query}").gets
+    results = JSON.parse(response).normalize_rubygems_results
+    results.cache
+    return results
+  end
+
+  # Array extensions
+  class ::Array
+    def cache
+      unless has_cache?
+        FileUtils.touch "#{RAY_ROOT}/search.cache"
+      end
+      File.open("#{RAY_ROOT}/search.cache", 'w') { |file|
+        file.write YAML::dump(old_cache.concat(self).uniq)
+      }
+      return self
     end
 
-    case source
-    when :registry
-      response = ''
-      open("http://ext.radiantcms.org/extensions.xml").each_line { |line| response << line }
-      xml = REXML::Document.new(response)
+    def has_cache?
+      File.exist? "#{RAY_ROOT}/search.cache"
+    end
+
+    def old_cache
+      YAML.load_file("#{RAY_ROOT}/search.cache") || []
+    end
+
+    def normalize_registry_results
       results = []
-      xml.elements.each('extensions/extension') { |el|
-        if el.elements['name'].text =~ /#{query}/
-          results << el
-        end
+      self.each { |this|
+        this = this.elements
+        repo = this['repository-url'].text
+        results << result = {
+                              :description  => this['description'].text,
+                              :repository   => repo,
+                              :download     => this['download-url'].text,
+                              :score        => 0.0,
+                              :name         => this['name'].text,
+                              :url          => repo.gsub(/git(.*).git/, 'http\1')
+                            }
       }
-      results.normalize.cache
-    when :github
-      query.gsub! /\ /, '+'
-      response = ''
-      open("http://github.com/api/v2/yaml/repos/search/#{query}").each_line { |line| response << line }
-      results = [YAML.load(response)].normalize
-      results.cache
-    when :rubygems
-      query.gsub! /\ /, '+'
-      response = open("http://rubygems.org/api/v1/search.json?query=#{query}").gets
-      results = JSON.parse(response).normalize
-      results.cache
+      return results
+    end
+
+    def normalize_github_results
+      results = []
+      self[0]['repositories'].each { |this|
+        name = this['name']
+        user = this['username']
+        results << result = {
+                              :description => this['description'],
+                              :repository  => "git://github.com/#{user}/#{name}.git",
+                              :download    => "http://github.com/#{user}/#{name}/zipball/master",
+                              :score       => this['score'],
+                              :name        => name.gsub(/radiant-(.*)-extension/, '\1'),
+                              :url         => this['record'].ivars['attributes']['homepage']
+                            }
+      }
+      return results
+    end
+
+    def normalize_rubygems_results
+      results = []
+      self.each { |this|
+        results << result = {
+                              :description => this['info'],
+                              :repository  => this['source_code_uri'],
+                              :download    => this['gem_uri'],
+                              :score       => 0.0,
+                              :name        => this['name'].gsub(/radiant-(.*)-extension/, '\1'),
+                              :url         => this['project_uri']
+                            }
+      }
+      return results
+    end
+
+    def results
+      results = ''
+      self.each { |result|
+        results << result.truncated
+      }
+      return results
+    end
+
+    def details
+      results = ''
+      self.each { |result|
+        results << result.extended
+      }
+      return results
     end
   end
 
-  class ::Array
-    def cache
-      begin
-        existing = YAML.load_file "#{ENV['HOME']}/.ray/search.cache"
-      rescue
-        FileUtils.mkdir_p "#{ENV['HOME']}/.ray"
-        FileUtils.touch "#{ENV['HOME']}/.ray/search.cache"
-        existing = []
-      end
-      existing = [] if existing == false
-      File.open("#{ENV['HOME']}/.ray/search.cache", 'w') { |f|
-        f.write YAML::dump(existing.concat(self).uniq)
-      }
-      self
-    end
+  # Hash extensions
+  class ::Hash
+    def extended
+      name = self[:name]
+      len = name.length
+"-- #{name} #{'-' * (68 - len)}
+   #{(self[:url])[0...69]}
 
-    def normalize
-      results = []
-      if self[0].class == REXML::Element # registry
-        self.each { |r|
-          result = {}
-          result[:name] = r.elements['name'].text
-          result[:description] = r.elements['description'].text
-          result[:repository] = r.elements['repository-url'].text
-          result[:url] = result[:repository].gsub /git(.*).git/, 'http\1'
-          result[:download] = r.elements['download-url'].text
-          result[:score] = 0.0
-          results << result
-        }
-        return results
-      elsif self[0]['repositories'] # github
-        self[0]['repositories'].each { |r|
-          result = {}
-          result[:name] = r['name'].gsub /radiant-(.*)-extension/, '\1'
-          result[:description] = r['description']
-          result[:repository] = "git://github.com/#{r['username']}/#{r['name']}.git"
-          result[:url] = result[:repository].gsub /git(.*).git/, 'http\1'
-          result[:download] = "http://github.com/#{r['username']}/#{r['name']}/zipball/master"
-          result[:score] = r['score']
-          results << result
-        }
-        return results
-      elsif self # rubygems
-        self.each { |r|
-          result = {}
-          result[:name] = r['name'].gsub /radiant-(.*)-extension/, '\1'
-          result[:description] = r['info']
-          result[:repository] = r['source_code_uri'].gsub /http(.*)/, 'git\1.git'
-          result[:url] = result[:repository].gsub /git(.*).git/, 'http\1'
-          result[:download] = r['gem_uri']
-          result[:score] = 0.0
-          results << result
-        }
-        return results
-      end
-    end
+   #{(self[:description]).wrap}
 
-    def truncate
-      self.pop
-      output = ''
-      self.each { |result|
-        name = result[:name]
-        description = result[:description]
-        truncate_at = (72 - name.length) - 8
-        output << "** #{name}: #{description[0...truncate_at]}...
-   Install: ray add #{name}
-   Details: ray info #{name}
-\n"
-      }
-      return output
-    end
-
-    def info
-      self.pop
-      output = ''
-      self.each { |result|
-        name = result[:name]
-        len = name.length
-        npad = '-' * (72 - (len + 4))
-        spad = ' ' * (36 - len)
-        gpad = ' ' * (42 - len)
-        upad = ' ' * (35 - len)
-        output << "-- #{name} #{npad}
-   #{(result[:url])[0...72]}
-
-#{(result[:description]).wrap}
    GIT: ray add #{name}
         ray add #{name} --submodule
    GEM: ray add #{name} --gem
         ray add #{name} --gem --sudo
    ZIP: ray add #{name} --zip
 \n"
-      }
-      return output
+    end
+    def truncated
+      name = self[:name]
+      "** #{name}: #{(self[:description])[0...((72 - name.length) - 8)]}...
+   Install: ray add #{name}
+   Details: ray info #{name}
+\n"
     end
   end
 
+  # String extensions
   class ::String
     def wrap
       col = 69

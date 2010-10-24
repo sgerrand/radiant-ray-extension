@@ -1,0 +1,9 @@
+--- 
+- :description: |-
+    A kramdown filter extension for Radiant CMS.
+    Visit http://kramdown.rubyforge.org/ for more information about kramdown.
+  :repository: http://github.com/johnmuhl/radiant-kramdown_filter-extension
+  :download: http://rubygems.org/gems/radiant-kramdown_filter-extension-1.0.11.gem
+  :score: 0.0
+  :name: kramdown_filter
+  :url: http://rubygems.org/gems/radiant-kramdown_filter-extension
