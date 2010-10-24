@@ -29,8 +29,9 @@ class Ray
       :options      => options
     }
 
-    if arguments.last =~ /production|test/
-      @input[:environment] = arguments.last
+    last = arguments.last
+    if last =~ /production|test/
+      @input[:environment] = last
       @input[:arguments].pop
     else
       @input[:environment] = 'development'
