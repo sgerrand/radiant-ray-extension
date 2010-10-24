@@ -8,14 +8,13 @@ Autotest.add_hook :initialize do |at|
   # autotest is unreliable with what and when it decides to map.
   # mappings seem to change between runs for inexplicable reasons.
   # add any mappings it complains about here and restart it.
-  at.extra_class_map['PreferencesSpec'] = 'lib/ray/preferences.rb'
-  at.extra_class_map['SearchSpec'] = 'lib/ray/search.rb'
-  at.extra_class_map['SearchSpec::ArrayExtensionsSpec::InfoSpec'] = 'lib/ray/search.rb'
+  # at.extra_class_map['ClassSpec'] = 'file.rb'
 
   at.add_exception '.gem'
   at.add_exception '.gems'
   at.add_exception '.ray'
   at.add_exception '.rbc'
+  at.add_exception '_slow.rb'
   at.add_exception 'mocks'
   at.add_exception 'ray.gemspec'
   at.add_exception 'VERSION'
