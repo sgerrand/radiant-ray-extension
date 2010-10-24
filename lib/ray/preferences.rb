@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require 'fileutils'
+require 'yaml'
+
 module Preferences
 
   def self.open scope = :local, file = nil
