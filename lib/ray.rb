@@ -10,6 +10,9 @@ require 'ray/extension'
 require 'ray/preferences'
 require 'ray/search'
 
+HOME      = ENV['HOME']
+RAY_ROOT  = "#{HOME}/.ray"
+
 class Ray
 
   attr_reader   :input
