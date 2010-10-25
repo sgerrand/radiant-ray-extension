@@ -40,7 +40,7 @@ module Search
         results << el
       end
     }
-    return results.normalize_registry_results.filter.cache
+    return results.normalize_registry_results.cache.filter
   end
   
   def self.github query
@@ -48,12 +48,12 @@ module Search
     open("http://github.com/api/v2/yaml/repos/search/radiant+#{query}").each_line { |line|
       response << line
     }
-    return [YAML.load(response)].normalize_github_results.filter.cache
+    return [YAML.load(response)].normalize_github_results.cache.filter
   end
   
   def self.rubygems query
     response = open("http://rubygems.org/api/v1/search.json?query=radiant+#{query}").gets
-    return JSON.parse(response).normalize_rubygems_results.filter.cache
+    return JSON.parse(response).normalize_rubygems_results.cache.filter
   end
 
   # Array extensions
@@ -62,7 +62,7 @@ module Search
       unless has_cache?
         FileUtils.touch "#{RAY_ROOT}/search.cache"
       end
-      new_cache = old_cache.concat(self).uniq
+      new_cache = merge_caches(old_cache, self)
       File.open("#{RAY_ROOT}/search.cache", 'w') { |file|
         file.write YAML::dump(new_cache)
       }
@@ -71,6 +71,26 @@ module Search
 
     def has_cache?
       File.exist? "#{RAY_ROOT}/search.cache"
+    end
+
+    def merge_caches old_cache, new_cache
+      if old_cache.any?
+        merged = []
+        old_cache.each { |old|
+          new_cache.each { |knew|
+            if old[:name] == knew[:name]
+              merge = old.merge(knew)
+              merged << merge
+            else
+              merged << old
+              merged << knew
+            end
+          }
+        }
+        merged.uniq
+      else
+        new_cache
+      end
     end
 
     def old_cache

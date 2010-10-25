@@ -38,14 +38,20 @@ describe Search do
     describe '#cache' do
       it 'caches search results' do
         FileUtils.rm_f "#{RAY_ROOT}/search.cache"
-        Search.rubygems 'kramdown_filter'
+        Search.github 'kramdown_filter'
         File.read("#{RAY_ROOT}/search.cache").must_match /---\ \n/
       end
       it 'appends new cache to old cache' do
         FileUtils.rm_f "#{RAY_ROOT}/search.cache"
-        Search.rubygems 'kramdown_filter'
+        Search.registry 'kramdown_filter'
+        Search.github 'settings'
+        Search.cache('').length.must_equal 2
+      end
+      it 'merges similar cache items' do
+        FileUtils.rm_f "#{RAY_ROOT}/search.cache"
+        Search.registry 'kramdown_filter'
         Search.github 'kramdown_filter'
-        Search.cache('kramdown_filter').length.must_equal 2
+        Search.cache('').length.must_equal 1
       end
     end
 
