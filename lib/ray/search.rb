@@ -148,7 +148,7 @@ module Search
         if this[:name].include?('radiant') or this[:description].include?('radiant') or this[:repository].include?('radiant')
           results << this
         end
-      }
+      } if self.length > 0
       return results
     end
   end
