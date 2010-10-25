@@ -40,7 +40,7 @@ module Search
         results << el
       end
     }
-    return results.normalize_registry_results.cache
+    return results.normalize_registry_results.filter.cache
   end
   
   def self.github query
@@ -48,16 +48,12 @@ module Search
     open("http://github.com/api/v2/yaml/repos/search/#{query}").each_line { |line|
       response << line
     }
-    results = [YAML.load(response)].normalize_github_results
-    results.cache
-    return results
+    return [YAML.load(response)].normalize_github_results.filter.cache
   end
   
   def self.rubygems query
     response = open("http://rubygems.org/api/v1/search.json?query=#{query}").gets
-    results = JSON.parse(response).normalize_rubygems_results
-    results.cache
-    return results
+    return JSON.parse(response).normalize_rubygems_results.filter.cache
   end
 
   # Array extensions
@@ -141,6 +137,16 @@ module Search
       results = ''
       self.each { |result|
         results << result.extended
+      }
+      return results
+    end
+
+    def filter
+      results = []
+      self.each { |this|
+        if this[:name].include?('radiant') or this[:description].include?('radiant') or this[:repository].include?('radiant')
+          results << this
+        end
       }
       return results
     end

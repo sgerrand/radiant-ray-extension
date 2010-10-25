@@ -42,5 +42,13 @@ describe Search do
         File.read("#{RAY_ROOT}/search.cache").must_match /---\ \n/
       end
     end
+
+    describe '#filter' do
+      it 'filters search results' do
+        results = Search.github 'kramdown'
+        results.first[:name].must_match('kramdown_filter') &&
+        results.length.must_equal(1)
+      end
+    end
   end
 end
