@@ -45,14 +45,14 @@ module Search
   
   def self.github query
     response = ''
-    open("http://github.com/api/v2/yaml/repos/search/#{query}").each_line { |line|
+    open("http://github.com/api/v2/yaml/repos/search/radiant+#{query}").each_line { |line|
       response << line
     }
     return [YAML.load(response)].normalize_github_results.filter.cache
   end
   
   def self.rubygems query
-    response = open("http://rubygems.org/api/v1/search.json?query=#{query}").gets
+    response = open("http://rubygems.org/api/v1/search.json?query=radiant+#{query}").gets
     return JSON.parse(response).normalize_rubygems_results.filter.cache
   end
 
