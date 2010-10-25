@@ -41,6 +41,12 @@ describe Search do
         Search.rubygems 'kramdown_filter'
         File.read("#{RAY_ROOT}/search.cache").must_match /---\ \n/
       end
+      it 'appends new cache to old cache' do
+        FileUtils.rm_f "#{RAY_ROOT}/search.cache"
+        Search.rubygems 'kramdown_filter'
+        Search.github 'kramdown_filter'
+        Search.cache('kramdown_filter').length.must_equal 2
+      end
     end
 
     describe '#filter' do

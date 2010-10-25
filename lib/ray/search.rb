@@ -62,8 +62,9 @@ module Search
       unless has_cache?
         FileUtils.touch "#{RAY_ROOT}/search.cache"
       end
+      new_cache = old_cache.concat(self).uniq
       File.open("#{RAY_ROOT}/search.cache", 'w') { |file|
-        file.write YAML::dump(old_cache.concat(self).uniq)
+        file.write YAML::dump(new_cache)
       }
       return self
     end
