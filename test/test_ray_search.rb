@@ -14,15 +14,15 @@ describe Search do
     Search.must_be_kind_of Module
   end
 
-  describe '#cache' do
+  describe '#all' do
     it 'is an Array' do
-      Search.cache('kramdown_filter').must_be_kind_of Array
+      Search.all('kramdown_filter').must_be_kind_of Array
     end
   end
 
   describe 'search result' do
     before do
-      @result = Search.cache('kramdown_filter')[0]
+      @result = Search.all('kramdown_filter')[0]
     end
 
     it 'is a Hash' do
@@ -48,13 +48,13 @@ describe Search do
   describe Array do
     describe '#results' do
       it 'is a String' do
-        Search.cache('kramdown_filter').results.must_be_kind_of String
+        Search.all('kramdown_filter').results.must_be_kind_of String
       end
     end
 
     describe '#details' do
       it 'is a String' do
-        Search.cache('kramdown_filter').details.must_be_kind_of String
+        Search.all('kramdown_filter').details.must_be_kind_of String
       end
     end
   end
@@ -62,19 +62,19 @@ describe Search do
   describe Hash do
     describe '#extended' do
       it 'is a String' do
-        Search.cache('kramdown_filter')[0].extended.must_be_kind_of String
+        Search.all('kramdown_filter')[0].extended.must_be_kind_of String
       end
       it 'is in extended format' do
-        Search.cache('kramdown_filter')[0].extended.must_match /--\ kramdown_filter.*\n\ \ \ http/
+        Search.all('kramdown_filter')[0].extended.must_match /--\ kramdown_filter.*\n\ \ \ http/
       end
     end
 
     describe '#truncated' do
       it 'is a String' do
-        Search.cache('kramdown_filter')[0].truncated.must_be_kind_of String
+        Search.all('kramdown_filter')[0].truncated.must_be_kind_of String
       end
       it 'is in truncated format' do
-        Search.cache('kramdown_filter')[0].truncated.must_match '** kramdown_filter: '
+        Search.all('kramdown_filter')[0].truncated.must_match '** kramdown_filter: '
       end
     end
   end

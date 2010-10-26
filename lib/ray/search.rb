@@ -7,7 +7,7 @@ require 'yaml'
 
 module Search
 
-  def self.cache query
+  def self.all query
     hits = []
     begin
       cache = YAML.load_file "#{RAY_ROOT}/search.cache" || []

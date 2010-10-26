@@ -40,7 +40,7 @@ describe Search do
   end
 
   describe Array do
-    describe '#cache' do
+    describe '#all' do
       it 'caches search results' do
         Search.github 'kramdown_filter'
         File.read("#{RAY_ROOT}/search.cache").must_match /---\ \n/
@@ -48,12 +48,12 @@ describe Search do
       it 'appends new cache to old cache' do
         Search.registry 'kramdown_filter'
         Search.github 'bluecloth2_filter'
-        Search.cache('').length.must_equal 2
+        Search.all('').length.must_equal 2
       end
       it 'merges similar cache items' do
         Search.registry 'kramdown_filter'
         Search.github 'kramdown_filter'
-        Search.cache('').length.must_equal 1
+        Search.all('').length.must_equal 1
       end
     end
 
