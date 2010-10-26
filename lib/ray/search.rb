@@ -15,18 +15,19 @@ module Search
         hits << extension if extension[:name].include? query
       } if cache.any?
     rescue
-      hits = Search.live query
+      hit = []
     end
-    return hits
+    if hits.any?
+      hits
+    else
+      Search.live query
+    end
   end
 
   def self.live query
-    results = [
-      Search.registry(query),
-      Search.github(query),
-      Search.rubygems(query)
-    ]
-    return results.flatten
+    Search.registry query
+    Search.rubygems query
+    Search.github query
   end
 
   def self.registry query
@@ -40,7 +41,7 @@ module Search
         results << el
       end
     }
-    return results.normalize_registry_results.cache.filter
+    results.normalize_registry_results.filter.cache
   end
   
   def self.github query
@@ -48,12 +49,12 @@ module Search
     open("http://github.com/api/v2/yaml/repos/search/radiant+#{query}").each_line { |line|
       response << line
     }
-    return [YAML.load(response)].normalize_github_results.cache.filter
+    [YAML.load(response)].normalize_github_results.filter.cache
   end
   
   def self.rubygems query
-    response = open("http://rubygems.org/api/v1/search.json?query=radiant+#{query}").gets
-    return JSON.parse(response).normalize_rubygems_results.cache.filter
+    response = open("http://rubygems.org/api/v1/search.json?query=#{query}").gets
+    JSON.parse(response).normalize_rubygems_results.filter.cache
   end
 
   # Array extensions
@@ -62,35 +63,46 @@ module Search
       unless has_cache?
         FileUtils.touch "#{RAY_ROOT}/search.cache"
       end
-      new_cache = merge_caches(old_cache, self)
-      File.open("#{RAY_ROOT}/search.cache", 'w') { |file|
-        file.write YAML::dump(new_cache)
-      }
+      if self.any?
+        new_cache = merge_caches old_cache, self
+        File.open("#{RAY_ROOT}/search.cache", 'w') { |file|
+          file.write YAML::dump(new_cache)
+        }
+      end
       return self
-    end
-
-    def has_cache?
-      File.exist? "#{RAY_ROOT}/search.cache"
     end
 
     def merge_caches old_cache, new_cache
       if old_cache.any?
-        merged = []
-        old_cache.each { |old|
-          new_cache.each { |knew|
-            if old[:name] == knew[:name]
-              merge = old.merge(knew)
-              merged << merge
-            else
-              merged << old
-              merged << knew
-            end
-          }
+        caches = old_cache.concat new_cache
+        @idx = []
+        caches.each { |extension|
+          matches = caches.map { |ext|
+            ext[:name].scan /^#{extension[:name]}$/
+          }.flatten
+          if matches.length > 1
+            matches.each { |match|
+              @idx << caches.index(extension)
+            }
+          end
         }
-        merged.uniq
+        if @idx.uniq.length > 1
+          merged = {}
+          @idx.each { |idx|
+            cache = caches[idx]
+            caches.delete(caches[idx])
+            merged.merge! cache if cache
+          }
+          caches << merged
+        end
+        return caches
       else
         new_cache
       end
+    end
+
+    def has_cache?
+      File.exist? "#{RAY_ROOT}/search.cache"
     end
 
     def old_cache
@@ -101,7 +113,7 @@ module Search
       results = []
       self.each { |this|
         this = this.elements
-        repo = this['repository-url'].text
+        repo = this['repository-url'].text || ''
         results << result = {
                               :description  => this['description'].text,
                               :repository   => repo,
@@ -119,13 +131,15 @@ module Search
       self[0]['repositories'].each { |this|
         name = this['name']
         user = this['username']
+        url  = this['record'].ivars['attributes']['homepage']
+        url  = "http://github.com/#{user}/#{name}" if url == ''
         results << result = {
                               :description => this['description'],
                               :repository  => "git://github.com/#{user}/#{name}.git",
-                              :download    => "http://github.com/#{user}/#{name}/zipball/master",
                               :score       => this['score'],
-                              :name        => name.gsub(/radiant-(.*)-extension/, '\1'),
-                              :url         => this['record'].ivars['attributes']['homepage']
+                              :name        => name.gsub(/radiant[-_](.*)/, '\1').gsub(/(.*)[_-]extension/, '\1'),
+                              :url         => url,
+                              :zip         => "http://github.com/#{user}/#{name}/zipball/master"
                             }
       }
       return results
@@ -137,9 +151,9 @@ module Search
         results << result = {
                               :description => this['info'],
                               :repository  => this['source_code_uri'],
-                              :download    => this['gem_uri'],
                               :score       => 0.0,
                               :name        => this['name'].gsub(/radiant-(.*)-extension/, '\1'),
+                              :gem         => this['gem_uri'],
                               :url         => this['project_uri']
                             }
       }
@@ -165,7 +179,7 @@ module Search
     def filter
       results = []
       self.each { |this|
-        if this[:name].include?('radiant') or this[:description].include?('radiant') or this[:repository].include?('radiant')
+        if this[:name].to_s.include?('radiant') or this[:description].to_s.include?('radiant') or this[:repository].to_s.include?('radiant')
           results << this
         end
       } if self.length > 0

@@ -8,9 +8,13 @@ require 'ray/search'
 
 MiniTest::Unit.autorun
 
-RAY_ROOT = "#{Dir.pwd}/test/mocks/.ray"
+RAY_ROOT = "test/mocks/.ray"
 
 describe Search do
+  after do
+    FileUtils.rm_f "#{RAY_ROOT}/search.cache"
+  end
+
   describe '#live' do
     it 'is an Array' do
       Search.live('kramdown_filter').must_be_kind_of Array
@@ -38,18 +42,15 @@ describe Search do
   describe Array do
     describe '#cache' do
       it 'caches search results' do
-        FileUtils.rm_f "#{RAY_ROOT}/search.cache"
         Search.github 'kramdown_filter'
         File.read("#{RAY_ROOT}/search.cache").must_match /---\ \n/
       end
       it 'appends new cache to old cache' do
-        FileUtils.rm_f "#{RAY_ROOT}/search.cache"
         Search.registry 'kramdown_filter'
-        Search.github 'settings'
+        Search.github 'bluecloth2_filter'
         Search.cache('').length.must_equal 2
       end
       it 'merges similar cache items' do
-        FileUtils.rm_f "#{RAY_ROOT}/search.cache"
         Search.registry 'kramdown_filter'
         Search.github 'kramdown_filter'
         Search.cache('').length.must_equal 1
