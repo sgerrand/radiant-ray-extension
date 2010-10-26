@@ -15,12 +15,12 @@ module Search
         hits << extension if extension[:name].include? query
       } if cache.any?
     rescue
-      hits = Search.all query
+      hits = Search.live query
     end
     return hits
   end
 
-  def self.all query
+  def self.live query
     results = [
       Search.registry(query),
       Search.github(query),

@@ -3,6 +3,7 @@ $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 
 require 'rubygems'
 require 'minitest/spec'
+require 'fileutils'
 require 'ray/search'
 
 MiniTest::Unit.autorun
@@ -10,9 +11,9 @@ MiniTest::Unit.autorun
 RAY_ROOT = "#{Dir.pwd}/test/mocks/.ray"
 
 describe Search do
-  describe '#all' do
+  describe '#live' do
     it 'is an Array' do
-      Search.all('kramdown_filter').must_be_kind_of Array
+      Search.live('kramdown_filter').must_be_kind_of Array
     end
   end
 
