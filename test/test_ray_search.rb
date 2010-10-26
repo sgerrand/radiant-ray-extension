@@ -7,7 +7,7 @@ require 'ray/search'
 
 MiniTest::Unit.autorun
 
-RAY_ROOT = "#{Dir.pwd}/test/mocks"
+RAY_ROOT = "test/mocks"
 
 describe Search do
   it 'is a Module' do
