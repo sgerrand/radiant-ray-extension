@@ -64,5 +64,20 @@ describe Search do
         results.length.must_equal(1)
       end
     end
+
+    describe '#pick' do
+      it 'is a Hash' do
+        Search.all('kramdown').pick('kramdown_filter').must_be_kind_of Hash
+      end
+      it 'raises exceptions when no matches are found' do
+        proc { Search.all('zzz').pick('kramdown') }.must_raise RuntimeError
+      end
+      it 'prompts the user for a choice when there is more than one exact match' do
+        Search.all('blog').pick('blog')[:repository].must_match 'git://github.com/'
+      end
+      it 'prompts the user for a choice when there is more than one fuzzy match' do
+        Search.all('paperclipped').pick('paperclipped')[:repository].must_match 'git://github.com/'
+      end
+    end
   end
 end

@@ -185,6 +185,64 @@ module Search
       } if self.length > 0
       return results
     end
+
+    def pick query
+      if self.any?
+        exact_matches = []
+        fuzzy_matches = []
+        self.each { |this|
+          name = this[:name]
+          case
+          when name == query
+            exact_matches << this
+          when name.include?(query)
+            fuzzy_matches << this
+          end
+        }
+        if exact_matches.any?
+          case
+          when exact_matches.one?
+            return exact_matches[0]
+          else
+            make_the_user_choose query, exact_matches
+          end
+        elsif fuzzy_matches.any?
+          case
+          when fuzzy_matches.one?
+            return fuzzy_matches[0]
+          else
+            make_the_user_choose query, fuzzy_matches
+          end
+        else
+          raise 'No matches found'
+        end
+      else
+        raise "No matches found"
+      end
+    end
+
+    def make_the_user_choose query, matches
+      puts "More than one extension matched '#{query}'"
+      puts "Please choose the extension you would like installed:"
+      show_options matches
+      choice = user_choice
+      return matches[choice - 1]
+    end
+
+    def show_options matches
+      matches.each { |this|
+        option = matches.index(this) + 1
+        name = this[:name]
+        user = this[:repository].gsub(/git:\/\/github\.com\/(.*)\/.+\.git/, '\1')
+        used = "#{option}. #{name} [#{user}] ".length
+        puts "#{option}. #{name} [#{user}] #{this[:description][0...(69 - used)]}..."
+      }
+    end
+
+    def user_choice
+      print 'Extension number: '
+      choice = STDIN.gets.chomp.to_i
+    end
   end
 
   # Hash extensions

@@ -7,7 +7,7 @@ require 'ray/search'
 
 MiniTest::Unit.autorun
 
-RAY_ROOT = "test/mocks"
+RAY_ROOT = "test/mocks/.ray"
 
 describe Search do
   it 'is a Module' do
@@ -55,6 +55,24 @@ describe Search do
     describe '#details' do
       it 'is a String' do
         Search.all('kramdown_filter').details.must_be_kind_of String
+      end
+    end
+
+    describe '#pick' do
+      it 'is a Hash' do
+        Search.all('kramdown').pick('kramdown_filter').must_be_kind_of Hash
+      end
+      it 'picks an exact match' do
+        Search.all('kramdown_filter').pick('kramdown_filter')[:name].must_match 'kramdown_filter'
+      end
+      it 'picks a close match when there is only one choice' do
+        Search.all('kramdown_filter').pick('kramdown')[:name].must_match 'kramdown_filter'
+      end
+      it 'picks an exact match from many' do
+        Search.all('paperclipped').pick('paperclipped_player')[:repository].must_match 'git://github.com/spanner/radiant-paperclipped_player-extension.git'
+      end
+      it 'raises exceptions when no matches are found' do
+        proc { Search.all('kramdown').pick('zzz') }.must_raise RuntimeError
       end
     end
   end
