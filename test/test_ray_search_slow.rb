@@ -66,9 +66,6 @@ describe Search do
     end
 
     describe '#pick' do
-      it 'is a Hash' do
-        Search.all('kramdown').pick('kramdown_filter').must_be_kind_of Hash
-      end
       it 'raises exceptions when no matches are found' do
         proc { Search.all('zzz').pick('kramdown') }.must_raise RuntimeError
       end
