@@ -40,21 +40,25 @@ describe Ray do
       it 'contains :environment' do
         @ray.input[:environment].wont_be_nil
       end
+
       describe ':command' do
         it 'is a Symbol' do
           @ray.input[:command].must_be_kind_of Symbol
         end
       end
+
       describe ':arguments' do
         it 'is a Array' do
           @ray.input[:arguments].must_be_kind_of Array
         end
       end
+
       describe ':options' do
         it 'is a Hash' do
           @ray.input[:options].must_be_kind_of Hash
         end
       end
+
       describe ':environment' do
         it 'is a String' do
           @ray.input[:environment].must_be_kind_of String
@@ -91,17 +95,19 @@ describe Ray do
         @ray.preferences = { :key => :value }
         @ray.preferences[:key].must_equal :value
       end
-      # FIXME: the next three `it`s may break if you have real prefs that differ
+
       describe ':download' do
         it 'is :git by default' do
           @ray.preferences[:download].must_equal :git
         end
       end
+
       describe ':restart' do
         it 'should be false by default' do
           @ray.preferences[:restart].must_equal false
         end
       end
+
       describe ':sudo' do
         it 'should be false by default' do
           @ray.preferences[:sudo].must_equal false

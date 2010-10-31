@@ -5,9 +5,7 @@ require 'rubygems'
 require 'minitest/spec'
 require 'ray/preferences'
 
-# # HOME = RAY_ROOT = "#{Dir.pwd}/test/mocks/.ray"
-# 
-HOME = "test/mocks"
+HOME = 'test/mocks'
 
 MiniTest::Unit.autorun
 

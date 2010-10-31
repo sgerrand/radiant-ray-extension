@@ -15,7 +15,6 @@ module Search
         hits << extension if extension[:name].include? query
       } if cache.any?
     rescue
-      hit = []
     end
     if hits.any?
       hits
@@ -90,7 +89,7 @@ module Search
           merged = {}
           @idx.each { |idx|
             cache = caches[idx]
-            caches.delete(caches[idx])
+            caches.delete(cache)
             merged.merge! cache if cache
           }
           caches << merged
@@ -137,7 +136,7 @@ module Search
                               :description => this['description'],
                               :repository  => "git://github.com/#{user}/#{name}.git",
                               :score       => this['score'],
-                              :name        => name.gsub(/radiant[-_](.*)/, '\1').gsub(/(.*)[_-]extension/, '\1'),
+                              :name        => name.gsub(/radiant[-_](.*)/i, '\1').gsub(/(.*)[_-]extension/i, '\1').gsub(/-/, '_'),
                               :url         => url,
                               :zip         => "http://github.com/#{user}/#{name}/zipball/master"
                             }
@@ -179,7 +178,7 @@ module Search
     def filter
       results = []
       self.each { |this|
-        if this[:name].to_s.include?('radiant') or this[:description].to_s.include?('radiant') or this[:repository].to_s.include?('radiant')
+        if this[:name].to_s =~ /radiant/i or this[:description].to_s =~ /radiant/i or this[:repository].to_s =~ /radiant/i
           results << this
         end
       } if self.length > 0
@@ -253,13 +252,8 @@ module Search
 "-- #{name} #{'-' * (68 - len)}
    #{(self[:url])[0...69]}
 
-   #{(self[:description]).wrap}
-
-   GIT: ray add #{name}
-        ray add #{name} --submodule
-   GEM: ray add #{name} --gem
-        ray add #{name} --gem --sudo
-   ZIP: ray add #{name} --zip
+#{(self[:description]).wrap}
+   INSTALL: ray add #{name}
 \n"
     end
     def truncated
