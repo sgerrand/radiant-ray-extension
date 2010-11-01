@@ -77,6 +77,17 @@ describe Preferences do
       Ray.preferences = { :preferences => @prefs, :file => "#{RAY_ROOT}/ray_local_preferences-#{@rand}" }
       Ray.preferences(:local, "#{RAY_ROOT}/ray_local_preferences-#{@rand}").must_equal @prefs
     end
+    it 'merges new preferences with old preferences' do
+      Ray.preferences = {
+        :preferences => { :restart => :thin },
+        :file => "#{RAY_ROOT}/ray_local_preferences-#{@rand}"
+      }
+      Ray.preferences = {
+        :preferences => { :download => :http },
+        :file => "#{RAY_ROOT}/ray_local_preferences-#{@rand}"
+      }
+      Ray.preferences(:local, "#{RAY_ROOT}/ray_local_preferences-#{@rand}").must_equal({ :restart => :thin, :download => :http, :sudo => false })
+    end
   end
 
   describe Hash do
