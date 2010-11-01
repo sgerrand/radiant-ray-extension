@@ -1,10 +1,5 @@
 # encoding: utf-8
 
-require 'json'
-require 'open-uri'
-require 'rexml/document'
-require 'yaml'
-
 module Search
 
   def search query, source = :all

@@ -1,6 +1,12 @@
 # encoding: utf-8
 $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 
+require 'fileutils'
+require 'json'
+require 'open-uri'
+require 'rexml/document'
+require 'yaml'
+
 require 'ray/extension'
 require 'ray/preferences'
 require 'ray/search'
