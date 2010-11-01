@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 Gem::Specification.new do |s|
-  s.name        = 'ray'
+  s.name        = 'radiant-ray'
   s.version     = File.read 'VERSION'
   s.date        = Time.new.strftime '%Y-%m-%d'
   s.summary     = 'Friendly extension management for Radiant CMS'
