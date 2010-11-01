@@ -40,7 +40,7 @@ module Search
         results << el
       end
     }
-    results.normalize_registry_results.filter.cache
+    results.normalize_registry_results.cache
   end
   
   def self.github query
@@ -48,7 +48,7 @@ module Search
     open("http://github.com/api/v2/yaml/repos/search/radiant+#{query}").each_line { |line|
       response << line
     }
-    [YAML.load(response)].normalize_github_results.filter.cache
+    [YAML.load(response)].normalize_github_results.cache
   end
   
   def self.rubygems query

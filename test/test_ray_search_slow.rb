@@ -63,7 +63,7 @@ describe Search do
 
     describe '#filter' do
       it 'filters search results' do
-        results = Search.github 'kramdown'
+        results = Search.rubygems 'kramdown'
         results.first[:name].must_match('kramdown_filter') &&
         results.length.must_equal(1)
       end
