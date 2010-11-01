@@ -14,8 +14,8 @@ class Ray
   attr_accessor :preferences
 
   extend Preferences
+  extend Search
   include Extension
-  include Search
 
   def initialize command = '', arguments = [], options = {}
     @input = {

@@ -3,7 +3,7 @@ $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 
 require 'rubygems'
 require 'minitest/spec'
-require 'ray/search'
+require 'ray'
 
 MiniTest::Unit.autorun
 
@@ -14,15 +14,15 @@ describe Search do
     Search.must_be_kind_of Module
   end
 
-  describe '#all' do
-    it 'is an Array' do
-      Search.all('kramdown_filter').must_be_kind_of Array
+  describe '#search' do
+    it 'returns an Array' do
+      Ray.search('kramdown_filter').must_be_kind_of Array
     end
   end
 
   describe 'search result' do
     before do
-      @result = Search.all('kramdown_filter')[0]
+      @result = Ray.search('kramdown_filter')[0]
     end
 
     it 'is a Hash' do
@@ -45,31 +45,31 @@ describe Search do
   describe Array do
     describe '#results' do
       it 'is a String' do
-        Search.all('kramdown_filter').results.must_be_kind_of String
+        Ray.search('kramdown_filter').results.must_be_kind_of String
       end
     end
 
     describe '#details' do
       it 'is a String' do
-        Search.all('kramdown_filter').details.must_be_kind_of String
+        Ray.search('kramdown_filter').details.must_be_kind_of String
       end
     end
 
     describe '#pick' do
       it 'is a Hash' do
-        Search.all('kramdown').pick('kramdown_filter').must_be_kind_of Hash
+        Ray.search('kramdown').pick('kramdown_filter').must_be_kind_of Hash
       end
       it 'picks an exact match' do
-        Search.all('kramdown_filter').pick('kramdown_filter')[:name].must_match 'kramdown_filter'
+        Ray.search('kramdown_filter').pick('kramdown_filter')[:name].must_match 'kramdown_filter'
       end
       it 'picks a close match when there is only one choice' do
-        Search.all('kramdown_filter').pick('kramdown')[:name].must_match 'kramdown_filter'
+        Ray.search('kramdown_filter').pick('kramdown')[:name].must_match 'kramdown_filter'
       end
       it 'picks an exact match from many' do
-        Search.all('paperclipped').pick('paperclipped_player')[:repository].must_match 'git://github.com/spanner/radiant-paperclipped_player-extension.git'
+        Ray.search('paperclipped').pick('paperclipped_player')[:repository].must_match 'git://github.com/spanner/radiant-paperclipped_player-extension.git'
       end
       it 'raises exceptions when no matches are found' do
-        proc { Search.all('kramdown').pick('zzz') }.must_raise RuntimeError
+        proc { Ray.search('kramdown').pick('zzz') }.must_raise RuntimeError
       end
     end
   end
@@ -77,19 +77,19 @@ describe Search do
   describe Hash do
     describe '#extended' do
       it 'is a String' do
-        Search.all('kramdown_filter')[0].extended.must_be_kind_of String
+        Ray.search('kramdown_filter')[0].extended.must_be_kind_of String
       end
       it 'is in extended format' do
-        Search.all('kramdown_filter')[0].extended.must_match /--\ kramdown_filter.*\n\ \ \ http/
+        Ray.search('kramdown_filter')[0].extended.must_match /--\ kramdown_filter.*\n\ \ \ http/
       end
     end
 
     describe '#truncated' do
       it 'is a String' do
-        Search.all('kramdown_filter')[0].truncated.must_be_kind_of String
+        Ray.search('kramdown_filter')[0].truncated.must_be_kind_of String
       end
       it 'is in truncated format' do
-        Search.all('kramdown_filter')[0].truncated.must_match '** kramdown_filter: '
+        Ray.search('kramdown_filter')[0].truncated.must_match '** kramdown_filter: '
       end
     end
   end

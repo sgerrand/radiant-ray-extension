@@ -15,6 +15,10 @@ describe Ray do
     Ray.must_respond_to 'preferences='
   end
 
+  it 'is extended by Search' do
+    Ray.must_respond_to 'search'
+  end
+
   describe '#new' do
     before do
       @ray = Ray.new 'spec', ['a', 'b'], { :key => :value }

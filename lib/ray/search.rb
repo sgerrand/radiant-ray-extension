@@ -7,29 +7,38 @@ require 'yaml'
 
 module Search
 
-  def self.all query
-    hits = []
-    begin
-      cache = YAML.load_file "#{RAY_ROOT}/search" || []
-      cache.each { |extension|
-        hits << extension if extension[:name].include? query
-      } if cache.any?
-    rescue
-    end
-    if hits.any?
-      hits
-    else
-      Search.live query
+  def search query, source = :all
+    case source
+    when :all       then search_all query
+    when :github    then search_github query
+    when :registry  then search_registry query
+    when :rubygems  then search_rubygems query
+    when :live      then search_live query
     end
   end
 
-  def self.live query
-    Search.registry query
-    Search.rubygems query
-    Search.github query
+  def search_all query
+    search_cache query
   end
 
-  def self.registry query
+  def search_live query
+    [
+      search_github(query),
+      search_registry(query),
+      search_rubygems(query)
+    ].flatten
+  end
+
+  def search_github query
+    response = ''
+    open("http://github.com/api/v2/yaml/repos/search/radiant+#{query}").each_line { |line|
+      response << line
+    }
+    cache [YAML.load(response)].normalize_github_results
+    [YAML.load(response)].normalize_github_results
+  end
+
+  def search_registry query
     results = []
     response = ''
     open("http://ext.radiantcms.org/extensions.xml").each_line { |line|
@@ -40,67 +49,75 @@ module Search
         results << el
       end
     }
-    results.normalize_registry_results.cache
+    cache results.normalize_registry_results
+    results.normalize_registry_results
   end
-  
-  def self.github query
-    response = ''
-    open("http://github.com/api/v2/yaml/repos/search/radiant+#{query}").each_line { |line|
-      response << line
-    }
-    [YAML.load(response)].normalize_github_results.cache
-  end
-  
-  def self.rubygems query
+
+  def search_rubygems query
     response = open("http://rubygems.org/api/v1/search.json?query=#{query}").gets
-    JSON.parse(response).normalize_rubygems_results.filter.cache
+    cache JSON.parse(response).normalize_rubygems_results.filter
+    JSON.parse(response).normalize_rubygems_results.filter
+  end
+
+  def search_cache query
+    hits = []
+    begin
+      cache = YAML.load_file "#{RAY_ROOT}/search" || []
+      cache.each { |extension|
+        hits << extension if extension[:name].include? query
+      } if cache.any?
+    rescue; end
+    if hits.any?
+      hits
+    else
+      search_live query
+    end
+  end
+
+  def cache results
+    unless has_cache?
+      FileUtils.touch "#{RAY_ROOT}/search"
+    end
+    if results.any?
+      new_cache = merge_caches old_cache, results
+      File.open("#{RAY_ROOT}/search", 'w') { |file|
+        file.write YAML::dump(new_cache)
+      }
+    end
+  end
+
+  def has_cache?
+    File.exist? "#{RAY_ROOT}/search"
+  end
+
+  def old_cache
+    YAML.load_file("#{RAY_ROOT}/search") || []
+  end
+
+  def merge_caches old_cache, new_cache
+    merged = []
+    oc_rm = []
+    nc_rm = []
+    new_cache.each { |this|
+      old_cache.each { |that|
+        if this[:name] == that[:name]
+          merged << that.merge(this)
+          oc_rm << old_cache.index(that)
+          nc_rm << new_cache.index(this)
+        end
+      }
+    }
+    oc_rm.uniq.sort.reverse.each { |index|
+      old_cache.delete old_cache[index]
+    }
+    nc_rm.uniq.sort.reverse.each { |index|
+      new_cache.delete new_cache[index]
+    }
+    old_cache.concat(new_cache).concat merged
   end
 
   # Array extensions
   class ::Array
-    def cache
-      unless has_cache?
-        FileUtils.touch "#{RAY_ROOT}/search"
-      end
-      if self.any?
-        new_cache = merge_caches old_cache, self
-        File.open("#{RAY_ROOT}/search", 'w') { |file|
-          file.write YAML::dump(new_cache)
-        }
-      end
-      return self
-    end
-
-    def merge_caches old_cache, new_cache
-      merged = []
-      oc_rm = []
-      nc_rm = []
-      new_cache.each { |this|
-        old_cache.each { |that|
-          if this[:name] == that[:name]
-            merged << that.merge(this)
-            oc_rm << old_cache.index(that)
-            nc_rm << new_cache.index(this)
-          end
-        }
-      }
-      oc_rm.uniq.sort.reverse.each { |index|
-        old_cache.delete old_cache[index]
-      }
-      nc_rm.uniq.sort.reverse.each { |index|
-        new_cache.delete new_cache[index]
-      }
-      old_cache.concat(new_cache).concat merged
-    end
-
-    def has_cache?
-      File.exist? "#{RAY_ROOT}/search"
-    end
-
-    def old_cache
-      YAML.load_file("#{RAY_ROOT}/search") || []
-    end
-
     def normalize_registry_results
       results = []
       self.each { |this|

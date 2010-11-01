@@ -4,7 +4,6 @@ $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'rubygems'
 require 'minitest/spec'
 require 'ray'
-require 'ray/preferences'
 
 MiniTest::Unit.autorun
 
