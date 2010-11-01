@@ -13,8 +13,8 @@ class Ray
   attr_reader   :input
   attr_accessor :preferences
 
+  extend Preferences
   include Extension
-  include Preferences
   include Search
 
   def initialize command = '', arguments = [], options = {}
@@ -38,15 +38,15 @@ class Ray
       :sudo => false
     }
 
-    global = Preferences.open :global
-    local = Preferences.open :local
+    global = Ray.preferences :global
+    local  = Ray.preferences
 
     @preferences.merge(global).merge local
 
   end
 
   def preferences= prefs
-    @preferences = Preferences.save prefs
+    @preferences = prefs
   end
 
 end

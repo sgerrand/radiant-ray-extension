@@ -5,25 +5,29 @@ require 'yaml'
 
 module Preferences
 
-  def self.open scope = :local, file = nil
-    pref_file = preference_file(scope, file)
-    File.exist?("#{pref_file}") ? YAML.load_file("#{pref_file}") : {}
+  def preferences scope = :local, file = nil
+    prefs = preferences_file scope, file
+    File.exist?(prefs) ? YAML.load_file(prefs) : {}
   end
 
-  def self.save preferences, scope = :local, file = nil
-    pref_file = preference_file(scope, file)
-    File.open(pref_file, 'w') { |file| file.write preferences.to_s }
-    Preferences.open scope, pref_file
+  def preferences= arguments
+    options = {
+      :preferences => (arguments[:preferences] || {}),
+      :scope => (arguments[:scope] || :local),
+      :file => (arguments[:file] || nil)
+    }
+    prefs = preferences_file options[:scope], options[:file]
+    File.open(prefs, 'w') { |this|
+      this.write options[:preferences].to_s
+    }
+    return options[:preferences]
   end
 
-  def self.preference_file scope, file
+  def preferences_file(scope = :local, file = nil)
     case
-    when file
-      file
-    when :global
-      "#{HOME}/.ray/preferences"
-    when :local
-      "#{Dir.pwd}/.ray/preferences"
+    when file    then return file
+    when :global then "#{RAY_ROOT}/preferences"
+    when :local  then './.ray/preferences'
     end
   end
 

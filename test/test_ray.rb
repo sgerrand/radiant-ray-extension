@@ -8,8 +8,9 @@ require 'ray'
 MiniTest::Unit.autorun
 
 describe Ray do
-  it 'includes Preferences' do
-    Ray.must_include Preferences
+  it 'is extended by Preferences' do
+    Ray.must_respond_to 'preferences'
+    Ray.must_respond_to 'preferences='
   end
 
   describe '#new' do
@@ -25,7 +26,7 @@ describe Ray do
     end
 
     describe '@input' do
-      it 'is a Hash' do
+      it 'returns a Hash' do
         @ray.input.must_be_kind_of Hash
       end
       it 'contains :command' do
