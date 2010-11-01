@@ -11,10 +11,6 @@ MiniTest::Unit.autorun
 RAY_ROOT = "test/mocks/.ray"
 
 describe Search do
-  after do
-    FileUtils.rm_f "#{RAY_ROOT}/search.cache"
-  end
-
   describe '#live' do
     it 'is an Array' do
       Search.live('kramdown_filter').must_be_kind_of Array

@@ -1,0 +1,117 @@
+--- 
+- :description: |
+    An extension by Aissac that allows you to translate Radiant Paperclipped Assets using Radiant Globalize2 Extension. Provides the ability to translate Paperclipped assets (title and caption) using the Radiant admin interface and you have altered Paperclipped Radius Tags which take into account the locale.
+    
+    Check out the "screencast":http://blog.aissac.ro/2009/11/02/episode-3-radiant-globalize2-compatibility-issues/
+
+  :repository: git://github.com/Aissac/radiant-globalize2-paperclipped-extension.git
+  :download: 
+  :name: globalize2_paperclipped
+  :url: http://github.com/Aissac/radiant-globalize2-paperclipped-extension
+- :description: Assets manager for Radiant based on "Paperclip":http://thoughtbot.com/projects/paperclip with support for multiple file types and drag and drop insertion into Radiant pages.
+  :repository: git://github.com/kbingman/paperclipped.git
+  :download: http://github.com/kbingman/paperclipped/
+  :name: paperclipped
+  :url: http://github.com/kbingman/paperclipped
+- :description: Adds multisite support to paperclipped, showing assets only for the current site if the user is not an admin
+  :repository: git://github.com/kbingman/radiant-paperclipped_multisite-extension.git
+  :score: 3.2620912
+  :name: paperclipped_multisite
+  :url: http://github.com/kbingman/radiant-paperclipped_multisite-extension
+  :zip: http://github.com/kbingman/radiant-paperclipped_multisite-extension/zipball/master
+- :description: Assign tags to paperclipped assets and display asset galleries based on page attachment, tag attachment or whatever.
+  :repository: git://github.com/spanner/radiant-paperclipped_taggable-extension.git
+  :score: 3.2620912
+  :name: paperclipped_taggable
+  :url: spanner.org/radiant/paperclipped_taggable
+  :zip: http://github.com/spanner/radiant-paperclipped_taggable-extension/zipball/master
+- :description: Adds SWFObject embedding support for Paperclipped SWF Assets
+  :repository: git://github.com/moklett/radiant-paperclipped-swfobject-extension.git
+  :score: 3.2620912
+  :name: paperclipped_swfobject
+  :url: http://github.com/moklett/radiant-paperclipped-swfobject-extension
+  :zip: http://github.com/moklett/radiant-paperclipped-swfobject-extension/zipball/master
+- :description: Adds to paperclipped the ability to handle and display gps tracks in various formats
+  :repository: git://github.com/spanner/radiant-paperclipped_gps-extension.git
+  :score: 3.2620912
+  :name: paperclipped_gps
+  :url: spanner.org/radiant/paperclipped_routes
+  :zip: http://github.com/spanner/radiant-paperclipped_gps-extension/zipball/master
+- :description: adds a friendly batch-uploader to paperclipped, with progress bars and a very simple interface
+  :repository: git://github.com/spanner/radiant-paperclipped_uploader-extension.git
+  :download: http://github.com/spanner/radiant-paperclipped_uploader-extension/tarball/master
+  :name: paperclipped_uploader
+  :url: spanner.org/radiant/paperclipped_uploader
+  :score: 3.2620912
+  :zip: http://github.com/spanner/radiant-paperclipped_uploader-extension/zipball/master
+- :description: Adds audio and video player tags to paperclipped and some useful conditionals around them
+  :repository: git://github.com/spanner/radiant-paperclipped_player-extension.git
+  :download: http://github.com/spanner/radiant-paperclipped_player-extension/tarball/master
+  :name: paperclipped_player
+  :url: http://spanner.org/radiant/paperclipped_player
+  :score: 3.2620912
+  :zip: http://github.com/spanner/radiant-paperclipped_player-extension/zipball/master
+- :description: Assign metadata to paperclipped assets in Radiant CMS.
+  :repository: git://github.com/nuex/radiant-paperclipped_meta-extension.git
+  :download: http://github.com/nuex/radiant-paperclipped_meta-extension/tarball/master
+  :name: paperclipped_meta
+  :url: http://github.com/nuex/radiant-paperclipped_meta-extension
+  :score: 3.2620912
+  :zip: http://github.com/nuex/radiant-paperclipped_meta-extension/zipball/master
+- :description: |-
+    This extension adds self-contained liveblogging support (think along the lines of Engadget's live coverage of events) to RadiantCMS. It's designed to have no external dependancies and should work just fine out of the box on most Radiant installations.
+    
+    It's a bit quick-and-dirty in its current incarnation - there's plenty of scope for improvement. Patches would be very welcome and fully encouraged.
+  :repository: git://github.com/HHRy/radiant-liveblog-extension.git
+  :download: http://github.com/HHRy/radiant-liveblog-extension/tarball/master
+  :name: liveblog
+  :url: http://github.com/HHRy/radiant-liveblog-extension
+- :description: Provides some useful blogging tags, like *previous* and *next* article and *time_ago_in_words* for showing dates like "3 days ago".
+  :repository: git://github.com/santry/blog_tags.git
+  :download: 
+  :name: blog_tags
+  :url: http://github.com/santry/blog_tags
+- :description: |-
+    Radiant is a simple and powerful publishing system designed for small teams.
+    It is built with Rails and is similar to Textpattern or MovableType, but is
+    a general purpose content managment system--not merely a blogging engine.
+  :repository: http://github.com/radiant/radiant
+  :name: radiant
+  :gem: http://rubygems.org/gems/radiant-0.9.1.gem
+  :url: http://rubygems.org/gems/radiant
+- :description: An easy way to create articles under an archive page in Radiant.
+  :repository: git://github.com/crnixon/radiant_blog_post_extension.git
+  :score: 3.1108158
+  :name: blog_post
+  :url: http://github.com/crnixon/radiant_blog_post_extension
+  :zip: http://github.com/crnixon/radiant_blog_post_extension/zipball/master
+- :description: Adds features for blogging
+  :repository: git://github.com/saturnflyer/radiant-blog-extension.git
+  :download: 
+  :name: blog
+  :url: http://www.saturnflyer.com
+  :score: 3.540432
+  :zip: http://github.com/saturnflyer/radiant-blog-extension/zipball/master
+- :description: Add blog access control function to radiant
+  :repository: git://github.com/imustardsoft/Radiant-blog.git
+  :download: 
+  :name: blog
+  :url: http://imustardsoft.com/blog/2010/09/26/introducing-radiant-blog-extension/
+  :score: 3.540432
+  :zip: http://github.com/imustardsoft/Radiant-blog/zipball/master
+- :description: Radiant CMS extension that wraps the Bluecloth 2 Markdown converter.
+  :repository: git://github.com/johnmuhl/radiant-bluecloth2_filter-extension.git
+  :score: 5.913411
+  :name: bluecloth2_filter
+  :url: http://rubygems.org/gems/radiant-bluecloth2_filter-extension
+  :zip: http://github.com/johnmuhl/radiant-bluecloth2_filter-extension/zipball/master
+- :description: |-
+    A kramdown filter extension for Radiant CMS.
+    Visit http://kramdown.rubyforge.org/ for more information about kramdown.
+  :repository: http://github.com/johnmuhl/radiant-kramdown_filter-extension
+  :download: http://rubygems.org/gems/radiant-kramdown_filter-extension-1.0.11.gem
+  :name: kramdown_filter
+  :url: http://rubygems.org/gems/radiant-kramdown_filter-extension
+  :gem: http://rubygems.org/gems/radiant-kramdown_filter-extension-1.0.11.gem
+  :score: 5.7794356
+  :zip: http://github.com/johnmuhl/radiant-kramdown_filter-extension/zipball/master
