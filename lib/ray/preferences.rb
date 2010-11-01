@@ -21,10 +21,9 @@ module Preferences
     File.open(prefs, 'w') { |this|
       this.write merged.to_s
     }
-    return options[:preferences]
   end
 
-  def preferences_file(scope = :local, file = nil)
+  def preferences_file scope = :local, file = nil
     case
     when file    then return file
     when :global then "#{RAY_ROOT}/preferences"
