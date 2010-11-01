@@ -82,8 +82,8 @@ describe Ray do
         @ray.preferences.must_be_kind_of Hash
       end
       it 'is writable' do
-        @ray.preferences = { :download => :http }
-        @ray.preferences[:download].must_equal :http
+        @ray.preferences = { :key => :value }
+        @ray.preferences[:key].must_equal :value
       end
       it 'contains :download' do
         @ray.preferences[:download].wont_be_nil

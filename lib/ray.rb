@@ -39,8 +39,9 @@ class Ray
     }.merge(Ray.preferences :global).merge Ray.preferences
   end
 
-  def preferences= prefs
-    @preferences = prefs
+  def preferences= prefs, scope = :local
+    Ray.preferences = { :preferences => prefs, :scope => scope }
+    @preferences = Ray.preferences scope
   end
 
 end
