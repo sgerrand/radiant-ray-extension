@@ -72,32 +72,25 @@ module Search
     end
 
     def merge_caches old_cache, new_cache
-      if old_cache.any?
-        caches = old_cache.concat new_cache
-        @idx = []
-        caches.each { |extension|
-          matches = caches.map { |ext|
-            ext[:name].scan /^#{extension[:name]}$/
-          }.flatten
-          if matches.length > 1
-            matches.each { |match|
-              @idx << caches.index(extension)
-            }
+      merged = []
+      oc_rm = []
+      nc_rm = []
+      new_cache.each { |this|
+        old_cache.each { |that|
+          if this[:name] == that[:name]
+            merged << that.merge(this)
+            oc_rm << old_cache.index(that)
+            nc_rm << new_cache.index(this)
           end
         }
-        if @idx.uniq.length > 1
-          merged = {}
-          @idx.each { |idx|
-            cache = caches[idx]
-            caches.delete(cache)
-            merged.merge! cache if cache
-          }
-          caches << merged
-        end
-        return caches
-      else
-        new_cache
-      end
+      }
+      oc_rm.uniq.sort.reverse.each { |index|
+        old_cache.delete old_cache[index]
+      }
+      nc_rm.uniq.sort.reverse.each { |index|
+        new_cache.delete new_cache[index]
+      }
+      old_cache.concat(new_cache).concat merged
     end
 
     def has_cache?
