@@ -40,9 +40,6 @@ describe Search do
     it 'contains :repository' do
       @result[:repository].wont_be_nil
     end
-    it 'contains :score' do
-      @result[:score].wont_be_nil
-    end
   end
 
   describe Array do
