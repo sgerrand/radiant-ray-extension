@@ -36,13 +36,7 @@ class Ray
       :download => :git,
       :restart => false,
       :sudo => false
-    }
-
-    global = Ray.preferences :global
-    local  = Ray.preferences
-
-    @preferences.merge(global).merge local
-
+    }.merge(Ray.preferences :global).merge Ray.preferences
   end
 
   def preferences= prefs

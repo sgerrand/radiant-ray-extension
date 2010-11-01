@@ -7,6 +7,8 @@ require 'ray'
 
 MiniTest::Unit.autorun
 
+RAY_ROOT  = "test/mocks/.ray"
+
 describe Ray do
   it 'is extended by Preferences' do
     Ray.must_respond_to 'preferences'
