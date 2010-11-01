@@ -117,7 +117,6 @@ module Search
                               :description  => this['description'].text,
                               :repository   => repo,
                               :download     => this['download-url'].text,
-                              :score        => 0.0,
                               :name         => this['name'].text,
                               :url          => repo.gsub(/git(.*).git/, 'http\1')
                             }
@@ -150,7 +149,6 @@ module Search
         results << result = {
                               :description => this['info'],
                               :repository  => this['source_code_uri'],
-                              :score       => 0.0,
                               :name        => this['name'].gsub(/radiant-(.*)-extension/, '\1'),
                               :gem         => this['gem_uri'],
                               :url         => this['project_uri']
