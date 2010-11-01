@@ -10,7 +10,7 @@ module Search
   def self.all query
     hits = []
     begin
-      cache = YAML.load_file "#{RAY_ROOT}/search.cache" || []
+      cache = YAML.load_file "#{RAY_ROOT}/search" || []
       cache.each { |extension|
         hits << extension if extension[:name].include? query
       } if cache.any?
@@ -60,11 +60,11 @@ module Search
   class ::Array
     def cache
       unless has_cache?
-        FileUtils.touch "#{RAY_ROOT}/search.cache"
+        FileUtils.touch "#{RAY_ROOT}/search"
       end
       if self.any?
         new_cache = merge_caches old_cache, self
-        File.open("#{RAY_ROOT}/search.cache", 'w') { |file|
+        File.open("#{RAY_ROOT}/search", 'w') { |file|
           file.write YAML::dump(new_cache)
         }
       end
@@ -101,11 +101,11 @@ module Search
     end
 
     def has_cache?
-      File.exist? "#{RAY_ROOT}/search.cache"
+      File.exist? "#{RAY_ROOT}/search"
     end
 
     def old_cache
-      YAML.load_file("#{RAY_ROOT}/search.cache") || []
+      YAML.load_file("#{RAY_ROOT}/search") || []
     end
 
     def normalize_registry_results
