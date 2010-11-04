@@ -323,6 +323,7 @@ def git_extension_install
 end
 
 def http_extension_install
+  @url.gsub!(/http:\/\/github.com/, 'http://nodeload.github.com')
   FileUtils.makedirs("#{@r}/tmp")
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
