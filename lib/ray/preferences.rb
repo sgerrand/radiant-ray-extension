@@ -1,42 +1,46 @@
 # encoding: utf-8
 
+require 'fileutils'
+require 'yaml'
+
+RAY_ROOT        = "#{Dir.pwd}/.ray"
+RAY_ROOT_GLOBAL = "#{ENV['HOME']}/.ray"
+
 module Preferences
-
-  def preferences scope = :local, file = nil
-    prefs = preferences_file scope, file
-    File.exist?(prefs) ? YAML.load_file(prefs) : {}
+  def self.read scope = :local
+    File.exist?(preference_file_for scope) ? load(scope) : {}
   end
 
-  def preferences= arguments
-    options = {
-      :preferences => (arguments[:preferences] || {}),
-      :scope => (arguments[:scope] || :local),
-      :file => (arguments[:file] || nil)
-    }
-    prefs = preferences_file options[:scope], options[:file]
-    merged = merge_preferences prefs, options[:preferences]
-    File.open(prefs, 'w') { |this|
-      this.write merged.to_s
-    }
+  def self.write new_preferences, scope = :local
+    setup(scope) unless File.exist?(preference_file_for scope)
+    save(new_preferences, scope)
   end
 
-  def preferences_file scope = :local, file = nil
-    case
-    when file    then return file
-    when :global then "#{RAY_ROOT}/preferences"
-    when :local  then './.ray/preferences'
+  def self.preference_file_for scope
+    case scope
+    when :global
+      "#{RAY_ROOT_GLOBAL}/preferences"
+    else
+      "#{RAY_ROOT}/preferences"
     end
   end
 
-  def merge_preferences old_prefs, new_prefs
-    File.exist?(old_prefs) ? old = YAML.load_file(old_prefs) : {}
-    old.merge new_prefs
+  def self.load scope
+    YAML.load_file(preference_file_for scope)
   end
 
-  # Hash extensions
-  class ::Hash
-    def to_s
-      YAML::dump self
-    end
+  def self.save new_preferences, scope
+    old_preferences = load scope || {}
+    preferences = old_preferences.merge(new_preferences)
+    File.open(preference_file_for(scope), 'w') { |preferences_file|
+      preferences_file.write preferences.to_yaml
+    }
+    return preferences
+  end
+
+  def self.setup scope
+    scope == :global ? dir = RAY_ROOT_GLOBAL : RAY_ROOT
+    FileUtils.mkdir "#{dir}"
+    FileUtils.touch "#{dir}/preferences"
   end
 end
