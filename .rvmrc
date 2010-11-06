@@ -1,0 +1,3 @@
+rvm default@radiant-ray --create &&
+echo "  RUBY: `ruby -e 'print RUBY_VERSION'`" &&
+echo "GEMSET: `rvm gemset name`"
