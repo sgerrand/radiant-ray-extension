@@ -16,11 +16,11 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_runtime_dependency 'json', '~> 1.4'
-
   s.add_development_dependency 'minitest', '~> 1.7'
 
   s.files = [
     'lib/ray.rb',
+    'lib/ray/array.rb',
     'lib/ray/extension.rb',
     'lib/ray/preferences.rb',
     'lib/ray/search.rb',
@@ -32,12 +32,12 @@ Gem::Specification.new do |s|
   s.test_files = [
     '.autotest',
     'test/test_ray.rb',
+    'test/test_ray_array.rb',
     'test/test_ray_extension.rb',
     'test/test_ray_preferences.rb',
     'test/test_ray_search.rb',
     'test/test_ray_search_slow.rb',
-    'test/mocks/.ray/preferences',
-    'test/mocks/.ray/ray_global_preferences',
-    'test/mocks/.ray/ray_local_preferences'
+    'test/mocks/ray/preferences',
+    'test/mocks/ray/search'
   ]
 end
