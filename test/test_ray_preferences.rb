@@ -8,22 +8,10 @@ require 'ray/preferences'
 
 MiniTest::Unit.autorun
 
-RAY_ROOT = RAY_ROOT_GLOBAL = 'test/mocks/ray'
+RAY_ROOT        = 'test/mocks/ray'
+RAY_ROOT_GLOBAL = 'test/mocks/ray'
 
 describe Preferences do
-  before do
-    FileUtils.cp "#{RAY_ROOT}/preferences", "#{RAY_ROOT}/preferences-bak"
-  end
-  after do
-    FileUtils.rm_f "#{RAY_ROOT}/preferences"
-    FileUtils.mv "#{RAY_ROOT}/preferences-bak", "#{RAY_ROOT}/preferences"
-    FileUtils.rm_f "#{RAY_ROOT}/preferences-bak"
-  end
-
-  it 'is a Module' do
-    Preferences.must_be_kind_of Module
-  end
-
   describe '#read' do
     it 'is a Hash' do
       Preferences.read.must_be_kind_of Hash
@@ -35,6 +23,13 @@ describe Preferences do
   end
 
   describe '#write' do
+    before do
+      FileUtils.cp "#{RAY_ROOT_GLOBAL}/preferences", "#{RAY_ROOT_GLOBAL}/preferences-bak"
+    end
+    after do
+      FileUtils.rm_f "#{RAY_ROOT_GLOBAL}/preferences"
+      FileUtils.mv "#{RAY_ROOT_GLOBAL}/preferences-bak", "#{RAY_ROOT_GLOBAL}/preferences"
+    end
     it 'is a Hash' do
       Preferences.write({}).must_be_kind_of Hash
     end

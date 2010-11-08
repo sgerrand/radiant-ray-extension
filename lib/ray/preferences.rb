@@ -7,6 +7,7 @@ RAY_ROOT        = "#{Dir.pwd}/.ray"
 RAY_ROOT_GLOBAL = "#{ENV['HOME']}/.ray"
 
 module Preferences
+
   def self.read scope = :local
     File.exist?(preference_file_for scope) ? load(scope) : {}
   end
@@ -43,4 +44,5 @@ module Preferences
     FileUtils.mkdir "#{dir}"
     FileUtils.touch "#{dir}/preferences"
   end
+
 end
