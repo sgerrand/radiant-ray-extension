@@ -14,28 +14,20 @@ CACHE           = "#{RAY_ROOT_GLOBAL}/search"
 
 describe Hash do
   describe '#extended' do
-    after do
-      FileUtils.rm CACHE
-    end
-
     it 'is a String' do
-      Search.all(:kramdown)[0].extended.must_be_kind_of String
+      Search.local(:kramdown)[0].extended.must_be_kind_of String
     end
     it 'is in extended format' do
-      Search.all(:kramdown)[0].extended.must_match /--\ kramdown_filter.*\n\ \ \ http/
+      Search.local(:kramdown)[0].extended.must_match /--\ kramdown_filter.*\n\ \ \ http/
     end
   end
 
   describe '#truncated' do
-    after do
-      FileUtils.rm CACHE
-    end
-
     it 'is a String' do
-      Search.all(:kramdown)[0].truncated.must_be_kind_of String
+      Search.local(:kramdown)[0].truncated.must_be_kind_of String
     end
     it 'is in truncated format' do
-      Search.all(:kramdown)[0].truncated.must_match '** kramdown_filter: '
+      Search.local(:kramdown)[0].truncated.must_match '** kramdown_filter: '
     end
   end
 end
