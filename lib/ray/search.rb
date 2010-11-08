@@ -236,8 +236,12 @@ module Search
     puts "!! More than one extension matched '#{query}'"
     puts '!! Please choose the extension you would like installed'
     show_options matches
-    choice = user_choice
-    return matches[choice - 1]
+    choice = user_choice matches
+    if choice
+      return matches[choice.to_i - 1]
+    else
+      return 'Installation canceled'
+    end
   end
 
   def self.show_options options
@@ -250,9 +254,14 @@ module Search
     }
   end
 
-  def self.user_choice
+  def self.user_choice matches
     print 'Extension number (c to cancel): '
-    STDIN.gets.chomp.to_i
+    choice = STDIN.gets.chomp
+    if choice =~ /c|q|x|z/i
+      return nil
+    elsif (choice.to_i - 1) <= matches.size
+      return choice
+    end
   end
 
   def self.setup
@@ -261,3 +270,4 @@ module Search
     return []
   end
 end
+

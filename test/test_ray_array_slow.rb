@@ -46,5 +46,8 @@ describe Array do
     it 'prompts the user for a choice when there is more than one fuzzy match' do
       Search.all(:paperclipped).pick('paperclipped_m')[:repository].must_match 'git://github.com/'
     end
+    it 'cancels when the user enters c' do
+      Search.all(:help).pick(:hel).must_match /canceled/i
+    end
   end
 end
