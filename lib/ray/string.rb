@@ -1,4 +1,5 @@
-# Additional methods for working with strings
+# encoding: utf-8
+
 class String
   def wrap col = 80, pad = 0
     # NOTE: text wrapping regular expression from http://goo.gl/dpIk

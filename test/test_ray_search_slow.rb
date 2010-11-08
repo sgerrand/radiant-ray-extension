@@ -1,87 +1,121 @@
 # encoding: utf-8
+
 $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 
 require 'rubygems'
 require 'minitest/spec'
-require 'ray'
+require 'ray/search'
 
 MiniTest::Unit.autorun
 
-RAY_ROOT = "test/mocks/.ray"
+RAY_ROOT_GLOBAL = 'test/mocks/ray'
+CACHE           = "#{RAY_ROOT_GLOBAL}/search"
 
 describe Search do
-  it 'is a Module' do
-    Search.must_be_kind_of Module
-  end
-
-  describe '#search_live' do
+  describe '#live' do
     it 'returns an Array' do
-      Ray.search_live('kramdown_filter').must_be_kind_of Array
+      Search.live(:kramdown_filter).must_be_kind_of Array
     end
   end
 
-  describe '#search_registry' do
+  describe '#github' do
     it 'returns an Array' do
-      Ray.search_registry('kramdown_filter').must_be_kind_of Array
+      Search.github(:kramdown_filter).must_be_kind_of Array
+    end
+  
+    describe 'Github search result' do
+      before do
+        @s = Search.github(:kramdown_filter)[0]
+      end
+  
+      it 'is a Hash' do
+        @s.must_be_kind_of Hash
+      end
+      it 'has required extension information' do
+        @s[:name].wont_be_nil
+        @s[:description].wont_be_nil
+        @s[:url].wont_be_nil
+        @s[:repository].wont_be_nil
+        @s[:score].wont_be_nil
+        @s[:zip].wont_be_nil
+      end
     end
   end
 
-  describe '#search_github' do
+  describe '#registry' do
     it 'returns an Array' do
-      Ray.search_github('kramdown_filter').must_be_kind_of Array
+      Search.registry(:kramdown_filter).must_be_kind_of Array
+    end
+  
+    describe 'Registry search result' do
+      before do
+        @s = Search.registry(:kramdown_filter).first
+      end
+  
+      it 'is a Hash' do
+        @s.must_be_kind_of Hash
+      end
+      it 'has required extension information' do
+        @s[:name].wont_be_nil
+        @s[:description].wont_be_nil
+        @s[:url].wont_be_nil
+        @s[:repository].wont_be_nil
+        @s[:download].wont_be_nil
+      end
+      it 'filters search results' do
+        r = Search.registry :kramdown
+        r.first[:name].must_match('kramdown_filter')
+        r.length.must_equal(1)
+      end
     end
   end
 
-  describe '#search_rubygems' do
+  describe '#rubygems' do
     it 'returns an Array' do
-      Ray.search_rubygems('kramdown_filter').must_be_kind_of Array
+      Search.rubygems(:kramdown_filter).must_be_kind_of Array
+    end
+  
+    describe 'RubyGems search result' do
+      before do
+        @s = Search.rubygems(:kramdown_filter)[0]
+      end
+  
+      it 'is a Hash' do
+        @s.must_be_kind_of Hash
+      end
+      it 'has required extension information' do
+        @s[:name].wont_be_nil
+        @s[:description].wont_be_nil
+        @s[:url].wont_be_nil
+        @s[:repository].wont_be_nil
+        @s[:gem].wont_be_nil
+      end
+      it 'filters search results' do
+        r = Search.rubygems :kramdown
+        r.first[:name].must_match('kramdown_filter')
+        r.length.must_equal(1)
+      end
     end
   end
 
-  describe '#search' do
+  describe '#cache' do
+    after do
+      FileUtils.rm CACHE
+    end
+
     it 'caches search results' do
-      Ray.search 'kramdown_filter', :github
-      File.read("#{RAY_ROOT}/search").must_match /---\ \n/
+      Search.all :kramdown
+      File.read("#{CACHE}").must_match /---\ \n/
     end
     it 'appends new cache to old cache' do
-      FileUtils.cp "#{RAY_ROOT}/search", "#{RAY_ROOT}/search-bak"
-      FileUtils.rm "#{RAY_ROOT}/search"
-      Ray.search_registry 'kramdown_filter'
-      Ray.search_github 'bluecloth2_filter'
-      Ray.search('').length.must_equal 2
-      FileUtils.rm "#{RAY_ROOT}/search"
-      FileUtils.mv "#{RAY_ROOT}/search-bak", "#{RAY_ROOT}/search"
+      Search.registry :kramdown_filter
+      Search.github :bluecloth2_filter
+      Search.local('').length.must_equal 2
     end
     it 'merges similar cache items' do
-      FileUtils.cp "#{RAY_ROOT}/search", "#{RAY_ROOT}/search-bak"
-      FileUtils.rm "#{RAY_ROOT}/search"
-      Ray.search_registry 'kramdown_filter'
-      Ray.search_github 'kramdown_filter'
-      Ray.search('').length.must_equal 1
-      FileUtils.rm "#{RAY_ROOT}/search"
-      FileUtils.mv "#{RAY_ROOT}/search-bak", "#{RAY_ROOT}/search"
-    end
-  end
-
-  describe Array do
-    describe '#filter' do
-      it 'filters search results' do
-        results = Ray.search_rubygems 'kramdown'
-        results.first[:name].must_match('kramdown_filter') &&
-        results.length.must_equal(1)
-      end
-    end
-
-    describe '#pick' do
-      it 'raises exceptions when no matches are found' do
-        proc { Ray.search('zzz').pick('kramdown') }.must_raise RuntimeError
-      end
-      it 'prompts the user for a choice when there is more than one exact match' do
-        Ray.search('blog').pick('blog')[:repository].must_match 'git://github.com/'
-      end
-      it 'prompts the user for a choice when there is more than one fuzzy match' do
-        Ray.search('paperclipped').pick('paperclipped_m')[:repository].must_match 'git://github.com/'
-      end
+      Search.registry :kramdown_filter
+      Search.github :kramdown_filter
+      Search.local('').length.must_equal 1
     end
   end
 end

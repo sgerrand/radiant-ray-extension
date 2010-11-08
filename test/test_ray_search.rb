@@ -1,110 +1,34 @@
 # encoding: utf-8
+# see test_ray_search_slow for more tests
+
 $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 
 require 'rubygems'
 require 'minitest/spec'
-require 'ray'
+require 'ray/search'
 
 MiniTest::Unit.autorun
 
-RAY_ROOT = "test/mocks/.ray"
-
 describe Search do
-  it 'is a Module' do
-    Search.must_be_kind_of Module
-  end
-
-  describe '#search' do
+  describe '#all' do
     it 'returns an Array' do
-      Ray.search('kramdown_filter').must_be_kind_of Array
+      Search.all(:kramdown_filter).must_be_kind_of Array
     end
   end
 
   describe 'search result' do
     before do
-      @result = Ray.search('kramdown_filter')[0]
+      @s = Search.all(:kramdown_filter)[0]
     end
-
+  
     it 'is a Hash' do
-      @result.must_be_kind_of Hash
+      @s.must_be_kind_of Hash
     end
-    it 'contains :name' do
-      @result[:name].wont_be_nil
-    end
-    it 'contains :description' do
-      @result[:description].wont_be_nil
-    end
-    it 'contains :url' do
-      @result[:url].wont_be_nil
-    end
-    it 'contains :repository' do
-      @result[:repository].wont_be_nil
-    end
-  end
-
-  describe Array do
-    describe '#results' do
-      it 'is a String' do
-        Ray.search('kramdown_filter').results.must_be_kind_of String
-      end
-    end
-
-    describe '#details' do
-      it 'is a String' do
-        Ray.search('kramdown_filter').details.must_be_kind_of String
-      end
-    end
-
-    describe '#pick' do
-      it 'is a Hash' do
-        Ray.search('kramdown').pick('kramdown_filter').must_be_kind_of Hash
-      end
-      it 'picks an exact match' do
-        Ray.search('kramdown_filter').pick('kramdown_filter')[:name].must_match 'kramdown_filter'
-      end
-      it 'picks a close match when there is only one choice' do
-        Ray.search('kramdown_filter').pick('kramdown')[:name].must_match 'kramdown_filter'
-      end
-      it 'picks an exact match from many' do
-        Ray.search('paperclipped').pick('paperclipped_player')[:repository].must_match 'git://github.com/spanner/radiant-paperclipped_player-extension.git'
-      end
-      it 'raises exceptions when no matches are found' do
-        proc { Ray.search('kramdown').pick('zzz') }.must_raise RuntimeError
-      end
-    end
-  end
-
-  describe Hash do
-    describe '#extended' do
-      it 'is a String' do
-        Ray.search('kramdown_filter')[0].extended.must_be_kind_of String
-      end
-      it 'is in extended format' do
-        Ray.search('kramdown_filter')[0].extended.must_match /--\ kramdown_filter.*\n\ \ \ http/
-      end
-    end
-
-    describe '#truncated' do
-      it 'is a String' do
-        Ray.search('kramdown_filter')[0].truncated.must_be_kind_of String
-      end
-      it 'is in truncated format' do
-        Ray.search('kramdown_filter')[0].truncated.must_match '** kramdown_filter: '
-      end
-    end
-  end
-
-  describe String do
-    describe '#wrap' do
-      it 'is a String' do
-        'wrap'.wrap.must_be_kind_of String
-      end
-      it 'indents by three spaces' do
-        'indented'.wrap.must_match '   indented'
-      end
-      it 'wraps at seventy-two columns' do
-        ('a' * 80).wrap.must_match /\ \ \ .{69}\n/
-      end
+    it 'has required extension information' do
+      @s[:name].wont_be_nil
+      @s[:description].wont_be_nil
+      @s[:url].wont_be_nil
+      @s[:repository].wont_be_nil
     end
   end
 end

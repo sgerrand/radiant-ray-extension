@@ -4,6 +4,7 @@ $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 
 require 'ray/array'
 require 'ray/preferences'
+require 'ray/search'
 
 RAY_ROOT        = "#{Dir.pwd}/.ray"
 RAY_ROOT_GLOBAL = "#{ENV['HOME']}/.ray"
