@@ -9,16 +9,23 @@ require 'ray/search'
 
 MiniTest::Unit.autorun
 
+RAY_ROOT_GLOBAL = 'test/mocks/ray'
+CACHE           = "#{RAY_ROOT_GLOBAL}/search"
+
 describe Search do
+  before do
+    FileUtils.touch CACHE
+  end
+
   describe '#all' do
     it 'returns an Array' do
-      Search.all(:kramdown_filter).must_be_kind_of Array
+      Search.local(:kramdown_filter).must_be_kind_of Array
     end
   end
 
   describe 'search result' do
     before do
-      @s = Search.all(:kramdown_filter)[0]
+      @s = Search.local(:kramdown_filter)[0]
     end
   
     it 'is a Hash' do
