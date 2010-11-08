@@ -14,6 +14,7 @@ Autotest.add_hook :initialize do |at|
   at.add_exception '.gems'
   at.add_exception '.ray'
   at.add_exception '.rbc'
+  at.add_exception '_preferences.rb'
   at.add_exception '_slow.rb'
   at.add_exception 'mocks'
   at.add_exception 'ray.gemspec'
