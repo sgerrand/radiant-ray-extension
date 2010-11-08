@@ -22,8 +22,10 @@ Gem::Specification.new do |s|
     'lib/ray.rb',
     'lib/ray/array.rb',
     'lib/ray/extension.rb',
+    'lib/ray/hash.rb',
     'lib/ray/preferences.rb',
     'lib/ray/search.rb',
+    'lib/ray/string.rb',
     'LICENSE',
     'Rakefile',
     'README.md'
@@ -33,10 +35,12 @@ Gem::Specification.new do |s|
     '.autotest',
     'test/test_ray.rb',
     'test/test_ray_array.rb',
+    'test/test_ray_array_slow.rb',
     'test/test_ray_extension.rb',
     'test/test_ray_preferences.rb',
     'test/test_ray_search.rb',
     'test/test_ray_search_slow.rb',
+    'test/test_ray_string.rb',
     'test/mocks/ray/preferences',
     'test/mocks/ray/search'
   ]
