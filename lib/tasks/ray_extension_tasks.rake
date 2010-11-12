@@ -323,7 +323,7 @@ def git_extension_install
 end
 
 def http_extension_install
-  @url.gsub!(/http:\/\/github.com/, 'http://nodeload.github.com')
+  @url.gsub!(/https:\/\/github.com/, 'https://nodeload.github.com')
   FileUtils.makedirs("#{@r}/tmp")
   begin
     tarball = open("#{@url}/tarball/master", "User-Agent" => "open-uri").read
@@ -505,7 +505,7 @@ def install_dependencies
   if @gem_dependencies
     gem_sources = `gem sources`.split("\n")
     gem_sources.each { |g| @github = g if g.include?("github") }
-    sh("gem sources --add http://gems.github.com") unless @github
+    sh("gem sources --add https://gems.github.com") unless @github
     @gem_dependencies.each do |g|
       has_gem = `gem list #{g}`.strip
       if has_gem.length == 0
@@ -545,9 +545,9 @@ def install_submodules(submodule_urls, submodule_paths)
   elsif @download == "http"
     submodule_urls.each do |url|
       FileUtils.makedirs("#{@r}/tmp")
-      url.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "http:\\2/tarball/master")
+      url.gsub!(/(git:)(\/\/github.com\/.*\/.*)(.git)/, "https:\\2/tarball/master")
       tarball = open("#{url}", "User-Agent" => "open-uri").read
-      url.gsub!(/http:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
+      url.gsub!(/https:\/\/github.com\/.*\/(.*)\/tarball\/master/, "\\1")
       open("#{@r}/tmp/#{url}.tar.gz", "wb") { |f| f.write(tarball) }
       Dir.chdir("#{@r}/tmp") do
         begin
@@ -778,7 +778,7 @@ def choose_extension_to_install(name, extensions, authors, urls, descriptions)
       "Trying to fetch it directly from GitHub..."
     ]
     output(messages, short=true)
-    @url = "http://github.com/radiant/radiant-#{name}-extension"
+    @url = "https://github.com/radiant/radiant-#{name}-extension"
     return
   else
     messages = [
@@ -895,11 +895,11 @@ def output(messages, short=nil)
 end
 
 def replace_github_username
-  @url.gsub!(/(http:\/\/github.com\/).*(\/.*)/, "\\1#{ENV["hub"]}\\2")
+  @url.gsub!(/(https:\/\/github.com\/).*(\/.*)/, "\\1#{ENV["hub"]}\\2")
 end
 
 def replace_extension_name
-  @url.gsub!(/(http:\/\/github.com\/.*\/)(.*)/, "\\1#{ENV["fullname"]}")
+  @url.gsub!(/(https:\/\/github.com\/.*\/)(.*)/, "\\1#{ENV["fullname"]}")
 end
 
 def determine_install_path
@@ -1154,7 +1154,7 @@ end
 
 def download_search_file
   begin
-    search = open("http://github.com/johnmuhl/radiant-ray-extension/raw/master/search.yml", "User-Agent" => "open-uri").read
+    search = open("https://github.com/johnmuhl/radiant-ray-extension/raw/master/search.yml", "User-Agent" => "open-uri").read
   rescue Exception
     messages = [
       "GitHub failed to serve the requested search file.",
